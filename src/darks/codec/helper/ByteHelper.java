@@ -2,6 +2,9 @@ package darks.codec.helper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
+import darks.codec.exceptions.OCException;
 
 /**
  * 
@@ -125,18 +128,40 @@ public final class ByteHelper
      * @return 字节数组
      * @see [类、类#方法、类#成员]
      */
-    public static byte[] convertString(String s)
+    public static byte[] convertString(String s, String encoding)
     {
         if (s == null)
         {
             return new byte[0];
         }
-        return s.getBytes();
+        try
+        {
+            if (encoding == null || "".equals(encoding))
+            {
+                return s.getBytes();
+            }
+            return s.getBytes(encoding);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new OCException("Not support encoding " + encoding, e);
+        }
     }
     
-    public static String convertToString(byte[] bytes)
+    public static String convertToString(byte[] bytes, String encoding)
     {
-        return new String(bytes);
+        try
+        {
+            if (encoding == null || "".equals(encoding))
+            {
+                return new String(bytes);
+            }
+            return new String(bytes, encoding);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new OCException("Not support encoding " + encoding, e);
+        }
     }
     
     /**
@@ -192,7 +217,7 @@ public final class ByteHelper
         {
             return "";
         }
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder(64);
         String hexDigits = "0123456789ABCDEF";
         for (int i = 0; i < coded.length; i++)
         {

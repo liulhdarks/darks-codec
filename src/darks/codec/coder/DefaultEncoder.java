@@ -1,7 +1,6 @@
 package darks.codec.coder;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import darks.codec.CodecParameter;
 import darks.codec.Encoder;
@@ -9,9 +8,11 @@ import darks.codec.basetype.BaseType;
 import darks.codec.basetype.BaseTypeFactory;
 import darks.codec.exceptions.OCException;
 import darks.codec.helper.ReflectHelper;
+import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
 import darks.codec.type.IOCSerializable;
+import darks.codec.type.OCObject;
 
 public class DefaultEncoder extends Encoder
 {
@@ -20,12 +21,15 @@ public class DefaultEncoder extends Encoder
     
     @Override
     public void encodeObject(BytesOutputStream out, Object obj,
-            CodecParameter param)
+            CodecParameter param) throws IOException
     {
         BaseType baseType = BaseTypeFactory.getCodec(obj.getClass());
         if (baseType != null)
         {
-            log.debug("Encode base type:[" + obj.getClass() + "] " + obj);
+            if (log.isDebugEnabled())
+            {
+                log.debug(StringHelper.buffer("Encode base type:[", obj.getClass(), "] ", obj));
+            }
             baseType.encode(out, obj, param);
         }
         else if (ReflectHelper.isDefaultType(obj))
@@ -43,7 +47,10 @@ public class DefaultEncoder extends Encoder
     {
         try
         {
-            log.debug("Encode default object:[" + ocs.getClass() + "] " + ocs);
+            if (log.isDebugEnabled())
+            {
+                log.debug(StringHelper.buffer("Encode default object:[", ocs.getClass(), "] ", ocs));
+            }
             ocs.writeObject(this, out, param);
         }
         catch (IOException e)
@@ -53,15 +60,13 @@ public class DefaultEncoder extends Encoder
     }
 
     private void encodeOther(BytesOutputStream out, Object object,
-            CodecParameter param)
+            CodecParameter param) throws IOException
     {
-        log.debug("Encode other object:[" + object.getClass() + "] " + object);
-        Field[] fields = ReflectHelper.getValidField(object);
-        for (Field field : fields)
+        if (log.isDebugEnabled())
         {
-            Object val = ReflectHelper.getFieldValue(object, field);
-            encodeObject(out, val, param);
+            log.debug(StringHelper.buffer("Encode other object:[", object.getClass(), "] ", object));
         }
+        new OCObject(object).writeObject(this, out, param);
     }
 
 }

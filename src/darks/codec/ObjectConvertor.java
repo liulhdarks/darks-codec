@@ -12,6 +12,7 @@ public class ObjectConvertor
     
     private CodecConfig codecConfig;
     
+    
     public ObjectConvertor()
     {
         initialize();

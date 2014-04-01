@@ -11,7 +11,14 @@ public class CodecConfig
         LITTLE, BIG
     }
     
-    protected OCInteger identifier;
+    public enum CacheType
+    {
+        NONE, GLOBAL, LOCAL
+    }
+    
+    private OCInteger identifier;
+    
+    private OCInteger endIdentifier;
     
     private boolean hasIdentifier = true;
 
@@ -24,6 +31,14 @@ public class CodecConfig
     private boolean autoLength = false;
     
     private boolean ignoreObjectAutoLength = false;
+    
+    private boolean ignoreStaticField = false;
+    
+    private boolean ignoreConstField = true;
+    
+    private CacheType cacheType = CacheType.LOCAL;
+    
+    private String encoding;
     
     public CodecConfig()
     {
@@ -38,7 +53,24 @@ public class CodecConfig
     public void setIdentifier(OCInteger identifier)
     {
         this.identifier = identifier;
-        setHasIdentifier(true);
+        if (identifier != null || endIdentifier != null)
+        {
+            setHasIdentifier(true);
+        }
+    }
+
+    public OCInteger getEndIdentifier()
+    {
+        return endIdentifier;
+    }
+
+    public void setEndIdentifier(OCInteger endIdentifier)
+    {
+        this.endIdentifier = endIdentifier;
+        if (identifier != null || endIdentifier != null)
+        {
+            setHasIdentifier(true);
+        }
     }
 
     public boolean isHasIdentifier()
@@ -101,4 +133,57 @@ public class CodecConfig
         this.ignoreObjectAutoLength = ignoreObjectAutoLength;
     }
 
+    public String getEncoding()
+    {
+        return encoding;
+    }
+
+    public void setEncoding(String encoding)
+    {
+        this.encoding = encoding;
+    }
+
+    public boolean isIgnoreStaticField()
+    {
+        return ignoreStaticField;
+    }
+
+    public void setIgnoreStaticField(boolean ignoreStaticField)
+    {
+        this.ignoreStaticField = ignoreStaticField;
+    }
+
+    public boolean isIgnoreConstField()
+    {
+        return ignoreConstField;
+    }
+
+    public void setIgnoreConstField(boolean ignoreConstField)
+    {
+        this.ignoreConstField = ignoreConstField;
+    }
+
+    public CacheType getCacheType()
+    {
+        return cacheType;
+    }
+
+    public void setCacheType(CacheType cacheType)
+    {
+        this.cacheType = cacheType;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "CodecConfig [identifier=" + identifier + ", hasIdentifier="
+                + hasIdentifier + ", hasTotalLength=" + hasTotalLength
+                + ", hasHeader=" + hasHeader + ", endianType=" + endianType
+                + ", autoLength=" + autoLength + ", ignoreObjectAutoLength="
+                + ignoreObjectAutoLength + ", ignoreStaticField="
+                + ignoreStaticField + ", ignoreConstField=" + ignoreConstField
+                + ", encoding=" + encoding + "]";
+    }
+    
+    
 }

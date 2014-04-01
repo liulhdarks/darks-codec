@@ -7,6 +7,7 @@ import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.OCCodec;
+import darks.codec.coder.cache.Cache;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
@@ -25,11 +26,14 @@ public class DefaultOCCodec extends OCCodec
 
     private Decoder decoder;
     
+    private Cache cache;
+    
     public DefaultOCCodec(CodecConfig codecConfig)
     {
         super(codecConfig);
         encoder = new DefaultEncoder();
         decoder = new DefaultDecoder();
+        cache = Cache.getCache(codecConfig);
     }
 
     @Override
@@ -39,11 +43,14 @@ public class DefaultOCCodec extends OCCodec
         {
             msg = new OCMessage(msg);
         }
-        CodecParameter param = new CodecParameter(codecConfig);
+        CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesOutputStream baos = new BytesOutputStream(INIT_BYTES_SIZE, codecConfig);
         encoder.encodeObject(baos, msg, param);
         byte[] bytes = baos.toByteArray();
-        log.debug(ByteHelper.toHexString(bytes));
+        if (log.isDebugEnabled())
+        {
+            log.debug(ByteHelper.toHexString(bytes));
+        }
         return bytes;
     }
 
@@ -54,7 +61,7 @@ public class DefaultOCCodec extends OCCodec
         {
             msg = new OCMessage(msg);
         }
-        CodecParameter param = new CodecParameter(codecConfig);
+        CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesInputStream bais = new BytesInputStream(bytes, codecConfig);
         decoder.decodeObject(bais, msg, param);
         return msg;

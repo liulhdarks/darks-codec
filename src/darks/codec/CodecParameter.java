@@ -3,6 +3,7 @@ package darks.codec;
 import java.lang.reflect.Type;
 
 import darks.codec.CodecConfig.EndianType;
+import darks.codec.coder.cache.Cache;
 
 public class CodecParameter
 {
@@ -17,12 +18,18 @@ public class CodecParameter
     
     private boolean ignoreObjectAutoLength = false;
     
-    public CodecParameter(CodecConfig codecConfig)
+    private String encoding;
+    
+    private Cache cache;
+    
+    public CodecParameter(CodecConfig codecConfig, Cache cache)
     {
         this.codecConfig = codecConfig;
+        this.cache = cache;
         littleEndian = (codecConfig.getEndianType() == EndianType.LITTLE);
         autoLength = codecConfig.isAutoLength();
         ignoreObjectAutoLength = codecConfig.isIgnoreObjectAutoLength();
+        encoding = codecConfig.getEncoding();
     }
     
     public boolean isLittleEndian()
@@ -62,6 +69,16 @@ public class CodecParameter
     public boolean isIgnoreObjectAutoLength()
     {
         return ignoreObjectAutoLength;
+    }
+
+    public String getEncoding()
+    {
+        return encoding;
+    }
+
+    public Cache getCache()
+    {
+        return cache;
     }
 
 }

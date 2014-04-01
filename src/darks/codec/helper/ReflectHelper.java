@@ -8,6 +8,8 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+import darks.codec.CodecParameter;
+import darks.codec.exceptions.ReflectException;
 import darks.codec.logs.Logger;
 import darks.codec.type.IOCSerializable;
 
@@ -128,53 +130,46 @@ public final class ReflectHelper
         }
     }
 
-    public static Field[] getValidField(Object obj)
+    public static Field[] getValidField(Object obj, CodecParameter codecParam)
     {
-        List<Field> result = new LinkedList<Field>();
+        
         Field seq = getDeepField(obj.getClass(), "fieldSequence");
         if (seq != null)
         {
-            try
+            Field[] fields = getFieldSequence(seq, obj);
+            if (fields != null)
             {
-                seq.setAccessible(true);
-                Object val = seq.get(obj);
-                if (val != null)
-                {
-                    String[] params = (String[]) val;
-                    for (String param : params)
-                    {
-                        Field f = getDeepField(obj.getClass(), param);
-                        result.add(f);
-                    }
-                    Field[] fields = new Field[result.size()];
-                    return result.toArray(fields);
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
+                return fields;
             }
         }
-        getValidField(obj.getClass(), result);
+        List<Field> result = new LinkedList<Field>();
+        getClassField(obj.getClass(), result, codecParam);
         Field[] fields = new Field[result.size()];
         return result.toArray(fields);
     }
 
-    public static void getValidField(Class<?> clazz, List<Field> result)
+    public static void getClassField(Class<?> clazz, List<Field> result, CodecParameter codecParam)
     {
         if (clazz == null || Object.class.equals(clazz)
                 || clazz.getName().indexOf(EXCEPT_PACK) >= 0)
         {
             return;
         }
-        getValidField(clazz.getSuperclass(), result);
+        getClassField(clazz.getSuperclass(), result, codecParam);
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields)
         {
-            if (Modifier.isFinal(field.getModifiers()) 
-                    && Modifier.isStatic(field.getModifiers()))
+            if (Modifier.isStatic(field.getModifiers()))
             {
-                continue;
+                if (codecParam.getCodecConfig().isIgnoreStaticField())
+                {
+                    continue;
+                }
+                if (Modifier.isFinal(field.getModifiers()) 
+                        && codecParam.getCodecConfig().isIgnoreConstField())
+                {
+                    continue;
+                }
             }
             if ("fieldSequence".equals(field.getName()))
             {
@@ -238,5 +233,31 @@ public final class ReflectHelper
             return tc.getActualTypeArguments();
         }
         return null;
+    }
+    
+    private static Field[] getFieldSequence(Field seq, Object obj)
+    {
+        try
+        {
+            seq.setAccessible(true);
+            Object val = seq.get(obj);
+            if (val != null)
+            {
+                List<Field> result = new LinkedList<Field>();
+                String[] params = (String[]) val;
+                for (String param : params)
+                {
+                    Field f = getDeepField(obj.getClass(), param);
+                    result.add(f);
+                }
+                Field[] fields = new Field[result.size()];
+                return result.toArray(fields);
+            }
+            return null;
+        }
+        catch (Exception e)
+        {
+            throw new ReflectException("Fail to get fields through sequence. Cause " + e.getMessage(), e);
+        }
     }
 }

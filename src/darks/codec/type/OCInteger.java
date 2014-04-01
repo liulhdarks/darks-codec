@@ -48,17 +48,18 @@ public class OCInteger extends OCType<Integer>
             CodecParameter param) throws IOException
     {
         byte[] bytes = null;
-        if (getLength() == BIT8_LEN)
+        int len = getLength();
+        switch (len)
         {
+        case BIT8_LEN:
             bytes = ByteHelper.convertInt8(getValue(0));
-        }
-        else if (getLength() == BIT16_LEN)
-        {
+            break;
+        case BIT16_LEN:
             bytes = ByteHelper.convertInt16(getValue(0), param.isLittleEndian());
-        }
-        else if (getLength() == BIT32_LEN)
-        {
+            break;
+        case BIT32_LEN:
             bytes = ByteHelper.convertInt32(getValue(0), param.isLittleEndian());
+            break;
         }
         super.writeBytes(encoder, out, bytes, param);
     }
@@ -68,17 +69,19 @@ public class OCInteger extends OCType<Integer>
             CodecParameter param) throws IOException
     {
         byte[] bytes = ByteHelper.readBytes(in, getLength(), param.isLittleEndian());
-        if (getLength() == BIT8_LEN)
+
+        int len = getLength();
+        switch (len)
         {
+        case BIT8_LEN:
             setValue(ByteHelper.convertToInt8(bytes));
-        }
-        else if (getLength() == BIT16_LEN)
-        {
+            break;
+        case BIT16_LEN:
             setValue(ByteHelper.convertToInt16(bytes));
-        }
-        else if (getLength() == BIT32_LEN)
-        {
+            break;
+        case BIT32_LEN:
             setValue(ByteHelper.convertToInt32(bytes));
+            break;
         }
     }
     

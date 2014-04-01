@@ -20,7 +20,7 @@ public class StringType extends BaseType
         String s = (String)obj;
         try
         {
-            byte[] bytes = s.getBytes();
+            byte[] bytes = ByteHelper.convertString(s, param.getEncoding());
             writeAutoLength(out, bytes.length, param);
             out.write(bytes);
         }
@@ -44,7 +44,7 @@ public class StringType extends BaseType
             int ioLen = in.available();
             len = (len <= 0 || ioLen < len) ? ioLen : len;
             byte[] bytes = ByteHelper.readBytes(in, len, false);
-            return new String(bytes);
+            return ByteHelper.convertToString(bytes, param.getEncoding());
         }
         catch (IOException e)
         {

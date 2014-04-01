@@ -42,7 +42,7 @@ public class OCString extends OCType<String>
             CodecParameter param) throws IOException
     {
         writeAutoLength(encoder, out, param);
-        byte[] bytes = ByteHelper.convertString(getValue());
+        byte[] bytes = ByteHelper.convertString(getValue(), param.getEncoding());
         super.writeBytes(encoder, out, bytes, param);
     }
     
@@ -64,6 +64,6 @@ public class OCString extends OCType<String>
             setLength(len);
             bytes = ByteHelper.readBytes(in, len, false);
         }
-        setValue(ByteHelper.convertToString(bytes));
+        setValue(ByteHelper.convertToString(bytes, param.getEncoding()));
     }
 }

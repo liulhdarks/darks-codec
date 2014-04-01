@@ -53,6 +53,7 @@ public class OCBytes extends OCType<byte[]>
         {
             return;
         }
+        writeAutoLength(encoder, out, param);
         byte[] bytes = getValue(new byte[0]);
         super.writeBytes(encoder, out, bytes, param);
     }
@@ -61,6 +62,7 @@ public class OCBytes extends OCType<byte[]>
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
+        readAutoLength(decoder, in, param);
         if (isDynamicLength())
         {
             int length = getLenType().getValue();

@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.coder.cache.Cache;
 import darks.codec.exceptions.OCException;
 import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
@@ -55,7 +56,7 @@ public class OCObject extends OCBase
             writeAutoLength(encoder, out, param);
         }
         int start = out.size();
-        Field[] fields = ReflectHelper.getValidField(object);
+        Field[] fields = getFields(object, param);
         for (Field field : fields)
         {
             Object val = ReflectHelper.getFieldValue(object, field);
@@ -73,7 +74,7 @@ public class OCObject extends OCBase
         {
             readAutoLength(decoder, in, param);
         }
-        Field[] fields = ReflectHelper.getValidField(object);
+        Field[] fields = getFields(object, param);
         for (Field field : fields)
         {
             Object val = ReflectHelper.getFieldValue(object, field);
@@ -92,6 +93,26 @@ public class OCObject extends OCBase
                 ReflectHelper.setFieldValue(object, field, val);
             }
         }
+    }
+    
+    private Field[] getFields(Object obj, CodecParameter codecParam)
+    {
+        Field[] result = null;
+        Cache cache = codecParam.getCache();
+        if (cache != null)
+        {
+            result = cache.getCacheFields(obj.getClass());
+            if (result == null)
+            {
+                result = ReflectHelper.getValidField(object, codecParam);
+                cache.putCacheFields(obj.getClass(), result);
+            }
+        }
+        else
+        {
+            result = ReflectHelper.getValidField(object, codecParam);
+        }
+        return result;
     }
 
     public String[] getFieldSequence()
