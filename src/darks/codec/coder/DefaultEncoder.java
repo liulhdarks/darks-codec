@@ -40,12 +40,12 @@ public class DefaultEncoder extends Encoder
     public void encodeObject(BytesOutputStream out, Object obj,
             CodecParameter param) throws IOException
     {
-        BaseType baseType = BaseTypeFactory.getCodec(obj.getClass());
+        BaseType baseType = BaseTypeFactory.getCodec(obj, param);
         if (baseType != null)
         {
             if (log.isDebugEnabled())
             {
-                log.debug(StringHelper.buffer("Encode base type:[", obj.getClass(), "] ", obj));
+                log.debug(StringHelper.buffer("Encode base type:[", ReflectHelper.getClass(obj, param), "] ", obj));
             }
             baseType.encode(out, obj, param);
         }
@@ -66,9 +66,16 @@ public class DefaultEncoder extends Encoder
         {
             if (log.isDebugEnabled())
             {
-                log.debug(StringHelper.buffer("Encode default object:[", ocs.getClass(), "] ", ocs));
+                log.debug(StringHelper.buffer("Encode default object:[", ReflectHelper.getClass(ocs, param), "] ", ocs));
             }
-            ocs.writeObject(this, out, param);
+            if (ocs == null && param.getCurrentfield() != null)
+            {
+                ocs = (OCSerializable)ReflectHelper.newInstance(param.getCurrentfield().getType());
+            }
+            if (ocs != null)
+            {
+                ocs.writeObject(this, out, param);
+            }
         }
         catch (IOException e)
         {
@@ -81,7 +88,7 @@ public class DefaultEncoder extends Encoder
     {
         if (log.isDebugEnabled())
         {
-            log.debug(StringHelper.buffer("Encode other object:[", object.getClass(), "] ", object));
+            log.debug(StringHelper.buffer("Encode other object:[", ReflectHelper.getClass(object, param), "] ", object));
         }
         new OCObject(object).writeObject(this, out, param);
     }

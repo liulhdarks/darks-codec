@@ -277,4 +277,17 @@ public final class ReflectHelper
             throw new ReflectException("Fail to get fields through sequence. Cause " + e.getMessage(), e);
         }
     }
+    
+    public static Class<?> getClass(Object obj, CodecParameter param)
+    {
+        if (obj != null)
+        {
+            return obj.getClass();
+        }
+        if (param.getCurrentfield() != null)
+        {
+            return param.getCurrentfield().getType();
+        }
+        return null;
+    }
 }

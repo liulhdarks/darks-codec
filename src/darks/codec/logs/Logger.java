@@ -47,4 +47,5 @@ public abstract class Logger
     public abstract void warn(String paramString);
     
     public abstract void warn(String paramString, Throwable e);
+    
 }

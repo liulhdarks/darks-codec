@@ -19,6 +19,7 @@ package darks.codec.basetype;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import darks.codec.CodecParameter;
 import darks.codec.basetype.impl.ByteType;
 import darks.codec.basetype.impl.DoubleType;
 import darks.codec.basetype.impl.FloatType;
@@ -79,6 +80,24 @@ public final class BaseTypeFactory
     
     public static BaseType getCodec(Class<?> clazz)
     {
+        return codecs.get(clazz);
+    }
+    
+    public static BaseType getCodec(Object obj, CodecParameter param)
+    {
+        Class<?> clazz = null;
+        if (obj != null)
+        {
+            clazz = obj.getClass();
+        }
+        else if (param.getCurrentfield() != null)
+        {
+            clazz = param.getCurrentfield().getType();
+        }
+        else
+        {
+            return null;
+        }
         return codecs.get(clazz);
     }
 }

@@ -18,6 +18,7 @@
 package darks.codec.type;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -27,7 +28,9 @@ import java.util.ListIterator;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.exceptions.DecodingException;
 import darks.codec.exceptions.OCException;
+import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
@@ -227,8 +230,13 @@ public class OCList<E> extends OCBase implements List<E>
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
+        Type[] types = ReflectHelper.getGenericTypes(param.getCurrentfield());
+        if (types == null)
+        {
+            throw new DecodingException("List generic type is null");
+        }
         readAutoLength(decoder, in, param);
-        Class<E> genericType = (Class<E>) param.getGenericType(0);
+        Class<E> genericType = (Class<E>) types[0];
         if (isDynamicLength())
         {
             int len = getLenType().getValue();

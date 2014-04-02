@@ -19,13 +19,11 @@ package darks.codec.type;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.coder.cache.Cache;
-import darks.codec.exceptions.OCException;
 import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
@@ -94,15 +92,7 @@ public class OCObject extends OCBase
         for (Field field : fields)
         {
             Object val = ReflectHelper.getFieldValue(object, field);
-            if (val instanceof OCList<?> || val instanceof OCMap<?, ?>)
-            {
-                Type[] types = ReflectHelper.getGenericTypes(field);
-                if (types == null)
-                {
-                    throw new OCException("Generic type is null");
-                }
-                param.setGenericType(types);
-            }
+            param.setCurrentfield(field);
             val = decoder.decodeObject(in, val, param);
             if (val != null)
             {

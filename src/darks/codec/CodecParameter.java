@@ -17,7 +17,7 @@
 
 package darks.codec;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Field;
 
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.coder.cache.Cache;
@@ -25,8 +25,6 @@ import darks.codec.coder.cache.Cache;
 public class CodecParameter
 {
 
-    private Type[] genericType;
-    
     private CodecConfig codecConfig;
     
     private boolean littleEndian;
@@ -38,6 +36,8 @@ public class CodecParameter
     private String encoding;
     
     private Cache cache;
+    
+    private Field currentfield;
     
     public CodecParameter(CodecConfig codecConfig, Cache cache)
     {
@@ -52,25 +52,6 @@ public class CodecParameter
     public boolean isLittleEndian()
     {
         return littleEndian;
-    }
-
-    public Type getGenericType(int index)
-    {
-        if (genericType == null || index < 0 || index >= genericType.length)
-        {
-            return null;
-        }
-        return genericType[index];
-    }
-
-    public Type[] getGenericType()
-    {
-        return genericType;
-    }
-
-    public void setGenericType(Type[] genericType)
-    {
-        this.genericType = genericType;
     }
 
     public CodecConfig getCodecConfig()
@@ -96,6 +77,16 @@ public class CodecParameter
     public Cache getCache()
     {
         return cache;
+    }
+
+    public Field getCurrentfield()
+    {
+        return currentfield;
+    }
+
+    public void setCurrentfield(Field currentfield)
+    {
+        this.currentfield = currentfield;
     }
 
 }
