@@ -28,7 +28,7 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public abstract class OCBase implements IOCSerializable
+public abstract class OCBase implements OCSerializable
 {
     /**
      */

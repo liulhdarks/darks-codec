@@ -28,7 +28,7 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.logs.Logger;
-import darks.codec.type.IOCSerializable;
+import darks.codec.type.OCSerializable;
 import darks.codec.type.OCObject;
 
 public class DefaultDecoder extends Decoder
@@ -51,7 +51,7 @@ public class DefaultDecoder extends Decoder
         }
         else if (ReflectHelper.isDefaultType(obj))
         {
-            decodeDefault(in, (IOCSerializable) obj, param);
+            decodeDefault(in, (OCSerializable) obj, param);
         }
         else
         {
@@ -60,7 +60,7 @@ public class DefaultDecoder extends Decoder
         return null;
     }
 
-    private void decodeDefault(BytesInputStream in, IOCSerializable ocs,
+    private void decodeDefault(BytesInputStream in, OCSerializable ocs,
             CodecParameter param) throws IOException
     {
         try

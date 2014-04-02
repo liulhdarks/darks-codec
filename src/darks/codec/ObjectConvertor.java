@@ -56,6 +56,16 @@ public class ObjectConvertor
         codecConfig = new CodecConfig();
     }
     
+    public byte[] encode(Object msg)
+        throws IOException
+    {
+        if (codec == null)
+        {
+            return null;
+        }
+        return codec.encode(new OCObject(msg));
+    }
+    
     public byte[] encode(OCObject msg)
         throws IOException
     {
@@ -64,6 +74,16 @@ public class ObjectConvertor
             return null;
         }
         return codec.encode(msg);
+    }
+    
+    public OCObject decode(byte[] bytes, Object source)
+        throws IOException
+    {
+        if (codec == null)
+        {
+            return null;
+        }
+        return codec.decode(bytes, new OCObject(source));
     }
     
     public OCObject decode(byte[] bytes, OCObject source)

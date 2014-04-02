@@ -28,7 +28,7 @@ import java.util.List;
 import darks.codec.CodecParameter;
 import darks.codec.exceptions.ReflectException;
 import darks.codec.logs.Logger;
-import darks.codec.type.IOCSerializable;
+import darks.codec.type.OCSerializable;
 
 public final class ReflectHelper
 {
@@ -79,7 +79,7 @@ public final class ReflectHelper
         Class<?>[] clazzs = clazz.getInterfaces();
         for (Class<?> cls : clazzs)
         {
-            if (IOCSerializable.class.equals(cls))
+            if (OCSerializable.class.equals(cls))
             {
                 return true;
             }
@@ -93,7 +93,7 @@ public final class ReflectHelper
         {
             return false;
         }
-        if (type instanceof IOCSerializable)
+        if (type instanceof OCSerializable)
         {
             return true;
         }

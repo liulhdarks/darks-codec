@@ -26,7 +26,7 @@ import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public interface IOCSerializable extends Serializable
+public interface OCSerializable extends Serializable
 {
 
     public void writeObject(Encoder encoder, BytesOutputStream out,
