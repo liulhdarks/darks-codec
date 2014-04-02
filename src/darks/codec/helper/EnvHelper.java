@@ -1,6 +1,6 @@
 /**
  * 
- *Copyright 2014 The Darks Logs Project
+ *Copyright 2014 The Darks Codec Project (Liu lihua)
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *you may not use this file except in compliance with the License.
