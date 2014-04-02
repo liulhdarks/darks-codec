@@ -34,6 +34,9 @@ public class ObjectConvertor
     
     private CodecConfig codecConfig;
     
+    private volatile boolean actived = false;
+    
+    private Object mutex = new Object();
     
     public ObjectConvertor()
     {
@@ -63,6 +66,7 @@ public class ObjectConvertor
         {
             return null;
         }
+        checkActivated();
         return codec.encode(new OCObject(msg));
     }
     
@@ -73,6 +77,7 @@ public class ObjectConvertor
         {
             return null;
         }
+        checkActivated();
         return codec.encode(msg);
     }
     
@@ -83,6 +88,7 @@ public class ObjectConvertor
         {
             return null;
         }
+        checkActivated();
         return codec.decode(bytes, new OCObject(source));
     }
     
@@ -93,7 +99,23 @@ public class ObjectConvertor
         {
             return null;
         }
+        checkActivated();
         return codec.decode(bytes, source);
+    }
+    
+    private void checkActivated()
+    {
+        if (!actived)
+        {
+            synchronized (mutex)
+            {
+                if (!actived)
+                {
+                    codec.activated();
+                    actived = true;
+                }
+            }
+        }
     }
     
     public OCCodec getCodec()

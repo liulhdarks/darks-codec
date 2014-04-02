@@ -50,6 +50,11 @@ public class DefaultOCCodec extends OCCodec
         super(codecConfig);
         encoder = new DefaultEncoder();
         decoder = new DefaultDecoder();
+    }
+
+    @Override
+    public void activated()
+    {
         cache = Cache.getCache(codecConfig);
     }
 
@@ -61,9 +66,11 @@ public class DefaultOCCodec extends OCCodec
             msg = new OCMessage(msg);
         }
         CodecParameter param = new CodecParameter(codecConfig, cache);
-        BytesOutputStream baos = new BytesOutputStream(INIT_BYTES_SIZE, codecConfig);
-        encoder.encodeObject(baos, msg, param);
-        byte[] bytes = baos.toByteArray();
+        BytesOutputStream out = new BytesOutputStream(INIT_BYTES_SIZE, codecConfig);
+        beforeEncode(out, param);
+        encoder.encodeObject(out, msg, param);
+        afterEncode(out, param);
+        byte[] bytes = out.toByteArray();
         if (log.isDebugEnabled())
         {
             log.debug(ByteHelper.toHexString(bytes));
@@ -79,8 +86,10 @@ public class DefaultOCCodec extends OCCodec
             msg = new OCMessage(msg);
         }
         CodecParameter param = new CodecParameter(codecConfig, cache);
-        BytesInputStream bais = new BytesInputStream(bytes, codecConfig);
-        decoder.decodeObject(bais, msg, param);
+        BytesInputStream in = new BytesInputStream(bytes, codecConfig);
+        beforeDecode(in, param);
+        decoder.decodeObject(in, msg, param);
+        afterDecode(in, param);
         return msg;
     }
 }

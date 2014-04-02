@@ -36,6 +36,8 @@ public class OCMessage extends OCObject
 
     protected OCInteger identifier;
 
+    protected OCInteger endIdentifier;
+
     protected OCInt32 totalLength = new OCInt32();
 
     protected OCObject ocObject;
@@ -99,6 +101,12 @@ public class OCMessage extends OCObject
                 out.moveLast();
             }
         }
+        if (cfg.isHasEndIdentifier())
+        {
+            endIdentifier = new OCInteger();
+            cfg.getEndIdentifier().clone(endIdentifier);
+            endIdentifier.writeObject(encoder, out, param);
+        }
     }
 
     @Override
@@ -106,6 +114,10 @@ public class OCMessage extends OCObject
             CodecParameter param) throws IOException
     {
         CodecConfig cfg = param.getCodecConfig();
+        if (cfg.isHasEndIdentifier())
+        {
+            in.setCount(in.getCount() - cfg.getEndIdentifier().getLength());
+        }
         if (cfg.isHasIdentifier())
         {
             identifier = new OCInteger();

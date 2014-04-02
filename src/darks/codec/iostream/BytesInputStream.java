@@ -43,6 +43,26 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         super(buf);
         isLittleEndian = codecConfig.getEndianType() == EndianType.LITTLE;
     }
+    
+    public int getCount()
+    {
+        return count;
+    }
+    
+    public void setCount(int count)
+    {
+        this.count = count;
+    }
+    
+    public void setCursor(int pos)
+    {
+        this.pos = pos;
+    }
+    
+    public byte[] getDirectBytes()
+    {
+        return buf;
+    }
 
     @Override
     public void readFully(byte[] b) throws IOException

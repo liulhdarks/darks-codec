@@ -19,11 +19,12 @@ package darks.codec;
 
 import java.io.IOException;
 
+import darks.codec.iostream.BytesInputStream;
+import darks.codec.iostream.BytesOutputStream;
 import darks.codec.type.OCObject;
 
 public abstract class OCCodec
 {
-
     
     protected CodecConfig codecConfig;
     
@@ -32,11 +33,35 @@ public abstract class OCCodec
         this.codecConfig = codecConfig;
     }
     
+    public void activated()
+    {
+    }
+    
     public abstract byte[] encode(OCObject msg)
         throws IOException;
     
     public abstract OCObject decode(byte[] bytes, OCObject source)
         throws IOException;
+    
+    protected void beforeEncode(BytesOutputStream out, CodecParameter param)
+    {
+        
+    }
+    
+    protected void afterEncode(BytesOutputStream out, CodecParameter param)
+    {
+        
+    }
+
+    protected void beforeDecode(BytesInputStream in, CodecParameter param)
+    {
+        
+    }
+    
+    protected void afterDecode(BytesInputStream in, CodecParameter param)
+    {
+        
+    }
 
     public CodecConfig getCodecConfig()
     {

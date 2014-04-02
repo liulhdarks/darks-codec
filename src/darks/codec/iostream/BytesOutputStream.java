@@ -70,6 +70,11 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         count = pos;
         this.offset = offset;
     }
+    
+    public byte[] getDirectBytes()
+    {
+        return buf;
+    }
 
     public void moveFirst()
     {

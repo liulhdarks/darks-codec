@@ -100,6 +100,11 @@ public class CodecConfig
         return hasIdentifier && (identifier != null);
     }
 
+    public boolean isHasEndIdentifier()
+    {
+        return hasIdentifier && (endIdentifier != null);
+    }
+
     public void setHasIdentifier(boolean hasIdentifier)
     {
         this.hasIdentifier = hasIdentifier;
