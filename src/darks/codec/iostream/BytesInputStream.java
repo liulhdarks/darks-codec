@@ -17,60 +17,126 @@
 
 package darks.codec.iostream;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import darks.codec.CodecConfig;
 import darks.codec.CodecConfig.EndianType;
 
-public class BytesInputStream extends ByteArrayInputStream implements DataInput
+public class BytesInputStream extends InputStream
 {
 
     protected boolean isLittleEndian;
-    
-    private byte readBuffer[] = new byte[8];
 
-    public BytesInputStream(byte[] buf, int offset, int length, CodecConfig codecConfig)
-    {
-        super(buf, offset, length);
-        isLittleEndian = codecConfig.getEndianType() == EndianType.LITTLE;
-    }
+    private byte longBuffer[] = new byte[8];
+
+    private byte[] buffer;
+
+    private int pos;
+
+    private int count;
 
     public BytesInputStream(byte[] buf, CodecConfig codecConfig)
     {
-        super(buf);
+        this.buffer = buf;
+        count = buf.length;
         isLittleEndian = codecConfig.getEndianType() == EndianType.LITTLE;
     }
-    
+
+    /**
+     * Reads the next byte of data from this input stream. The value byte is
+     * returned as an <code>int</code> in the range <code>0</code> to
+     * <code>255</code>. If no byte is available because the end of the stream
+     * has been reached, the value <code>-1</code> is returned.
+     * <p>
+     * This <code>read</code> method cannot block.
+     * 
+     * @return the next byte of data, or <code>-1</code> if the end of the
+     *         stream has been reached.
+     */
+    public int read()
+    {
+        return (pos < count) ? (buffer[pos++] & 0xff) : -1;
+    }
+
+    /**
+     * Reads up to <code>len</code> bytes of data into an array of bytes from
+     * this input stream. If <code>pos</code> equals <code>count</code>, then
+     * <code>-1</code> is returned to indicate end of file. Otherwise, the
+     * number <code>k</code> of bytes read is equal to the smaller of
+     * <code>len</code> and <code>count-pos</code>. If <code>k</code> is
+     * positive, then bytes <code>buf[pos]</code> through
+     * <code>buf[pos+k-1]</code> are copied into <code>b[off]</code> through
+     * <code>b[off+k-1]</code> in the manner performed by
+     * <code>System.arraycopy</code>. The value <code>k</code> is added into
+     * <code>pos</code> and <code>k</code> is returned.
+     * <p>
+     * This <code>read</code> method cannot block.
+     * 
+     * @param b the buffer into which the data is read.
+     * @param off the start offset in the destination array <code>b</code>
+     * @param len the maximum number of bytes read.
+     * @return the total number of bytes read into the buffer, or
+     *         <code>-1</code> if there is no more data because the end of the
+     *         stream has been reached.
+     * @exception NullPointerException If <code>b</code> is <code>null</code>.
+     * @exception IndexOutOfBoundsException If <code>off</code> is negative,
+     *                <code>len</code> is negative, or <code>len</code> is
+     *                greater than <code>b.length - off</code>
+     */
+    public int read(byte b[], int off, int len)
+    {
+        if (b == null)
+        {
+            throw new NullPointerException();
+        }
+        else if (off < 0 || len < 0 || len > b.length - off)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+        if (pos >= count)
+        {
+            return -1;
+        }
+        if (pos + len > count)
+        {
+            len = count - pos;
+        }
+        if (len <= 0)
+        {
+            return 0;
+        }
+        System.arraycopy(buffer, pos, b, off, len);
+        pos += len;
+        return len;
+    }
+
     public int getCount()
     {
         return count;
     }
-    
+
     public void setCount(int count)
     {
         this.count = count;
     }
-    
+
     public void setCursor(int pos)
     {
         this.pos = pos;
     }
-    
+
     public byte[] getDirectBytes()
     {
-        return buf;
+        return buffer;
     }
 
-    @Override
     public void readFully(byte[] b) throws IOException
     {
         readFully(b, 0, b.length);
     }
 
-    @Override
     public void readFully(byte[] b, int off, int len) throws IOException
     {
         if (len < 0)
@@ -87,7 +153,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         }
     }
 
-    @Override
     public int skipBytes(int n) throws IOException
     {
         int total = 0;
@@ -101,7 +166,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         return total;
     }
 
-    @Override
     public boolean readBoolean() throws IOException
     {
         int ch = read();
@@ -112,7 +176,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         return (ch != 0);
     }
 
-    @Override
     public byte readByte() throws IOException
     {
         int ch = read();
@@ -123,7 +186,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         return (byte) (ch);
     }
 
-    @Override
     public int readUnsignedByte() throws IOException
     {
         int ch = read();
@@ -134,7 +196,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         return ch;
     }
 
-    @Override
     public short readShort() throws IOException
     {
         int ch1 = read();
@@ -153,7 +214,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         }
     }
 
-    @Override
     public int readUnsignedShort() throws IOException
     {
         int ch1 = read();
@@ -172,7 +232,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         }
     }
 
-    @Override
     public char readChar() throws IOException
     {
         int ch1 = read();
@@ -191,7 +250,6 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         }
     }
 
-    @Override
     public int readInt() throws IOException
     {
         int ch1 = read();
@@ -212,53 +270,46 @@ public class BytesInputStream extends ByteArrayInputStream implements DataInput
         }
     }
 
-    @Override
     public long readLong() throws IOException
     {
-        readFully(readBuffer, 0, 8);
+        readFully(longBuffer, 0, 8);
         if (isLittleEndian)
         {
-            return (((long) readBuffer[7] << 56)
-                    + ((long) (readBuffer[6] & 255) << 48)
-                    + ((long) (readBuffer[5] & 255) << 40)
-                    + ((long) (readBuffer[4] & 255) << 32)
-                    + ((long) (readBuffer[3] & 255) << 24)
-                    + ((readBuffer[2] & 255) << 16) 
-                    + ((readBuffer[1] & 255) << 8) 
-                    + ((readBuffer[0] & 255) << 0));
+            return (((long) longBuffer[7] << 56)
+                    + ((long) (longBuffer[6] & 255) << 48)
+                    + ((long) (longBuffer[5] & 255) << 40)
+                    + ((long) (longBuffer[4] & 255) << 32)
+                    + ((long) (longBuffer[3] & 255) << 24)
+                    + ((longBuffer[2] & 255) << 16)
+                    + ((longBuffer[1] & 255) << 8) + ((longBuffer[0] & 255) << 0));
         }
         else
         {
-            return (((long) readBuffer[0] << 56)
-                    + ((long) (readBuffer[1] & 255) << 48)
-                    + ((long) (readBuffer[2] & 255) << 40)
-                    + ((long) (readBuffer[3] & 255) << 32)
-                    + ((long) (readBuffer[4] & 255) << 24)
-                    + ((readBuffer[5] & 255) << 16) 
-                    + ((readBuffer[6] & 255) << 8) 
-                    + ((readBuffer[7] & 255) << 0));
+            return (((long) longBuffer[0] << 56)
+                    + ((long) (longBuffer[1] & 255) << 48)
+                    + ((long) (longBuffer[2] & 255) << 40)
+                    + ((long) (longBuffer[3] & 255) << 32)
+                    + ((long) (longBuffer[4] & 255) << 24)
+                    + ((longBuffer[5] & 255) << 16)
+                    + ((longBuffer[6] & 255) << 8) + ((longBuffer[7] & 255) << 0));
         }
     }
 
-    @Override
     public float readFloat() throws IOException
     {
         return Float.intBitsToFloat(readInt());
     }
 
-    @Override
     public double readDouble() throws IOException
     {
         return Double.longBitsToDouble(readLong());
     }
 
-    @Override
     public String readLine() throws IOException
     {
         return null;
     }
 
-    @Override
     public String readUTF() throws IOException
     {
         return null;

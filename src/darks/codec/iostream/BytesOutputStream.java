@@ -17,28 +17,28 @@
 
 package darks.codec.iostream;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutput;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 
 import darks.codec.CodecConfig;
 import darks.codec.CodecConfig.EndianType;
-import darks.codec.exceptions.OCException;
 
-public class BytesOutputStream extends ByteArrayOutputStream implements
-        DataOutput
+public class BytesOutputStream extends OutputStream
 {
     private static final int DEFAULT_OFFSET = 0;
 
     private static final int FIRST_POS = 0;
 
     private static final int LAST_POS_INVALID = -1;
-    
+
     protected boolean isLittleEndian;
 
     private byte longBuffer[] = new byte[8];
 
-    private byte[] byteArray = null;
+    private byte[] buffer = null;
+
+    private int count = 0;
 
     private int lastCount;
 
@@ -53,10 +53,67 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
 
     public BytesOutputStream(int size, CodecConfig codecConfig)
     {
-        super(size);
+        buffer = new byte[size];
+        count = 0;
         lastCount = LAST_POS_INVALID;
         offset = DEFAULT_OFFSET;
         isLittleEndian = codecConfig.getEndianType() == EndianType.LITTLE;
+    }
+
+    /**
+     * Writes the specified byte to this byte array output stream.
+     * 
+     * @param b the byte to be written.
+     */
+    public void write(int b)
+    {
+        int newcount = count + 1;
+        if (newcount > buffer.length)
+        {
+            buffer = Arrays.copyOf(buffer,
+                    Math.max(buffer.length << 1, newcount));
+        }
+        buffer[count] = (byte) b;
+        count = newcount;
+    }
+
+    /**
+     * Writes <code>len</code> bytes from the specified byte array starting at
+     * offset <code>off</code> to this byte array output stream.
+     * 
+     * @param b the data.
+     * @param off the start offset in the data.
+     * @param len the number of bytes to write.
+     */
+    public void write(byte b[], int off, int len)
+    {
+        if ((off < 0) || (off > b.length) || (len < 0)
+                || ((off + len) > b.length) || ((off + len) < 0))
+        {
+            throw new IndexOutOfBoundsException();
+        }
+        else if (len == 0)
+        {
+            return;
+        }
+        int newcount = count + len;
+        if (newcount > buffer.length)
+        {
+            buffer = Arrays.copyOf(buffer,
+                    Math.max(buffer.length << 1, newcount));
+        }
+        System.arraycopy(b, off, buffer, count, len);
+        count = newcount;
+    }
+
+    public byte[] toByteArray()
+    {
+        return Arrays.copyOf(buffer, count);
+    }
+
+    public int size()
+    {
+        return count;
     }
 
     public void setCursor(int pos)
@@ -70,10 +127,10 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         count = pos;
         this.offset = offset;
     }
-    
+
     public byte[] getDirectBytes()
     {
-        return buf;
+        return buffer;
     }
 
     public void moveFirst()
@@ -95,26 +152,23 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
 
     public void replace(int pos, byte[] bytes)
     {
-        if (pos + bytes.length > buf.length)
+        if (pos + bytes.length > buffer.length)
         {
-            throw new ArrayIndexOutOfBoundsException(buf.length);
+            throw new ArrayIndexOutOfBoundsException(buffer.length);
         }
-        System.arraycopy(bytes, 0, buf, pos, bytes.length);
+        System.arraycopy(bytes, 0, buffer, pos, bytes.length);
     }
 
-    @Override
     public void writeBoolean(boolean v) throws IOException
     {
         write(v ? 1 : 0);
     }
 
-    @Override
     public void writeByte(int v) throws IOException
     {
         write(v);
     }
 
-    @Override
     public void writeShort(int v) throws IOException
     {
         if (isLittleEndian)
@@ -129,7 +183,6 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         }
     }
 
-    @Override
     public void writeChar(int v) throws IOException
     {
         if (isLittleEndian)
@@ -144,7 +197,6 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         }
     }
 
-    @Override
     public void writeInt(int v) throws IOException
     {
         if (isLittleEndian)
@@ -163,7 +215,6 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         }
     }
 
-    @Override
     public void writeLong(long v) throws IOException
     {
         if (isLittleEndian)
@@ -191,19 +242,16 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         write(longBuffer, 0, 8);
     }
 
-    @Override
     public void writeFloat(float v) throws IOException
     {
         writeInt(Float.floatToIntBits(v));
     }
 
-    @Override
     public void writeDouble(double v) throws IOException
     {
         writeLong(Double.doubleToLongBits(v));
     }
 
-    @Override
     public void writeBytes(String s) throws IOException
     {
         int len = s.length();
@@ -213,7 +261,6 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
         }
     }
 
-    @Override
     public void writeChars(String s) throws IOException
     {
         int len = s.length();
@@ -223,76 +270,6 @@ public class BytesOutputStream extends ByteArrayOutputStream implements
             write((v >>> 8) & 0xFF);
             write((v >>> 0) & 0xFF);
         }
-    }
-
-    @Override
-    public void writeUTF(String str) throws IOException
-    {
-        int strlen = str.length();
-        int utflen = 0;
-        int c, count = 0;
-
-        for (int i = 0; i < strlen; i++)
-        {
-            c = str.charAt(i);
-            if ((c >= 0x0001) && (c <= 0x007F))
-            {
-                utflen++;
-            }
-            else if (c > 0x07FF)
-            {
-                utflen += 3;
-            }
-            else
-            {
-                utflen += 2;
-            }
-        }
-
-        if (utflen > 65535)
-        {
-            throw new OCException("encoded string too long: " + utflen
-                    + " bytes");
-        }
-
-        if (byteArray == null || (byteArray.length < (utflen + 2)))
-        {
-            byteArray = new byte[(utflen * 2) + 2];
-        }
-
-        byteArray[count++] = (byte) ((utflen >>> 8) & 0xFF);
-        byteArray[count++] = (byte) ((utflen >>> 0) & 0xFF);
-
-        int i = 0;
-        for (i = 0; i < strlen; i++)
-        {
-            c = str.charAt(i);
-            if (!((c >= 0x0001) && (c <= 0x007F)))
-                break;
-            byteArray[count++] = (byte) c;
-        }
-
-        for (; i < strlen; i++)
-        {
-            c = str.charAt(i);
-            if ((c >= 0x0001) && (c <= 0x007F))
-            {
-                byteArray[count++] = (byte) c;
-
-            }
-            else if (c > 0x07FF)
-            {
-                byteArray[count++] = (byte) (0xE0 | ((c >> 12) & 0x0F));
-                byteArray[count++] = (byte) (0x80 | ((c >> 6) & 0x3F));
-                byteArray[count++] = (byte) (0x80 | ((c >> 0) & 0x3F));
-            }
-            else
-            {
-                byteArray[count++] = (byte) (0xC0 | ((c >> 6) & 0x1F));
-                byteArray[count++] = (byte) (0x80 | ((c >> 0) & 0x3F));
-            }
-        }
-        write(byteArray, 0, utflen + 2);
     }
 
     public int getLastCount()
