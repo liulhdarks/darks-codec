@@ -23,7 +23,7 @@ import darks.codec.CodecConfig;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
-import darks.codec.OCCodec;
+import darks.codec.Codec;
 import darks.codec.coder.cache.Cache;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
@@ -32,10 +32,10 @@ import darks.codec.type.OCMessage;
 import darks.codec.type.OCObject;
 import darks.codec.wrap.WrapChain;
 
-public class DefaultOCCodec extends OCCodec
+public class DefaultCodec extends Codec
 {
 
-    private static final Logger log = Logger.getLogger(DefaultOCCodec.class);
+    private static final Logger log = Logger.getLogger(DefaultCodec.class);
 
     private static final int INIT_BYTES_SIZE = 128;
 
@@ -47,7 +47,7 @@ public class DefaultOCCodec extends OCCodec
     
     private WrapChain wrapChain;
     
-    public DefaultOCCodec(CodecConfig codecConfig)
+    public DefaultCodec(CodecConfig codecConfig)
     {
         super(codecConfig);
         encoder = new DefaultEncoder();

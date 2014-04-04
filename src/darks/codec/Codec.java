@@ -21,12 +21,12 @@ import java.io.IOException;
 
 import darks.codec.type.OCObject;
 
-public abstract class OCCodec
+public abstract class Codec
 {
     
     protected CodecConfig codecConfig;
     
-    public OCCodec(CodecConfig codecConfig)
+    public Codec(CodecConfig codecConfig)
     {
         this.codecConfig = codecConfig;
     }

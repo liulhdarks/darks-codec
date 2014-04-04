@@ -19,7 +19,7 @@ package darks.codec;
 
 import java.io.IOException;
 
-import darks.codec.coder.DefaultOCCodec;
+import darks.codec.coder.DefaultCodec;
 import darks.codec.type.OCObject;
 
 /**
@@ -30,7 +30,7 @@ import darks.codec.type.OCObject;
 public class ObjectConvertor
 {
     
-    private OCCodec codec;
+    private Codec codec;
     
     private CodecConfig codecConfig;
     
@@ -41,10 +41,10 @@ public class ObjectConvertor
     public ObjectConvertor()
     {
         initialize();
-        codec = new DefaultOCCodec(codecConfig);
+        codec = new DefaultCodec(codecConfig);
     }
     
-    public ObjectConvertor(OCCodec codec)
+    public ObjectConvertor(Codec codec)
     {
         initialize();
         this.codec = codec;
@@ -118,12 +118,12 @@ public class ObjectConvertor
         }
     }
     
-    public OCCodec getCodec()
+    public Codec getCodec()
     {
         return codec;
     }
     
-    public void setCodec(OCCodec codec)
+    public void setCodec(Codec codec)
     {
         this.codec = codec;
     }
