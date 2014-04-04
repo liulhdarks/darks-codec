@@ -23,6 +23,8 @@ import java.io.InputStream;
 
 import darks.codec.CodecConfig;
 import darks.codec.CodecConfig.EndianType;
+import darks.codec.helper.ByteHelper;
+import darks.codec.helper.StringHelper;
 
 public class BytesInputStream extends InputStream
 {
@@ -36,6 +38,10 @@ public class BytesInputStream extends InputStream
     private int pos;
 
     private int count;
+    
+    private int offsetStart;
+    
+    private int offsetEnd;
 
     public BytesInputStream(byte[] buf, CodecConfig codecConfig)
     {
@@ -110,6 +116,21 @@ public class BytesInputStream extends InputStream
         System.arraycopy(buffer, pos, b, off, len);
         pos += len;
         return len;
+    }
+
+    /**
+     * Returns the number of remaining bytes that can be read (or skipped over)
+     * from this input stream.
+     * <p>
+     * The value returned is <code>count&nbsp;- pos</code>, which is the number
+     * of bytes remaining to be read from the input buffer.
+     * 
+     * @return the number of remaining bytes that can be read (or skipped over)
+     *         from this input stream without blocking.
+     */
+    public int available()
+    {
+        return count - pos;
     }
 
     public int getCount()
@@ -304,15 +325,49 @@ public class BytesInputStream extends InputStream
     {
         return Double.longBitsToDouble(readLong());
     }
-
-    public String readLine() throws IOException
+    
+    public int getOffsetStart()
     {
-        return null;
+        return offsetStart;
     }
 
-    public String readUTF() throws IOException
+    public void setOffsetStart(int offsetStart)
     {
-        return null;
+        this.offsetStart = offsetStart;
+    }
+
+    public int getOffsetEnd()
+    {
+        return offsetEnd;
+    }
+
+    public void setOffsetEnd(int offsetEnd)
+    {
+        this.offsetEnd = offsetEnd;
+    }
+    
+    public void offset(int offstart, int offend)
+    {
+        offsetStart += offstart;
+        offsetEnd += offend;
+        count -= offend;
+    }
+    
+    public void moveHead()
+    {
+        pos = offsetStart;
+    }
+    
+    public int position()
+    {
+        return pos;
+    }
+
+    @Override
+    public String toString()
+    {
+        return StringHelper.buffer("BytesInputStream [pos=", pos, ", count=",
+                count, ']', ByteHelper.toHexString(buffer, offsetStart, offsetEnd));
     }
 
 }

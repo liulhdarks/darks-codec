@@ -15,41 +15,31 @@
  *limitations under the License.
  */
 
-package darks.codec;
+package darks.codec.wrap;
 
 import java.io.IOException;
 
-import darks.codec.type.OCObject;
+import darks.codec.CodecParameter;
+import darks.codec.Decoder;
+import darks.codec.Encoder;
+import darks.codec.iostream.BytesInputStream;
+import darks.codec.iostream.BytesOutputStream;
 
-public abstract class OCCodec
+public class GZipWrapper extends Wrapper
 {
-    
-    protected CodecConfig codecConfig;
-    
-    public OCCodec(CodecConfig codecConfig)
-    {
-        this.codecConfig = codecConfig;
-    }
-    
-    public void activated()
-    {
-    }
-    
-    public abstract byte[] encode(OCObject msg)
-        throws IOException;
-    
-    public abstract OCObject decode(byte[] bytes, OCObject source)
-        throws IOException;
 
-    public CodecConfig getCodecConfig()
+    @Override
+    public void afterEncode(Encoder encoder, BytesOutputStream out,
+            CodecParameter param) throws IOException
     {
-        return codecConfig;
+        
     }
 
-    public void setCodecConfig(CodecConfig codecConfig)
+    @Override
+    public void beforeDecode(Decoder decoder, BytesInputStream in,
+            CodecParameter param) throws IOException
     {
-        this.codecConfig = codecConfig;
+        
     }
-    
-    
+
 }

@@ -25,12 +25,12 @@ import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.OCCodec;
 import darks.codec.coder.cache.Cache;
-import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
 import darks.codec.type.OCMessage;
 import darks.codec.type.OCObject;
+import darks.codec.wrap.WrapChain;
 
 public class DefaultOCCodec extends OCCodec
 {
@@ -45,11 +45,14 @@ public class DefaultOCCodec extends OCCodec
     
     private Cache cache;
     
+    private WrapChain wrapChain;
+    
     public DefaultOCCodec(CodecConfig codecConfig)
     {
         super(codecConfig);
         encoder = new DefaultEncoder();
         decoder = new DefaultDecoder();
+        wrapChain = codecConfig.getWrapChain();
     }
 
     @Override
@@ -67,13 +70,13 @@ public class DefaultOCCodec extends OCCodec
         }
         CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesOutputStream out = new BytesOutputStream(INIT_BYTES_SIZE, codecConfig);
-        beforeEncode(out, param);
+        wrapChain.beforeEncode(encoder, out, param);
         encoder.encodeObject(out, msg, param);
-        afterEncode(out, param);
+        wrapChain.afterEncode(encoder, out, param);
         byte[] bytes = out.toByteArray();
         if (log.isDebugEnabled())
         {
-            log.debug(ByteHelper.toHexString(bytes));
+            log.debug(out.toString());
         }
         return bytes;
     }
@@ -87,9 +90,9 @@ public class DefaultOCCodec extends OCCodec
         }
         CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesInputStream in = new BytesInputStream(bytes, codecConfig);
-        beforeDecode(in, param);
+        wrapChain.beforeDecode(decoder, in, param);
         decoder.decodeObject(in, msg, param);
-        afterDecode(in, param);
+        wrapChain.afterDecode(decoder, in, param);
         return msg;
     }
 }

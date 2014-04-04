@@ -15,41 +15,35 @@
  *limitations under the License.
  */
 
-package darks.codec;
+package darks.codec.exceptions;
 
-import java.io.IOException;
 
-import darks.codec.type.OCObject;
-
-public abstract class OCCodec
+public class VerifyException extends OCException
 {
-    
-    protected CodecConfig codecConfig;
-    
-    public OCCodec(CodecConfig codecConfig)
-    {
-        this.codecConfig = codecConfig;
-    }
-    
-    public void activated()
-    {
-    }
-    
-    public abstract byte[] encode(OCObject msg)
-        throws IOException;
-    
-    public abstract OCObject decode(byte[] bytes, OCObject source)
-        throws IOException;
 
-    public CodecConfig getCodecConfig()
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3829543977230228041L;
+
+    public VerifyException()
     {
-        return codecConfig;
+        super();
     }
 
-    public void setCodecConfig(CodecConfig codecConfig)
+    public VerifyException(String message, Throwable cause)
     {
-        this.codecConfig = codecConfig;
+        super(message, cause);
     }
-    
+
+    public VerifyException(String message)
+    {
+        super(message);
+    }
+
+    public VerifyException(Throwable cause)
+    {
+        super(cause);
+    }
     
 }

@@ -19,10 +19,13 @@ package darks.codec.iostream;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import darks.codec.CodecConfig;
 import darks.codec.CodecConfig.EndianType;
+import darks.codec.helper.ByteHelper;
 
 public class BytesOutputStream extends OutputStream
 {
@@ -43,6 +46,10 @@ public class BytesOutputStream extends OutputStream
     private int lastCount;
 
     private int offset;
+
+    private LinkedList<ByteBuffer> head;
+
+    private LinkedList<ByteBuffer> tail;
 
     public BytesOutputStream(CodecConfig codecConfig)
     {
@@ -108,7 +115,90 @@ public class BytesOutputStream extends OutputStream
 
     public byte[] toByteArray()
     {
-        return Arrays.copyOf(buffer, count);
+        // return Arrays.copyOf(buffer, count);
+        int size = totalSize();
+        ByteBuffer buf = ByteBuffer.allocate(size);
+        if (head != null)
+        {
+            for (ByteBuffer bytes : head)
+            {
+                buf.put(bytes.array());
+            }
+        }
+        buf.put(buffer, 0, count);
+        if (tail != null)
+        {
+            for (ByteBuffer bytes : tail)
+            {
+                buf.put(bytes.array());
+            }
+        }
+        return buf.array();
+    }
+
+    public int totalSize()
+    {
+        int sum = 0;
+        if (head != null)
+        {
+            for (ByteBuffer buf : head)
+            {
+                sum += buf.position();
+            }
+        }
+        if (tail != null)
+        {
+            for (ByteBuffer buf : tail)
+            {
+                sum += buf.position();
+            }
+        }
+        sum += count;
+        return sum;
+    }
+
+    public ByteBuffer newBufferHeadFirst(int size)
+    {
+        if (head == null)
+        {
+            head = new LinkedList<ByteBuffer>();
+        }
+        ByteBuffer buf = ByteBuffer.allocate(size);
+        head.addFirst(buf);
+        return buf;
+    }
+
+    public ByteBuffer newBufferHeadEnd(int size)
+    {
+        if (head == null)
+        {
+            head = new LinkedList<ByteBuffer>();
+        }
+        ByteBuffer buf = ByteBuffer.allocate(size);
+        head.addLast(buf);
+        return buf;
+    }
+
+    public ByteBuffer newBufferTailFirst(int size)
+    {
+        if (tail == null)
+        {
+            tail = new LinkedList<ByteBuffer>();
+        }
+        ByteBuffer buf = ByteBuffer.allocate(size);
+        tail.addFirst(buf);
+        return buf;
+    }
+
+    public ByteBuffer newBufferTailEnd(int size)
+    {
+        if (tail == null)
+        {
+            tail = new LinkedList<ByteBuffer>();
+        }
+        ByteBuffer buf = ByteBuffer.allocate(size);
+        tail.addLast(buf);
+        return buf;
     }
 
     public int size()
@@ -157,6 +247,25 @@ public class BytesOutputStream extends OutputStream
             throw new ArrayIndexOutOfBoundsException(buffer.length);
         }
         System.arraycopy(bytes, 0, buffer, pos, bytes.length);
+    }
+    
+    public void incInt(int pos, int inc) throws IOException
+    {
+        if (pos + 4 > buffer.length)
+        {
+            throw new ArrayIndexOutOfBoundsException(buffer.length);
+        }
+        int src = 0;
+        if (isLittleEndian)
+        {
+            src = ((buffer[pos + 3] << 24) + (buffer[pos + 2] << 16) + (buffer[pos + 1] << 8) + (buffer[pos] << 0));
+        }
+        else
+        {
+            src = ((buffer[pos] << 24) + (buffer[pos + 1] << 16) + (buffer[pos + 2] << 8) + (buffer[pos + 3] << 0));
+        }
+        src += inc;
+        writeInt(src);
     }
 
     public void writeBoolean(boolean v) throws IOException
@@ -290,6 +399,40 @@ public class BytesOutputStream extends OutputStream
     public void setOffset(int offset)
     {
         this.offset = offset;
+    }
+    
+    public LinkedList<ByteBuffer> getHead()
+    {
+        return head;
+    }
+
+    public LinkedList<ByteBuffer> getTail()
+    {
+        return tail;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder ret = new StringBuilder(64);
+        if (head != null)
+        {
+            for (ByteBuffer bytes : head)
+            {
+                ret.append(ByteHelper.toHexString(bytes.array()));
+                ret.append("  ");
+            }
+        }
+        ret.append(ByteHelper.toHexString(buffer));
+        if (tail != null)
+        {
+            for (ByteBuffer bytes : tail)
+            {
+                ret.append("  ");
+                ret.append(ByteHelper.toHexString(bytes.array()));
+            }
+        }
+        return ret.toString();
     }
 
 }

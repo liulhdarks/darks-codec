@@ -19,49 +19,74 @@ package darks.codec.wrap;
 
 import java.io.IOException;
 
-import darks.codec.CodecConfig;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public abstract class Wrapper
+public class WrapChain
 {
-    Wrapper next;
+    Wrapper head;
     
-    Wrapper prev;
+    Wrapper tail;
+    
+    public void add(Wrapper wrap)
+    {
+        if (head == null)
+        {
+            head = wrap;
+            tail = wrap;
+        }
+        else
+        {
+            wrap.next = head;
+            head.prev = wrap;
+            head = wrap;
+        }
+    }
     
     public void beforeEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
+        Wrapper wrap = head;
+        while (wrap != null)
+        {
+            wrap.beforeEncode(encoder, out, param);
+            wrap = wrap.next;
+        }
     }
 
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
+        Wrapper wrap = head;
+        while (wrap != null)
+        {
+            wrap.afterEncode(encoder, out, param);
+            wrap = wrap.next;
+        }
     }
 
     public void beforeDecode(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
+        Wrapper wrap = tail;
+        while (wrap != null)
+        {
+            wrap.beforeDecode(decoder, in, param);
+            wrap = wrap.prev;
+        }
     }
 
     public void afterDecode(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-    }
-    
-    public void computeTotalLength(BytesOutputStream out, int offset, CodecConfig codecConfig) throws IOException
-    {
-        if (offset == 0)
+        Wrapper wrap = tail;
+        while (wrap != null)
         {
-            return;
-        }
-        if (codecConfig.isHasTotalLength() 
-                || (codecConfig.isAutoLength() && !codecConfig.isIgnoreObjectAutoLength()))
-        {
-            out.incInt(0, offset);
+            wrap.afterDecode(decoder, in, param);
+            wrap = wrap.prev;
         }
     }
 }

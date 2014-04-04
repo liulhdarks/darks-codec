@@ -26,42 +26,40 @@ import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public abstract class Wrapper
+public class IdentifyWrapper extends Wrapper
 {
-    Wrapper next;
-    
-    Wrapper prev;
-    
-    public void beforeEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
-    {
-    }
 
+    @Override
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
+        CodecConfig cfg = param.getCodecConfig();
+        if (cfg.isHasIdentifier())
+        {
+            out.newBufferHeadFirst(cfg.getIdentifier().getLength()).put(
+                    cfg.getIdentifier().getBytes(param.isLittleEndian()));
+        }
+        if (cfg.isHasEndIdentifier())
+        {
+            out.newBufferTailEnd(cfg.getEndIdentifier().getLength()).put(
+                    cfg.getEndIdentifier().getBytes(param.isLittleEndian()));
+        }
     }
 
+    @Override
     public void beforeDecode(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
+        CodecConfig cfg = param.getCodecConfig();
+        if (cfg.isHasIdentifier())
+        {
+            in.offset(cfg.getIdentifier().getLength(), 0);
+        }
+        if (cfg.isHasEndIdentifier())
+        {
+            in.offset(0, cfg.getEndIdentifier().getLength());
+        }
+        in.moveHead();
     }
 
-    public void afterDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
-    {
-    }
-    
-    public void computeTotalLength(BytesOutputStream out, int offset, CodecConfig codecConfig) throws IOException
-    {
-        if (offset == 0)
-        {
-            return;
-        }
-        if (codecConfig.isHasTotalLength() 
-                || (codecConfig.isAutoLength() && !codecConfig.isIgnoreObjectAutoLength()))
-        {
-            out.incInt(0, offset);
-        }
-    }
 }

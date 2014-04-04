@@ -101,4 +101,23 @@ public class OCInteger extends OCType<Integer>
         }
     }
     
+    public byte[] getBytes(boolean littleEndian)
+    {
+        byte[] bytes = null;
+        int len = getLength();
+        switch (len)
+        {
+        case BIT8_LEN:
+            bytes = ByteHelper.convertInt8(getValue(0));
+            break;
+        case BIT16_LEN:
+            bytes = ByteHelper.convertInt16(getValue(0), littleEndian);
+            break;
+        case BIT32_LEN:
+            bytes = ByteHelper.convertInt32(getValue(0), littleEndian);
+            break;
+        }
+        return bytes;
+    }
+    
 }

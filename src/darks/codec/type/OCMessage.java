@@ -33,7 +33,6 @@ public class OCMessage extends OCObject
      */
     private static final long serialVersionUID = -3217240880451032242L;
 
-
     protected OCInteger identifier;
 
     protected OCInteger endIdentifier;
@@ -63,7 +62,7 @@ public class OCMessage extends OCObject
     {
         this.identifier = new OCInt16(identifier);
     }
-    
+
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -71,9 +70,11 @@ public class OCMessage extends OCObject
         CodecConfig cfg = param.getCodecConfig();
         if (cfg.isHasIdentifier())
         {
-            identifier = new OCInteger();
-            cfg.getIdentifier().clone(identifier);
-            identifier.writeObject(encoder, out, param);
+            //identifier = new OCInteger();
+            //cfg.getIdentifier().clone(identifier);
+            //identifier.writeObject(encoder, out, param);
+            //out.newBufferHeadFirst(cfg.getIdentifier().getLength()).put(
+            //        cfg.getIdentifier().getBytes(param.isLittleEndian()));
         }
         if (cfg.isHasTotalLength())
         {
@@ -103,9 +104,11 @@ public class OCMessage extends OCObject
         }
         if (cfg.isHasEndIdentifier())
         {
-            endIdentifier = new OCInteger();
-            cfg.getEndIdentifier().clone(endIdentifier);
-            endIdentifier.writeObject(encoder, out, param);
+            // endIdentifier = new OCInteger();
+            // cfg.getEndIdentifier().clone(endIdentifier);
+            // endIdentifier.writeObject(encoder, out, param);
+            //out.newBufferTailEnd(cfg.getEndIdentifier().getLength()).put(
+            //        cfg.getEndIdentifier().getBytes(param.isLittleEndian()));
         }
     }
 
@@ -116,13 +119,13 @@ public class OCMessage extends OCObject
         CodecConfig cfg = param.getCodecConfig();
         if (cfg.isHasEndIdentifier())
         {
-            in.setCount(in.getCount() - cfg.getEndIdentifier().getLength());
+            //in.setCount(in.getCount() - cfg.getEndIdentifier().getLength());
         }
         if (cfg.isHasIdentifier())
         {
-            identifier = new OCInteger();
-            cfg.getIdentifier().clone(identifier);
-            identifier.readObject(decoder, in, param);
+            //identifier = new OCInteger();
+            //cfg.getIdentifier().clone(identifier);
+            //identifier.readObject(decoder, in, param);
         }
         if (cfg.isHasTotalLength())
         {
@@ -149,6 +152,5 @@ public class OCMessage extends OCObject
                 + totalLength + ", ocObject=" + ocObject + ", object=" + object
                 + "]";
     }
-    
-    
+
 }

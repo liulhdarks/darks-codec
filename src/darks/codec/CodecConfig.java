@@ -18,6 +18,7 @@
 package darks.codec;
 
 import darks.codec.type.OCInteger;
+import darks.codec.wrap.WrapChain;
 
 /**
  * 
@@ -61,6 +62,8 @@ public class CodecConfig
     private CacheType cacheType = CacheType.LOCAL;
     
     private String encoding;
+    
+    private WrapChain wrapChain = new WrapChain();
     
     public CodecConfig()
     {
@@ -198,6 +201,11 @@ public class CodecConfig
     public void setCacheType(CacheType cacheType)
     {
         this.cacheType = cacheType;
+    }
+
+    public WrapChain getWrapChain()
+    {
+        return wrapChain;
     }
 
     @Override
