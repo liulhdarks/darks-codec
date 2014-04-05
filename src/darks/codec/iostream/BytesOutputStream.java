@@ -265,7 +265,9 @@ public class BytesOutputStream extends OutputStream
             src = ((buffer[pos] << 24) + (buffer[pos + 1] << 16) + (buffer[pos + 2] << 8) + (buffer[pos + 3] << 0));
         }
         src += inc;
+        setCursor(pos);
         writeInt(src);
+        moveLast();
     }
 
     public void writeBoolean(boolean v) throws IOException
@@ -380,6 +382,13 @@ public class BytesOutputStream extends OutputStream
             write((v >>> 0) & 0xFF);
         }
     }
+    
+    public void reset()
+    {
+        this.count = 0;
+        this.offset = 0;
+        buffer = new byte[buffer.length];
+    }
 
     public int getLastCount()
     {
@@ -423,7 +432,7 @@ public class BytesOutputStream extends OutputStream
                 ret.append("  ");
             }
         }
-        ret.append(ByteHelper.toHexString(buffer));
+        ret.append(ByteHelper.toHexString(buffer, 0, buffer.length - count));
         if (tail != null)
         {
             for (ByteBuffer bytes : tail)

@@ -326,6 +326,15 @@ public class BytesInputStream extends InputStream
         return Double.longBitsToDouble(readLong());
     }
     
+    public void reset(byte[] bytes)
+    {
+        this.buffer = bytes;
+        count = bytes.length;
+        pos = 0;
+        offsetStart = 0;
+        offsetEnd = 0;
+    }
+    
     public int getOffsetStart()
     {
         return offsetStart;

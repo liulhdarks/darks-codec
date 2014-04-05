@@ -1,7 +1,9 @@
-package darks.codec.extern;
+package darks.codec.wrap.verify;
+
 
 public abstract class Verifier
 {
+    
     public Object update(Object initData, byte[] data)
     {
         return update(initData, data, 0, data.length);

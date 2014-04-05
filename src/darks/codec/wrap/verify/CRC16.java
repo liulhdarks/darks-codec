@@ -1,4 +1,4 @@
-package darks.codec.extern;
+package darks.codec.wrap.verify;
 
 import darks.codec.helper.ByteHelper;
 

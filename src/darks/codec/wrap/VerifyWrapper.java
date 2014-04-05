@@ -24,23 +24,31 @@ import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.exceptions.VerifyException;
-import darks.codec.extern.Verifier;
 import darks.codec.helper.ByteHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
+import darks.codec.wrap.verify.CRC16;
+import darks.codec.wrap.verify.Verifier;
 
 public class VerifyWrapper extends Wrapper
 {
 
     static Logger log = Logger.getLogger(VerifyWrapper.class);
+    
+    
 
     Verifier verifier;
 
     public VerifyWrapper(Verifier verifier)
     {
         this.verifier = verifier;
+    }
+    
+    public static VerifyWrapper CRC16()
+    {
+        return new VerifyWrapper(new CRC16());
     }
 
     @Override
