@@ -19,16 +19,16 @@ package darks.codec.coder;
 
 import java.io.IOException;
 
+import darks.codec.Codec;
 import darks.codec.CodecConfig;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
-import darks.codec.Codec;
 import darks.codec.coder.cache.Cache;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
-import darks.codec.type.OCMessage;
+import darks.codec.type.OCInt32;
 import darks.codec.type.OCObject;
 import darks.codec.wrap.WrapChain;
 
@@ -42,11 +42,11 @@ public class DefaultCodec extends Codec
     private Encoder encoder;
 
     private Decoder decoder;
-    
+
     private Cache cache;
-    
+
     private WrapChain wrapChain;
-    
+
     public DefaultCodec(CodecConfig codecConfig)
     {
         super(codecConfig);
@@ -64,13 +64,11 @@ public class DefaultCodec extends Codec
     @Override
     public byte[] encode(OCObject msg) throws IOException
     {
-        if (codecConfig.isHasHeader())
-        {
-            msg = new OCMessage(msg);
-        }
         CodecParameter param = new CodecParameter(codecConfig, cache);
-        BytesOutputStream out = new BytesOutputStream(INIT_BYTES_SIZE, codecConfig);
+        BytesOutputStream out = new BytesOutputStream(INIT_BYTES_SIZE,
+                codecConfig);
         wrapChain.beforeEncode(encoder, out, param);
+        encodeTotalLength(msg, out, param);
         encoder.encodeObject(out, msg, param);
         wrapChain.afterEncode(encoder, out, param);
         byte[] bytes = out.toByteArray();
@@ -84,15 +82,34 @@ public class DefaultCodec extends Codec
     @Override
     public OCObject decode(byte[] bytes, OCObject msg) throws IOException
     {
-        if (codecConfig.isHasHeader())
-        {
-            msg = new OCMessage(msg);
-        }
         CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesInputStream in = new BytesInputStream(bytes, codecConfig);
         wrapChain.beforeDecode(decoder, in, param);
+        decodeTotalLength(msg, in, param);
         decoder.decodeObject(in, msg, param);
         wrapChain.afterDecode(decoder, in, param);
         return msg;
+    }
+
+    private void encodeTotalLength(OCObject msg, BytesOutputStream out,
+            CodecParameter param) throws IOException
+    {
+        if (codecConfig.isHasTotalLength())
+        {
+            OCInt32 totalLength = new OCInt32();
+            totalLength.writeObject(encoder, out, param);
+            msg.setLenType(totalLength);
+        }
+    }
+    
+    private void decodeTotalLength(OCObject msg, BytesInputStream in,
+            CodecParameter param) throws IOException
+    {
+        if (codecConfig.isHasTotalLength())
+        {
+            OCInt32 totalLength = new OCInt32();
+            totalLength.readObject(decoder, in, param);
+            msg.setLenType(totalLength);
+        }
     }
 }

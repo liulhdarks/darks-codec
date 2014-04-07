@@ -19,30 +19,43 @@ package darks.codec.wrap;
 
 import java.io.IOException;
 
-import darks.codec.CodecConfig;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
+import darks.codec.type.OCInteger;
 
 public class IdentifyWrapper extends Wrapper
 {
+    
+    private OCInteger headIdentify;
+
+    private OCInteger tailIdentify;
+
+    public IdentifyWrapper(OCInteger headIdentify)
+    {
+        this.headIdentify = headIdentify;
+    }
+    
+    public IdentifyWrapper(OCInteger headIdentify, OCInteger tailIdentify)
+    {
+        this.headIdentify = headIdentify;
+        this.tailIdentify = tailIdentify;
+    }
 
     @Override
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
-        CodecConfig cfg = param.getCodecConfig();
-        if (cfg.isHasIdentifier())
+        if (headIdentify != null)
         {
-            out.newBufferHeadFirst(cfg.getIdentifier().getLength()).put(
-                    cfg.getIdentifier().getBytes(param.isLittleEndian()));
+            out.newBufferHeadFirst(headIdentify.getLength()).put(
+                    headIdentify.getBytes(param.isLittleEndian()));
         }
-        if (cfg.isHasEndIdentifier())
+        if (tailIdentify != null)
         {
-            out.newBufferTailEnd(cfg.getEndIdentifier().getLength()).put(
-                    cfg.getEndIdentifier().getBytes(param.isLittleEndian()));
+            out.newBufferTailEnd(tailIdentify.getLength()).put(tailIdentify.getBytes(param.isLittleEndian()));
         }
     }
 
@@ -50,14 +63,13 @@ public class IdentifyWrapper extends Wrapper
     public void beforeDecode(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-        CodecConfig cfg = param.getCodecConfig();
-        if (cfg.isHasIdentifier())
+        if (headIdentify != null)
         {
-            in.offset(cfg.getIdentifier().getLength(), 0);
+            in.offset(headIdentify.getLength(), 0);
         }
-        if (cfg.isHasEndIdentifier())
+        if (tailIdentify != null)
         {
-            in.offset(0, cfg.getEndIdentifier().getLength());
+            in.offset(0, tailIdentify.getLength());
         }
         in.moveHead();
     }

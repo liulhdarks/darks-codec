@@ -17,12 +17,12 @@
 
 package darks.codec;
 
-import darks.codec.type.OCInteger;
 import darks.codec.wrap.WrapChain;
 
 /**
  * 
  * CodecConfig.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
@@ -33,84 +33,33 @@ public class CodecConfig
     {
         LITTLE, BIG
     }
-    
+
     public enum CacheType
     {
         NONE, GLOBAL, LOCAL
     }
-    
-    private OCInteger identifier;
-    
-    private OCInteger endIdentifier;
-    
-    private boolean hasIdentifier = true;
 
     private boolean hasTotalLength = true;
-    
-    private boolean hasHeader = true;
-    
+
     private EndianType endianType = EndianType.LITTLE;
-    
+
     private boolean autoLength = false;
-    
+
     private boolean ignoreObjectAutoLength = false;
-    
+
     private boolean ignoreStaticField = false;
-    
+
     private boolean ignoreConstField = true;
-    
+
     private CacheType cacheType = CacheType.LOCAL;
-    
+
     private String encoding;
-    
+
     private WrapChain wrapChain = new WrapChain();
-    
+
     public CodecConfig()
     {
-        
-    }
 
-    public OCInteger getIdentifier()
-    {
-        return identifier;
-    }
-
-    public void setIdentifier(OCInteger identifier)
-    {
-        this.identifier = identifier;
-        if (identifier != null || endIdentifier != null)
-        {
-            setHasIdentifier(true);
-        }
-    }
-
-    public OCInteger getEndIdentifier()
-    {
-        return endIdentifier;
-    }
-
-    public void setEndIdentifier(OCInteger endIdentifier)
-    {
-        this.endIdentifier = endIdentifier;
-        if (identifier != null || endIdentifier != null)
-        {
-            setHasIdentifier(true);
-        }
-    }
-
-    public boolean isHasIdentifier()
-    {
-        return hasIdentifier && (identifier != null);
-    }
-
-    public boolean isHasEndIdentifier()
-    {
-        return hasIdentifier && (endIdentifier != null);
-    }
-
-    public void setHasIdentifier(boolean hasIdentifier)
-    {
-        this.hasIdentifier = hasIdentifier;
     }
 
     public boolean isHasTotalLength()
@@ -131,16 +80,6 @@ public class CodecConfig
     public void setEndianType(EndianType endianType)
     {
         this.endianType = endianType;
-    }
-
-    public boolean isHasHeader()
-    {
-        return hasHeader;
-    }
-
-    public void setHasHeader(boolean hasHeader)
-    {
-        this.hasHeader = hasHeader;
     }
 
     public boolean isAutoLength()
@@ -211,14 +150,12 @@ public class CodecConfig
     @Override
     public String toString()
     {
-        return "CodecConfig [identifier=" + identifier + ", hasIdentifier="
-                + hasIdentifier + ", hasTotalLength=" + hasTotalLength
-                + ", hasHeader=" + hasHeader + ", endianType=" + endianType
-                + ", autoLength=" + autoLength + ", ignoreObjectAutoLength="
-                + ignoreObjectAutoLength + ", ignoreStaticField="
-                + ignoreStaticField + ", ignoreConstField=" + ignoreConstField
-                + ", encoding=" + encoding + "]";
+        return "CodecConfig [hasTotalLength=" + hasTotalLength
+                + ", endianType=" + endianType + ", autoLength=" + autoLength
+                + ", ignoreObjectAutoLength=" + ignoreObjectAutoLength
+                + ", ignoreStaticField=" + ignoreStaticField
+                + ", ignoreConstField=" + ignoreConstField + ", encoding="
+                + encoding + "]";
     }
-    
-    
+
 }
