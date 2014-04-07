@@ -63,7 +63,7 @@ public class BytesInputStream extends InputStream
      */
     public int read()
     {
-        return (pos < count) ? (buffer[pos++] & 0xff) : -1;
+        return (pos - offsetStart < count) ? (buffer[pos++] & 0xff) : -1;
     }
 
     /**
@@ -101,13 +101,13 @@ public class BytesInputStream extends InputStream
         {
             throw new IndexOutOfBoundsException();
         }
-        if (pos >= count)
+        if (pos - offsetStart >= count)
         {
             return -1;
         }
-        if (pos + len > count)
+        if (pos + len - offsetStart > count)
         {
-            len = count - pos;
+            len = count - pos + offsetStart;
         }
         if (len <= 0)
         {
@@ -130,7 +130,7 @@ public class BytesInputStream extends InputStream
      */
     public int available()
     {
-        return count - pos;
+        return count - pos + offsetStart;
     }
 
     public int getCount()
@@ -145,7 +145,7 @@ public class BytesInputStream extends InputStream
 
     public void setCursor(int pos)
     {
-        this.pos = pos;
+        this.pos = pos + offsetStart;
     }
 
     public byte[] getDirectBytes()
@@ -360,6 +360,7 @@ public class BytesInputStream extends InputStream
         offsetStart += offstart;
         offsetEnd += offend;
         count -= offend;
+        count -= offstart;
     }
     
     public void moveHead()
@@ -376,7 +377,7 @@ public class BytesInputStream extends InputStream
     public String toString()
     {
         return StringHelper.buffer("BytesInputStream [pos=", pos, ", count=",
-                count, ']', ByteHelper.toHexString(buffer, offsetStart, offsetEnd));
+                count, ']', ByteHelper.toHexString(buffer, offsetStart, count));
     }
 
 }

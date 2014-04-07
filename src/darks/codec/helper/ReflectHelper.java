@@ -54,6 +54,7 @@ public final class ReflectHelper
         try
         {
             Constructor<E> ctr = clazz.getConstructor();
+            ctr.setAccessible(true);
             return ctr.newInstance();
         }
         catch (Exception e)

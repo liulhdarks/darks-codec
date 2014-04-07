@@ -19,6 +19,7 @@ package darks.codec.type;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
@@ -26,6 +27,7 @@ import darks.codec.Encoder;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
+import darks.codec.logs.Logger;
 
 public class OCBytes extends OCType<byte[]>
 {
@@ -34,7 +36,7 @@ public class OCBytes extends OCType<byte[]>
      */
     private static final long serialVersionUID = -3809172632938626001L;
     
-    //private static final Logger log = Logger.getLogger(OCBytes.class);
+    private static Logger log = Logger.getLogger(OCBytes.class);
     
     public OCBytes()
     {
@@ -59,6 +61,72 @@ public class OCBytes extends OCType<byte[]>
     public OCBytes(byte[] bytes, int len)
     {
         super(bytes, len);
+    }
+    
+    public static OCBytes int8(int v)
+    {
+        return new OCBytes(ByteHelper.convertInt8(v));
+    }
+    
+    public static OCBytes int16(int v, boolean littleEndian)
+    {
+        return new OCBytes(ByteHelper.convertInt16(v, littleEndian));
+    }
+    
+    public static OCBytes int32(int v, boolean littleEndian)
+    {
+        return new OCBytes(ByteHelper.convertInt32(v, littleEndian));
+    }
+    
+    public static OCBytes string(String s)
+    {
+        return new OCBytes(s.getBytes());
+    }
+    
+    public static OCBytes string(String s, String encoding)
+    {
+        try
+        {
+            return new OCBytes(s.getBytes(encoding));
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            log.error(e.getMessage(), e);
+            return null;
+        }
+    }
+    
+    public String getString()
+    {
+        return new String(getValue());
+    }
+    
+    public String getString(String encoding)
+    {
+        try
+        {
+            return new String(getValue(), encoding);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            log.error(e.getMessage(), e);
+            return null;
+        }
+    }
+    
+    public int getInt8()
+    {
+        return ByteHelper.convertToInt8(getValue());
+    }
+    
+    public int getInt16(boolean littleEndian)
+    {
+        return ByteHelper.convertToInt16(getValue(), littleEndian);
+    }
+    
+    public int getInt32(boolean littleEndian)
+    {
+        return ByteHelper.convertToInt32(getValue(), littleEndian);
     }
     
     @Override

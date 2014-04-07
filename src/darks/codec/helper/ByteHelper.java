@@ -67,6 +67,24 @@ public final class ByteHelper
         return 0;
     }
 
+    public static int convertToInt32(byte[] bytes, boolean isLE)
+    {
+        if (bytes.length >= 4)
+        {
+            if (isLE)
+            {
+                return (((bytes[3] & 0xff) << 24) + ((bytes[2] & 0xff) << 16)
+                        + ((bytes[1] & 0xff) << 8) + ((bytes[0] & 0xff) << 0));
+            }
+            else
+            {
+                return (((bytes[0] & 0xff) << 24) + ((bytes[1] & 0xff) << 16)
+                        + ((bytes[2] & 0xff) << 8) + ((bytes[3] & 0xff) << 0));
+            }
+        }
+        return 0;
+    }
+
     public static byte[] convertInt16(int v, boolean isLE)
     {
         return convertInt16((short) v, isLE);
@@ -89,6 +107,22 @@ public final class ByteHelper
         if (bytes.length >= 2)
         {
             return ((bytes[0] & 0xff) << 8) + ((bytes[1] & 0xff) << 0);
+        }
+        return 0;
+    }
+
+    public static int convertToInt16(byte[] bytes, boolean isLE)
+    {
+        if (bytes.length >= 2)
+        {
+            if (isLE)
+            {
+                return ((bytes[1] & 0xff) << 8) + ((bytes[0] & 0xff) << 0);
+            }
+            else
+            {
+                return ((bytes[0] & 0xff) << 8) + ((bytes[1] & 0xff) << 0);
+            }
         }
         return 0;
     }
@@ -185,21 +219,24 @@ public final class ByteHelper
 
     public static String toHexString(byte[] coded)
     {
-        return toHexString(coded, 0, 0);
+        if (coded == null)
+        {
+            return "";
+        }
+        return toHexString(coded, 0, coded.length);
     }
 
-    public static String toHexString(byte[] coded, int offsetStart,
-            int offsetEnd)
+    public static String toHexString(byte[] coded, int offset,
+            int length)
     {
         if (coded == null)
         {
             return "";
         }
-        int len = coded.length - offsetEnd;
-        StringBuilder result = new StringBuilder(len * 3);
-        for (int i = offsetStart; i < len; i++)
+        StringBuilder result = new StringBuilder(length * 3);
+        for (int i = 0; i < length; i++)
         {
-            int c = coded[i];
+            int c = coded[i + offset];
             if (c < 0)
             {
                 c += 256;

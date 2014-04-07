@@ -49,8 +49,6 @@ public class IntegerType extends BaseType
     {
         try
         {
-//            byte[] bytes = ByteHelper.readBytes(in, 4, param.isLittleEndian());
-//            int value = ByteHelper.convertToInt32(bytes);
             return in.readInt();
         }
         catch (IOException e)

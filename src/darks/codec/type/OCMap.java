@@ -51,6 +51,12 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
         map = new HashMap<K, E>();
         mapList = new HashMap<K, List<E>>();
     }
+    
+    public OCMap(Map<? extends K, ? extends E> map)
+    {
+        map = this.map;
+        mapList = new HashMap<K, List<E>>();
+    }
 
     @Override
     public int size()

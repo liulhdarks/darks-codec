@@ -29,7 +29,8 @@ import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
-import darks.codec.wrap.verify.CRC16;
+import darks.codec.wrap.verify.CRC16Verifier;
+import darks.codec.wrap.verify.CRC32Verifier;
 import darks.codec.wrap.verify.Verifier;
 
 public class VerifyWrapper extends Wrapper
@@ -48,7 +49,12 @@ public class VerifyWrapper extends Wrapper
     
     public static VerifyWrapper CRC16()
     {
-        return new VerifyWrapper(new CRC16());
+        return new VerifyWrapper(new CRC16Verifier());
+    }
+    
+    public static VerifyWrapper CRC32()
+    {
+        return new VerifyWrapper(new CRC32Verifier());
     }
 
     @Override
@@ -73,6 +79,10 @@ public class VerifyWrapper extends Wrapper
             }
         }
         byte[] codes = verifier.getVerifyCode(code, param.isLittleEndian());
+        if (codes == null)
+        {
+            throw new VerifyException("Fail to get verify code by " + verifier);
+        }
         out.newBufferTailEnd(codes.length).put(codes);
     }
 
@@ -90,6 +100,10 @@ public class VerifyWrapper extends Wrapper
         Object code = verifier
                 .update(null, bytes, in.position(), in.getCount());
         byte[] codes = verifier.getVerifyCode(code, param.isLittleEndian());
+        if (codes == null)
+        {
+            throw new VerifyException("Fail to get verify code by " + verifier);
+        }
         if (log.isDebugEnabled())
         {
             log.debug(StringHelper.buffer("Verify source:",

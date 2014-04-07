@@ -2,14 +2,14 @@ package darks.codec.wrap.verify;
 
 import darks.codec.helper.ByteHelper;
 
-public class CRC16 extends Verifier
+public class CRC16Verifier extends Verifier
 {
 
     private short[] crcTable = new short[256];
 
     private int gPloy = 0x1021; // 生成多项式
 
-    public CRC16()
+    public CRC16Verifier()
     {
         computeCrcTable();
     }
@@ -55,10 +55,10 @@ public class CRC16 extends Verifier
     public Object update(Object initData, byte[] data, int offset, int length)
     {
         int crc = (Integer)(initData == null ? 0 : initData);
-        for (int i = offset; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             crc = ((crc & 0xFF) << 8)
-                    ^ crcTable[(((crc & 0xFF00) >> 8) ^ data[i]) & 0xFF];
+                    ^ crcTable[(((crc & 0xFF00) >> 8) ^ data[i + offset]) & 0xFF];
         }
         return crc;
     }

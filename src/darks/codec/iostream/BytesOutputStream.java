@@ -432,7 +432,7 @@ public class BytesOutputStream extends OutputStream
                 ret.append("  ");
             }
         }
-        ret.append(ByteHelper.toHexString(buffer, 0, buffer.length - count));
+        ret.append(ByteHelper.toHexString(buffer, 0, count));
         if (tail != null)
         {
             for (ByteBuffer bytes : tail)
