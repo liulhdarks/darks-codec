@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import darks.codec.Codec;
 import darks.codec.CodecConfig;
+import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -30,6 +31,7 @@ import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
 import darks.codec.type.OCInt32;
 import darks.codec.type.OCObject;
+import darks.codec.wrap.TotalLengthWrapper;
 import darks.codec.wrap.WrapChain;
 
 public class DefaultCodec extends Codec
@@ -46,6 +48,8 @@ public class DefaultCodec extends Codec
     private Cache cache;
 
     private WrapChain wrapChain;
+    
+    private TotalLengthWrapper totalLenWrap = new TotalLengthWrapper();
 
     public DefaultCodec(CodecConfig codecConfig)
     {
@@ -67,10 +71,13 @@ public class DefaultCodec extends Codec
         CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesOutputStream out = new BytesOutputStream(INIT_BYTES_SIZE,
                 codecConfig);
+        FinalEncodeQueue queue = new FinalEncodeQueue();
+        param.setFinalQueue(queue);
         wrapChain.beforeEncode(encoder, out, param);
         encodeTotalLength(msg, out, param);
         encoder.encodeObject(out, msg, param);
         wrapChain.afterEncode(encoder, out, param);
+        queue.doFinal(encoder, out, param);
         byte[] bytes = out.toByteArray();
         if (log.isDebugEnabled())
         {
@@ -94,18 +101,19 @@ public class DefaultCodec extends Codec
     private void encodeTotalLength(OCObject msg, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
-        if (codecConfig.isHasTotalLength())
+        if (codecConfig.getTotalLengthType() != TotalLengthType.AUTO)
         {
             OCInt32 totalLength = new OCInt32();
             totalLength.writeObject(encoder, out, param);
             msg.setLenType(totalLength);
+            param.getFinalQueue().addWrap(totalLenWrap, null);
         }
     }
     
     private void decodeTotalLength(OCObject msg, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-        if (codecConfig.isHasTotalLength())
+        if (codecConfig.getTotalLengthType() != TotalLengthType.AUTO)
         {
             OCInt32 totalLength = new OCInt32();
             totalLength.readObject(decoder, in, param);

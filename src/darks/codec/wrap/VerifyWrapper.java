@@ -19,10 +19,14 @@ package darks.codec.wrap;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.LinkedList;
+import java.util.List;
 
+import darks.codec.CodecConfig;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.exceptions.VerifyException;
 import darks.codec.helper.ByteHelper;
 import darks.codec.helper.StringHelper;
@@ -32,13 +36,12 @@ import darks.codec.logs.Logger;
 import darks.codec.wrap.verify.CRC16Verifier;
 import darks.codec.wrap.verify.CRC32Verifier;
 import darks.codec.wrap.verify.Verifier;
+import darks.codec.wrap.verify.VerifyExtern;
 
 public class VerifyWrapper extends Wrapper
 {
 
     static Logger log = Logger.getLogger(VerifyWrapper.class);
-    
-    
 
     Verifier verifier;
 
@@ -46,12 +49,12 @@ public class VerifyWrapper extends Wrapper
     {
         this.verifier = verifier;
     }
-    
+
     public static VerifyWrapper CRC16()
     {
         return new VerifyWrapper(new CRC16Verifier());
     }
-    
+
     public static VerifyWrapper CRC32()
     {
         return new VerifyWrapper(new CRC32Verifier());
@@ -61,19 +64,59 @@ public class VerifyWrapper extends Wrapper
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
-        computeTotalLength(out, verifier.verifyLength(), param.getCodecConfig());
-        Object code = null;
+        if (log.isDebugEnabled())
+        {
+            log.debug("Pre-encode verify " + verifier + " length:" + verifier.verifyLength());
+        }
+        List<ByteBuffer> headList = null;
+        List<ByteBuffer> tailList = null;
+        CodecConfig cfg = param.getCodecConfig();
+        if (cfg.getTotalLengthType() == TotalLengthType.AUTO)
+        {
+            computeTotalLength(out, verifier.verifyLength(), cfg);
+        }
         if (out.getHead() != null)
         {
+            headList = new LinkedList<ByteBuffer>();
             for (ByteBuffer buf : out.getHead())
+            {
+                headList.add(buf);
+            }
+        }
+        if (out.getTail() != null)
+        {
+            tailList = new LinkedList<ByteBuffer>();
+            for (ByteBuffer buf : out.getTail())
+            {
+                tailList.add(buf);
+            }
+        }
+        int len = verifier.verifyLength();
+        ByteBuffer verifyBuf = (ByteBuffer)out.newBufferTailEnd(len).position(len);
+        param.getFinalQueue().addWrap(this, new VerifyExtern(headList, tailList, verifyBuf));
+    }
+
+    @Override
+    public void finalEncode(Encoder encoder, BytesOutputStream out,
+            CodecParameter param, Object extern) throws IOException
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug("Final encode verify " + verifier);
+        }
+        VerifyExtern vExtern = (VerifyExtern)extern;
+        Object code = null;
+        if (vExtern.headList != null)
+        {
+            for (ByteBuffer buf : vExtern.headList)
             {
                 code = verifier.update(code, buf.array());
             }
         }
         code = verifier.update(code, out.getDirectBytes(), 0, out.size());
-        if (out.getTail() != null)
+        if (vExtern.tailList != null)
         {
-            for (ByteBuffer buf : out.getTail())
+            for (ByteBuffer buf : vExtern.tailList)
             {
                 code = verifier.update(code, buf.array());
             }
@@ -83,7 +126,8 @@ public class VerifyWrapper extends Wrapper
         {
             throw new VerifyException("Fail to get verify code by " + verifier);
         }
-        out.newBufferTailEnd(codes.length).put(codes);
+        vExtern.verifyBuf.flip();
+        vExtern.verifyBuf.put(codes);
     }
 
     @Override
@@ -122,4 +166,5 @@ public class VerifyWrapper extends Wrapper
         }
     }
 
+    
 }

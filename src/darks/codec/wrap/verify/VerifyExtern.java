@@ -17,18 +17,22 @@
 
 package darks.codec.wrap.verify;
 
+import java.nio.ByteBuffer;
+import java.util.List;
 
-public abstract class Verifier
+public class VerifyExtern
 {
+    public List<ByteBuffer> headList;
     
-    public Object update(Object initData, byte[] data)
+    public List<ByteBuffer> tailList;
+    
+    public ByteBuffer verifyBuf;
+
+    public VerifyExtern(List<ByteBuffer> headList, List<ByteBuffer> tailList, ByteBuffer verifyBuf)
     {
-        return update(initData, data, 0, data.length);
+        this.headList = headList;
+        this.tailList = tailList;
+        this.verifyBuf = verifyBuf;
     }
     
-    public abstract Object update(Object initData, byte[] data, int offset, int length);
-    
-    public abstract byte[] getVerifyCode(Object code, boolean littleEndian);
-    
-    public abstract int verifyLength();
 }

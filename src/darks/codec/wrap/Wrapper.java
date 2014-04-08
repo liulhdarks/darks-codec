@@ -29,9 +29,9 @@ import darks.codec.iostream.BytesOutputStream;
 public abstract class Wrapper
 {
     Wrapper next;
-    
+
     Wrapper prev;
-    
+
     public void beforeEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
@@ -39,6 +39,11 @@ public abstract class Wrapper
 
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
+    {
+    }
+
+    public void finalEncode(Encoder encoder, BytesOutputStream out,
+            CodecParameter param, Object extern) throws IOException
     {
     }
 
@@ -51,15 +56,15 @@ public abstract class Wrapper
             CodecParameter param) throws IOException
     {
     }
-    
-    public void computeTotalLength(BytesOutputStream out, int offset, CodecConfig codecConfig) throws IOException
+
+    public void computeTotalLength(BytesOutputStream out, int offset,
+            CodecConfig codecConfig) throws IOException
     {
         if (offset == 0)
         {
             return;
         }
-        if (codecConfig.isHasTotalLength() 
-                || (codecConfig.isAutoLength() && !codecConfig.isIgnoreObjectAutoLength()))
+        if (codecConfig.isHasTotalLength())
         {
             out.incInt(0, offset);
         }

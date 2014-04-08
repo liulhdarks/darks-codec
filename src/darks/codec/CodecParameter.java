@@ -20,6 +20,7 @@ package darks.codec;
 import java.lang.reflect.Field;
 
 import darks.codec.CodecConfig.EndianType;
+import darks.codec.coder.FinalEncodeQueue;
 import darks.codec.coder.cache.Cache;
 
 public class CodecParameter
@@ -38,6 +39,8 @@ public class CodecParameter
     private Cache cache;
     
     private Field currentfield;
+    
+    private FinalEncodeQueue finalQueue;
     
     public CodecParameter(CodecConfig codecConfig, Cache cache)
     {
@@ -89,4 +92,14 @@ public class CodecParameter
         this.currentfield = currentfield;
     }
 
+    public FinalEncodeQueue getFinalQueue()
+    {
+        return finalQueue;
+    }
+
+    public void setFinalQueue(FinalEncodeQueue finalQueue)
+    {
+        this.finalQueue = finalQueue;
+    }
+    
 }

@@ -87,13 +87,13 @@ public class ZipWrapper extends Wrapper
             bis = new BufferedInputStream(bais);
             out.reset();
             int start = 0;
-            if (cfg.isHasTotalLength() || cfg.isAutoLength())
+            if (cfg.isHasTotalLength())
             {
                 start = 4;
                 out.setCursor(start);
             }
             compress.compress(bis, out);
-            if (cfg.isHasTotalLength() || cfg.isAutoLength())
+            if (cfg.isHasTotalLength())
             {
                 int count = out.size() - start;
                 out.setCursor(0);
@@ -125,7 +125,7 @@ public class ZipWrapper extends Wrapper
         }
         CodecConfig cfg = param.getCodecConfig();
         in.moveHead();
-        if (cfg.isHasTotalLength() || cfg.isAutoLength())
+        if (cfg.isHasTotalLength())
         {
             int count = in.readInt();
             if (log.isDebugEnabled())

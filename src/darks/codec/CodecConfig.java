@@ -18,6 +18,7 @@
 package darks.codec;
 
 import darks.codec.wrap.WrapChain;
+import darks.codec.wrap.Wrapper;
 
 /**
  * 
@@ -39,7 +40,12 @@ public class CodecConfig
         NONE, GLOBAL, LOCAL
     }
 
-    private boolean hasTotalLength = true;
+    public enum TotalLengthType
+    {
+        AUTO, BODY, HEAD_BODY
+    }
+    
+    private TotalLengthType totalLengthType = TotalLengthType.AUTO;
 
     private EndianType endianType = EndianType.LITTLE;
 
@@ -64,12 +70,28 @@ public class CodecConfig
 
     public boolean isHasTotalLength()
     {
-        return hasTotalLength;
+        if (totalLengthType == TotalLengthType.AUTO)
+        {
+            if (autoLength && !ignoreObjectAutoLength)
+            {
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+    public TotalLengthType getTotalLengthType()
+    {
+        return totalLengthType;
     }
 
-    public void setHasTotalLength(boolean hasTotalLength)
+    public void setTotalLengthType(TotalLengthType totalLengthType)
     {
-        this.hasTotalLength = hasTotalLength;
+        this.totalLengthType = totalLengthType;
     }
 
     public EndianType getEndianType()
@@ -147,10 +169,15 @@ public class CodecConfig
         return wrapChain;
     }
 
+    public void addWrap(Wrapper wrap)
+    {
+        wrapChain.add(wrap);
+    }
+
     @Override
     public String toString()
     {
-        return "CodecConfig [hasTotalLength=" + hasTotalLength
+        return "CodecConfig [totalLengthType=" + totalLengthType
                 + ", endianType=" + endianType + ", autoLength=" + autoLength
                 + ", ignoreObjectAutoLength=" + ignoreObjectAutoLength
                 + ", ignoreStaticField=" + ignoreStaticField

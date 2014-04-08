@@ -24,6 +24,9 @@ import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
+import darks.codec.type.OCInt16;
+import darks.codec.type.OCInt32;
+import darks.codec.type.OCInt8;
 import darks.codec.type.OCInteger;
 
 public class IdentifyWrapper extends Wrapper
@@ -32,6 +35,21 @@ public class IdentifyWrapper extends Wrapper
     private OCInteger headIdentify;
 
     private OCInteger tailIdentify;
+
+    public IdentifyWrapper(byte identify)
+    {
+        this.headIdentify = new OCInt8(identify);
+    }
+
+    public IdentifyWrapper(short identify)
+    {
+        this.headIdentify = new OCInt16(identify);
+    }
+
+    public IdentifyWrapper(int identify)
+    {
+        this.headIdentify = new OCInt32(identify);
+    }
 
     public IdentifyWrapper(OCInteger headIdentify)
     {
