@@ -15,24 +15,18 @@
  *limitations under the License.
  */
 
-package darks.codec.type;
+package darks.codec.annotations;
 
-import java.io.IOException;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import darks.codec.CodecParameter;
-import darks.codec.Decoder;
-import darks.codec.Encoder;
-import darks.codec.annotations.CodecType;
-import darks.codec.iostream.BytesInputStream;
-import darks.codec.iostream.BytesOutputStream;
-
-@CodecType
-public interface OCType
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface CodecType
 {
-
-    public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException;
-
-    public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException;
+    String value() default "";
 }

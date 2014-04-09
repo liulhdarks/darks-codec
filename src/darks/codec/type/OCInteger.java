@@ -22,16 +22,14 @@ import java.io.IOException;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public class OCInteger extends OCType<Integer>
+@CodecType
+public class OCInteger extends OCBaseType<Integer>
 {
-    
-    /**
-     */
-    private static final long serialVersionUID = -5799245199331542476L;
     
     public static final int BIT8_LEN = 1;
     

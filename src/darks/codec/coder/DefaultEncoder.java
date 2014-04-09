@@ -28,7 +28,7 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
-import darks.codec.type.OCSerializable;
+import darks.codec.type.OCType;
 import darks.codec.type.OCObject;
 
 public class DefaultEncoder extends Encoder
@@ -51,7 +51,7 @@ public class DefaultEncoder extends Encoder
         }
         else if (ReflectHelper.isDefaultType(obj))
         {
-            encodeDefault(out, (OCSerializable) obj, param);
+            encodeDefault(out, (OCType) obj, param);
         }
         else
         {
@@ -59,7 +59,7 @@ public class DefaultEncoder extends Encoder
         }
     }
 
-    private void encodeDefault(BytesOutputStream out, OCSerializable ocs,
+    private void encodeDefault(BytesOutputStream out, OCType ocs,
             CodecParameter param)
     {
         try
@@ -70,7 +70,7 @@ public class DefaultEncoder extends Encoder
             }
             if (ocs == null && param.getCurrentfield() != null)
             {
-                ocs = (OCSerializable)ReflectHelper.newInstance(param.getCurrentfield().getType());
+                ocs = (OCType)ReflectHelper.newInstance(param.getCurrentfield().getType());
             }
             if (ocs != null)
             {

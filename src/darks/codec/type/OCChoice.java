@@ -22,14 +22,13 @@ import java.io.IOException;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+@CodecType
 public class OCChoice<T> extends OCBase
 {
-    /**
-     */
-    private static final long serialVersionUID = -1128977532526843170L;
     
     private OCBase selected;
     

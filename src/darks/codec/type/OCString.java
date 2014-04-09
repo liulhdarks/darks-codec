@@ -22,16 +22,14 @@ import java.io.IOException;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public class OCString extends OCType<String>
+@CodecType
+public class OCString extends OCBaseType<String>
 {
-    
-    /**
-     */
-    private static final long serialVersionUID = -956003176522540628L;
     
     public OCString()
     {

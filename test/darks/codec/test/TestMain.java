@@ -5,7 +5,7 @@ import java.io.IOException;
 import darks.codec.CodecConfig.CacheType;
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
-import darks.codec.ObjectConvertor;
+import darks.codec.ObjectCoder;
 import darks.codec.type.OCInt16;
 import darks.codec.type.OCInt32;
 import darks.codec.type.OCInt8;
@@ -13,7 +13,6 @@ import darks.codec.type.OCList;
 import darks.codec.type.OCObject;
 import darks.codec.wrap.IdentifyWrapper;
 import darks.codec.wrap.VerifyWrapper;
-import darks.codec.wrap.ZipWrapper;
 
 public class TestMain
 {
@@ -24,19 +23,20 @@ public class TestMain
      */
     public static void main(String[] args) throws IOException
     {
-        ObjectConvertor oc = new ObjectConvertor();
+        ObjectCoder oc = new ObjectCoder();
         oc.getCodecConfig().setEndianType(EndianType.LITTLE);
         oc.getCodecConfig().setTotalLengthType(TotalLengthType.HEAD_BODY);
         oc.getCodecConfig().setAutoLength(true);
         oc.getCodecConfig().setCacheType(CacheType.NONE);
         oc.getCodecConfig().addWrap(new IdentifyWrapper(new OCInt16(0xfafb), new OCInt8(0xFF)));
         oc.getCodecConfig().addWrap(VerifyWrapper.CRC16());
-        oc.getCodecConfig().addWrap(ZipWrapper.JZLIB());
+        //oc.getCodecConfig().addWrap(CipherWrapper.AES("darks"));
+        //oc.getCodecConfig().addWrap(ZipWrapper.JZLIB());
         //oc.getCodecConfig().getWrapChain().add(ZipWrapper.JDK_GZIP());
         //oc.getCodecConfig().getWrapChain().add(ZipWrapper.COMMON_COMPRESS(CompressorStreamFactory.SNAPPY_FRAMED));
         //oc.getCodecConfig().setIgnoreObjectAutoLength(true);
         long st = System.currentTimeMillis();
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 10000; i++)
         {
             MainMsg msg = new MainMsg();
             msg.id = 10;
@@ -51,7 +51,7 @@ public class TestMain
             
             MainMsg msg2 = new MainMsg();
             oc.decode(bytes, msg2);
-            System.out.println(msg2);
+            //System.out.println(msg2);
         }
         long dt = System.currentTimeMillis() - st;
         System.out.println("cost time:" + dt);

@@ -24,17 +24,15 @@ import java.io.UnsupportedEncodingException;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
 
-public class OCBytes extends OCType<byte[]>
+@CodecType
+public class OCBytes extends OCBaseType<byte[]>
 {
-    
-    /**
-     */
-    private static final long serialVersionUID = -3809172632938626001L;
     
     private static Logger log = Logger.getLogger(OCBytes.class);
     

@@ -17,12 +17,11 @@
 
 package darks.codec.type;
 
+import darks.codec.annotations.CodecType;
+
+@CodecType
 public class OCInt8 extends OCInteger
 {
-    
-    /**
-     */
-    private static final long serialVersionUID = 8680326158431049622L;
     
     public OCInt8()
     {

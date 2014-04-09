@@ -23,17 +23,15 @@ import java.lang.reflect.Field;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.coder.cache.Cache;
 import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+@CodecType
 public class OCObject extends OCBase
 {
-
-    /**
-     */
-    private static final long serialVersionUID = -8825839864474490788L;
 
     private String[] fieldSequence;
     

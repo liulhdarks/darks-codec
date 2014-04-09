@@ -2,13 +2,11 @@ package darks.codec.test.map;
 
 import java.io.IOException;
 
-import darks.codec.ObjectConvertor;
 import darks.codec.CodecConfig.CacheType;
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
+import darks.codec.ObjectCoder;
 import darks.codec.type.OCBytes;
-import darks.codec.type.OCInt16;
-import darks.codec.type.OCInt8;
 import darks.codec.type.OCMap;
 import darks.codec.wrap.IdentifyWrapper;
 import darks.codec.wrap.VerifyWrapper;
@@ -18,7 +16,7 @@ public class TestMap
     
     public static void main(String[] args) throws IOException
     {
-        ObjectConvertor oc = new ObjectConvertor();
+        ObjectCoder oc = new ObjectCoder();
         oc.getCodecConfig().setEndianType(EndianType.LITTLE);
         oc.getCodecConfig().setTotalLengthType(TotalLengthType.HEAD_BODY);
         oc.getCodecConfig().setAutoLength(true);
@@ -34,7 +32,7 @@ public class TestMap
         testIntObjectMap(oc);
     }
     
-    private static void testIntMap(ObjectConvertor oc) throws IOException
+    private static void testIntMap(ObjectCoder oc) throws IOException
     {
         MapIntIntMsg msg1 = new MapIntIntMsg();
         msg1.code = "1234567890";
@@ -47,7 +45,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testStringIntMap(ObjectConvertor oc) throws IOException
+    private static void testStringIntMap(ObjectCoder oc) throws IOException
     {
         MapStringIntMsg msg1 = new MapStringIntMsg();
         msg1.code = "1234567890";
@@ -60,7 +58,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testIntStringMap(ObjectConvertor oc) throws IOException
+    private static void testIntStringMap(ObjectCoder oc) throws IOException
     {
         MapIntStringMsg msg1 = new MapIntStringMsg();
         msg1.code = "1234567890";
@@ -73,7 +71,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testIntBytesMap(ObjectConvertor oc) throws IOException
+    private static void testIntBytesMap(ObjectCoder oc) throws IOException
     {
         MapIntBytesMsg msg1 = new MapIntBytesMsg();
         msg1.code = "1234567890";
@@ -86,7 +84,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testIntObjectMap(ObjectConvertor oc) throws IOException
+    private static void testIntObjectMap(ObjectCoder oc) throws IOException
     {
         MapIntObjectMsg msg1 = new MapIntObjectMsg();
         msg1.code = "1234567890";

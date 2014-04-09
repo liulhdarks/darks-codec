@@ -15,24 +15,14 @@
  *limitations under the License.
  */
 
-package darks.codec.type;
-
-import java.io.IOException;
+package darks.codec.wrap.cipher;
 
 import darks.codec.CodecParameter;
-import darks.codec.Decoder;
-import darks.codec.Encoder;
-import darks.codec.annotations.CodecType;
-import darks.codec.iostream.BytesInputStream;
-import darks.codec.iostream.BytesOutputStream;
 
-@CodecType
-public interface OCType
+public abstract class OCCipher
 {
+    
+    public abstract byte[] encrypt(byte[] data, int offset, int length, CodecParameter param);
 
-    public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException;
-
-    public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException;
+    public abstract byte[] decrypt(byte[] data, int offset, int length, CodecParameter param);
 }

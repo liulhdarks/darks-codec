@@ -26,14 +26,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import darks.codec.CodecParameter;
+import darks.codec.annotations.CodecType;
 import darks.codec.exceptions.ReflectException;
 import darks.codec.logs.Logger;
-import darks.codec.type.OCSerializable;
+import darks.codec.type.OCType;
 
 public final class ReflectHelper
 {
-
-    private static final String EXCEPT_PACK = "darks.codec.type.";
 
     private static final Logger log = Logger.getLogger(ReflectHelper.class);
 
@@ -42,13 +41,6 @@ public final class ReflectHelper
 
     }
 
-    /**
-     * <实例化> <功能详细描述>
-     * 
-     * @param clazz
-     * @return
-     * @see [类、类#方法、类#成员]
-     */
     public static <E> E newInstance(Class<E> clazz)
     {
         try
@@ -64,13 +56,6 @@ public final class ReflectHelper
         return null;
     }
 
-    /**
-     * <对象是否为默认类型> <功能详细描述>
-     * 
-     * @param clazz 对象类
-     * @return true/false
-     * @see [类、类#方法、类#成员]
-     */
     public static boolean isDefaultType(Class<?> clazz)
     {
         if (clazz == null || Object.class.equals(clazz))
@@ -80,7 +65,7 @@ public final class ReflectHelper
         Class<?>[] clazzs = clazz.getInterfaces();
         for (Class<?> cls : clazzs)
         {
-            if (OCSerializable.class.equals(cls))
+            if (OCType.class.equals(cls))
             {
                 return true;
             }
@@ -94,20 +79,13 @@ public final class ReflectHelper
         {
             return false;
         }
-        if (type instanceof OCSerializable)
+        if (type instanceof OCType)
         {
             return true;
         }
         return false;
     }
 
-    /**
-     * <一句话功能简述> <功能详细描述>
-     * 
-     * @param obj
-     * @return
-     * @see [类、类#方法、类#成员]
-     */
     public static Field[] getDeclaredFields(Object obj)
     {
         Class<?> clazz = obj.getClass();
@@ -150,7 +128,6 @@ public final class ReflectHelper
 
     public static Field[] getValidField(Object obj, CodecParameter codecParam)
     {
-        
         Field seq = getDeepField(obj.getClass(), "fieldSequence");
         if (seq != null)
         {
@@ -166,10 +143,11 @@ public final class ReflectHelper
         return result.toArray(fields);
     }
 
-    public static void getClassField(Class<?> clazz, List<Field> result, CodecParameter codecParam)
+    public static void getClassField(Class<?> clazz, List<Field> result,
+            CodecParameter codecParam)
     {
         if (clazz == null || Object.class.equals(clazz)
-                || clazz.getName().indexOf(EXCEPT_PACK) >= 0)
+                || clazz.getAnnotation(CodecType.class) != null)
         {
             return;
         }
@@ -183,7 +161,7 @@ public final class ReflectHelper
                 {
                     continue;
                 }
-                if (Modifier.isFinal(field.getModifiers()) 
+                if (Modifier.isFinal(field.getModifiers())
                         && codecParam.getCodecConfig().isIgnoreConstField())
                 {
                     continue;
@@ -219,7 +197,7 @@ public final class ReflectHelper
         }
         return null;
     }
-    
+
     public static void setFieldValue(Object obj, Field field, Object value)
     {
         boolean acc = field.isAccessible();
@@ -237,7 +215,7 @@ public final class ReflectHelper
             field.setAccessible(acc);
         }
     }
-    
+
     public static Type[] getGenericTypes(Field field)
     {
         Type type = field.getGenericType();
@@ -247,12 +225,12 @@ public final class ReflectHelper
         }
         if (type instanceof ParameterizedType)
         {
-            ParameterizedType tc = (ParameterizedType)type;
+            ParameterizedType tc = (ParameterizedType) type;
             return tc.getActualTypeArguments();
         }
         return null;
     }
-    
+
     private static Field[] getFieldSequence(Field seq, Object obj)
     {
         try
@@ -275,10 +253,12 @@ public final class ReflectHelper
         }
         catch (Exception e)
         {
-            throw new ReflectException("Fail to get fields through sequence. Cause " + e.getMessage(), e);
+            throw new ReflectException(
+                    "Fail to get fields through sequence. Cause "
+                            + e.getMessage(), e);
         }
     }
-    
+
     public static Class<?> getClass(Object obj, CodecParameter param)
     {
         if (obj != null)

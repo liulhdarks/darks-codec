@@ -15,23 +15,33 @@
  *limitations under the License.
  */
 
-package darks.codec.type;
+package darks.codec.wrap.cipher;
 
-import java.io.IOException;
-import java.io.Serializable;
 
-import darks.codec.CodecParameter;
-import darks.codec.Decoder;
-import darks.codec.Encoder;
-import darks.codec.iostream.BytesInputStream;
-import darks.codec.iostream.BytesOutputStream;
-
-public interface OCSerializable extends Serializable
+public class AESCipher extends AbstractCipher
 {
-
-    public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException;
-
-    public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException;
+    
+    private static final int DEFAULT_KEY_SIZE = 128;
+    
+    private static final String ALGORITHM = "AES";
+    
+    public AESCipher(String key)
+    {
+        this(key.getBytes());
+    }
+    
+    public AESCipher(String key, int keySize)
+    {
+        this(key.getBytes(), keySize);
+    }
+    
+    public AESCipher(byte[] key)
+    {
+        this(key, DEFAULT_KEY_SIZE);
+    }
+    
+    public AESCipher(byte[] key, int keySize)
+    {
+        super(ALGORITHM, key, keySize);
+    }
 }

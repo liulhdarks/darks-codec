@@ -22,17 +22,16 @@ import java.io.IOException;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.basetype.BaseType;
 import darks.codec.basetype.BaseTypeFactory;
 import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
-public abstract class OCBase implements OCSerializable
+@CodecType
+public abstract class OCBase implements OCType
 {
-    /**
-     */
-    private static final long serialVersionUID = -4006955537635420445L;
 
     private OCInteger lenType;
 

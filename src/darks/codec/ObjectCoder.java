@@ -27,7 +27,7 @@ import darks.codec.type.OCObject;
  * @version 1.0.0
  * @author Liu lihua
  */
-public class ObjectConvertor
+public class ObjectCoder
 {
     
     private Codec codec;
@@ -38,13 +38,13 @@ public class ObjectConvertor
     
     private Object mutex = new Object();
     
-    public ObjectConvertor()
+    public ObjectCoder()
     {
         initialize();
         codec = new DefaultCodec(codecConfig);
     }
     
-    public ObjectConvertor(Codec codec)
+    public ObjectCoder(Codec codec)
     {
         initialize();
         this.codec = codec;

@@ -28,6 +28,8 @@ import darks.codec.iostream.BytesOutputStream;
 
 public abstract class Wrapper
 {
+    protected static final int TOTAL_LEN_BITS = 4;
+    
     Wrapper next;
 
     Wrapper prev;

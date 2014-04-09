@@ -89,7 +89,7 @@ public class ZipWrapper extends Wrapper
             int start = 0;
             if (cfg.isHasTotalLength())
             {
-                start = 4;
+                start = TOTAL_LEN_BITS;
                 out.setCursor(start);
             }
             compress.compress(bis, out);

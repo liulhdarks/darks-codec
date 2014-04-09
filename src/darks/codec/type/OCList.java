@@ -28,18 +28,16 @@ import java.util.ListIterator;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
+import darks.codec.annotations.CodecType;
 import darks.codec.exceptions.DecodingException;
 import darks.codec.exceptions.OCException;
 import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+@CodecType
 public class OCList<E> extends OCBase implements List<E>
 {
-
-    /**
-     */
-    private static final long serialVersionUID = 6262137524025156151L;
 
     private List<E> list;
 

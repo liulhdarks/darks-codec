@@ -15,24 +15,35 @@
  *limitations under the License.
  */
 
-package darks.codec.type;
+package darks.codec.exceptions;
 
-import java.io.IOException;
 
-import darks.codec.CodecParameter;
-import darks.codec.Decoder;
-import darks.codec.Encoder;
-import darks.codec.annotations.CodecType;
-import darks.codec.iostream.BytesInputStream;
-import darks.codec.iostream.BytesOutputStream;
-
-@CodecType
-public interface OCType
+public class CipherException extends OCException
 {
 
-    public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3829543977230228041L;
 
-    public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException;
+    public CipherException()
+    {
+        super();
+    }
+
+    public CipherException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public CipherException(String message)
+    {
+        super(message);
+    }
+
+    public CipherException(Throwable cause)
+    {
+        super(cause);
+    }
+    
 }

@@ -19,8 +19,10 @@ package darks.codec.type;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,19 +38,23 @@ import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
 @CodecType
-public class OCMap<K, E> extends OCBase implements Map<K, E>
+public class OCListMap<K, E> extends OCBase implements Map<K, E>
 {
 
     Map<K, E> map = null;
 
-    public OCMap()
+    Map<K, List<E>> mapList = null;
+
+    public OCListMap()
     {
         map = new HashMap<K, E>();
+        mapList = new HashMap<K, List<E>>();
     }
     
-    public OCMap(Map<K, E> map)
+    public OCListMap(Map<K, E> map)
     {
         this.map = map;
+        mapList = new HashMap<K, List<E>>();
     }
 
     @Override
@@ -84,12 +90,20 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     @Override
     public E put(K key, E value)
     {
+        List<E> list = mapList.get(key);
+        if (list == null)
+        {
+            list = new ArrayList<E>();
+            mapList.put(key, list);
+        }
+        list.add(value);
         return map.put(key, value);
     }
 
     @Override
     public E remove(Object key)
     {
+        mapList.remove(key);
         return map.remove(key);
     }
 
@@ -121,6 +135,27 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     public Set<Entry<K, E>> entrySet()
     {
         return map.entrySet();
+    }
+
+    public List<E> getKeyList(K key)
+    {
+        List<E> list = mapList.get(key);
+        if (list == null)
+        {
+            list = new ArrayList<E>();
+            mapList.put(key, list);
+        }
+        return list;
+    }
+
+    public Set<Map.Entry<K, List<E>>> getKeyListEntrySet()
+    {
+        return mapList.entrySet();
+    }
+
+    public Collection<List<E>> getKeyListValues()
+    {
+        return mapList.values();
     }
 
     @Override
@@ -185,7 +220,7 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     @Override
     public String toString()
     {
-        return StringHelper.buffer("OCMap [map=", map, ']');
+        return StringHelper.buffer("OCListMap [map=", map, ']');
     }
 
 }
