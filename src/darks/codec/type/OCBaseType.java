@@ -25,7 +25,7 @@ public abstract class OCBaseType<T> extends OCBase
     
     private T value;
     
-    private int length;
+    private int length = -1;
     
     public OCBaseType()
     {

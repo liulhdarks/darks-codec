@@ -17,7 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -25,7 +24,9 @@ import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.annotations.CodecType;
+import darks.codec.exceptions.DecodingException;
 import darks.codec.helper.ByteHelper;
+import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
@@ -33,54 +34,60 @@ import darks.codec.logs.Logger;
 @CodecType
 public class OCBytes extends OCBaseType<byte[]>
 {
-    
+
     private static Logger log = Logger.getLogger(OCBytes.class);
-    
+
     public OCBytes()
     {
-        
+
     }
-    
+
     public OCBytes(OCInteger lenType)
     {
         super(lenType);
     }
-    
+
     public OCBytes(byte[] bytes)
     {
         super(bytes);
+        setLength(bytes.length);
     }
-    
+
     public OCBytes(byte[] bytes, OCInteger lenType)
     {
         super(bytes, lenType);
     }
-    
+
     public OCBytes(byte[] bytes, int len)
     {
         super(bytes, len);
     }
-    
+
+    public OCBytes(int len)
+    {
+        super(null, len);
+    }
+
     public static OCBytes int8(int v)
     {
         return new OCBytes(ByteHelper.convertInt8(v));
     }
-    
+
     public static OCBytes int16(int v, boolean littleEndian)
     {
         return new OCBytes(ByteHelper.convertInt16(v, littleEndian));
     }
-    
+
     public static OCBytes int32(int v, boolean littleEndian)
     {
         return new OCBytes(ByteHelper.convertInt32(v, littleEndian));
     }
-    
+
     public static OCBytes string(String s)
     {
         return new OCBytes(s.getBytes());
     }
-    
+
     public static OCBytes string(String s, String encoding)
     {
         try
@@ -93,12 +100,12 @@ public class OCBytes extends OCBaseType<byte[]>
             return null;
         }
     }
-    
+
     public String getString()
     {
         return new String(getValue());
     }
-    
+
     public String getString(String encoding)
     {
         try
@@ -111,22 +118,22 @@ public class OCBytes extends OCBaseType<byte[]>
             return null;
         }
     }
-    
+
     public int getInt8()
     {
         return ByteHelper.convertToInt8(getValue());
     }
-    
+
     public int getInt16(boolean littleEndian)
     {
         return ByteHelper.convertToInt16(getValue(), littleEndian);
     }
-    
+
     public int getInt32(boolean littleEndian)
     {
         return ByteHelper.convertToInt32(getValue(), littleEndian);
     }
-    
+
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -139,7 +146,7 @@ public class OCBytes extends OCBaseType<byte[]>
         byte[] bytes = getValue(new byte[0]);
         super.writeBytes(encoder, out, bytes, param);
     }
-    
+
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
@@ -147,49 +154,58 @@ public class OCBytes extends OCBaseType<byte[]>
         readAutoLength(decoder, in, param);
         if (isDynamicLength())
         {
-            int length = getLenType().getValue();
-            setLength(length);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buf = new byte[length];
-            if (in.available() > 0)
-            {
-                int len = in.read(buf);
-                if (len == length)
-                {
-                    baos.write(buf, 0, len);
-                }
-                else
-                {
-                    throw new IOException(
-                        "Read data length is not matched. Require:" + length
-                            + " but:" + len);
-                }
-            }
-            setValue(baos.toByteArray());
+            readDynamicLengthObject(decoder, in, param);
+        }
+        else if (getLength() >= 0)
+        {
+            readSpecifyLengthObject(decoder, in, param);
         }
         else
         {
-            int len = in.available();
-            setLength(len);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buf = new byte[1024];
-            while (in.available() > 0)
-            {
-                len = in.read(buf);
-                if (len > 0)
-                {
-                    baos.write(buf, 0, len);
-                }
-            }
-            setValue(baos.toByteArray());
+            readAvailableLengthObject(decoder, in, param);
         }
     }
-    
+
+    private void readDynamicLengthObject(Decoder decoder, BytesInputStream in,
+            CodecParameter param) throws IOException
+    {
+        int length = getLenType().getValue();
+        setLength(length);
+        readSpecifyLengthObject(decoder, in, param);
+    }
+
+    private void readAvailableLengthObject(Decoder decoder,
+            BytesInputStream in, CodecParameter param) throws IOException
+    {
+        int len = in.available();
+        setLength(len);
+        readSpecifyLengthObject(decoder, in, param);
+    }
+
+    private void readSpecifyLengthObject(Decoder decoder, BytesInputStream in,
+            CodecParameter param) throws IOException
+    {
+        int length = getLength();
+        byte[] buf = getValue();
+        if (buf == null || buf.length != length)
+        {
+            buf = new byte[length];
+        }
+        int currLen = in.read(buf, 0, length);
+        if (currLen != length)
+        {
+            throw new DecodingException("Fail to read bytes.Require length "
+                    + length + ", which is " + currLen);
+        }
+        setValue(buf);
+    }
+
     @Override
     public String toString()
     {
-        return "OCBytes [getValue()=" + ByteHelper.toHexString(getValue())
-            + ", getLength()=" + getLength() + "]";
+        return StringHelper.buffer("OCBytes [getValue()=",
+                ByteHelper.toHexString(getValue()), ", getLength()=",
+                getLength(), ']');
     }
-    
+
 }

@@ -56,6 +56,34 @@ public final class ByteHelper
         }
         return bytes;
     }
+    
+    public static byte[] convertLong(long v, boolean isLE)
+    {
+        byte[] bytes = new byte[8];
+        if (isLE)
+        {
+            bytes[0] = (byte) (v >>> 0);
+            bytes[1] = (byte) (v >>> 8);
+            bytes[2] = (byte) (v >>> 16);
+            bytes[3] = (byte) (v >>> 24);
+            bytes[4] = (byte) (v >>> 32);
+            bytes[5] = (byte) (v >>> 40);
+            bytes[6] = (byte) (v >>> 48);
+            bytes[7] = (byte) (v >>> 56);
+        }
+        else
+        {
+            bytes[0] = (byte) (v >>> 56);
+            bytes[1] = (byte) (v >>> 48);
+            bytes[2] = (byte) (v >>> 40);
+            bytes[3] = (byte) (v >>> 32);
+            bytes[4] = (byte) (v >>> 24);
+            bytes[5] = (byte) (v >>> 16);
+            bytes[6] = (byte) (v >>> 8);
+            bytes[7] = (byte) (v >>> 0);
+        }
+        return bytes;
+    }
 
     public static int convertToInt32(byte[] bytes)
     {
@@ -63,6 +91,21 @@ public final class ByteHelper
         {
             return (((bytes[0] & 0xff) << 24) + ((bytes[1] & 0xff) << 16)
                     + ((bytes[2] & 0xff) << 8) + ((bytes[3] & 0xff) << 0));
+        }
+        return 0;
+    }
+
+    public static long convertToLong(byte[] longBuffer)
+    {
+        if (longBuffer.length >= 8)
+        {
+            return (((long) longBuffer[0] << 56)
+                    + ((long) (longBuffer[1] & 255) << 48)
+                    + ((long) (longBuffer[2] & 255) << 40)
+                    + ((long) (longBuffer[3] & 255) << 32)
+                    + ((long) (longBuffer[4] & 255) << 24)
+                    + ((longBuffer[5] & 255) << 16)
+                    + ((longBuffer[6] & 255) << 8) + ((longBuffer[7] & 255) << 0));
         }
         return 0;
     }
