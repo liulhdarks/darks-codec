@@ -23,6 +23,7 @@ import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.annotations.CodecType;
+import darks.codec.exceptions.EncodingException;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
@@ -61,19 +62,10 @@ public class OCInteger extends OCBaseType<Integer>
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
-        byte[] bytes = null;
-        int len = getLength();
-        switch (len)
+        byte[] bytes = getBytes(param.isLittleEndian());
+        if (bytes == null)
         {
-        case BIT8_LEN:
-            bytes = ByteHelper.convertInt8(getValue(0));
-            break;
-        case BIT16_LEN:
-            bytes = ByteHelper.convertInt16(getValue(0), param.isLittleEndian());
-            break;
-        case BIT32_LEN:
-            bytes = ByteHelper.convertInt32(getValue(0), param.isLittleEndian());
-            break;
+            throw new EncodingException("Fail to encode " + getClass());
         }
         super.writeBytes(encoder, out, bytes, param);
     }

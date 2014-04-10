@@ -128,7 +128,12 @@ public final class ReflectHelper
 
     public static Field[] getValidField(Object obj, CodecParameter codecParam)
     {
-        Field seq = getDeepField(obj.getClass(), "fieldSequence");
+        Class<?> clazz = obj == null ? null : obj.getClass();
+        if (clazz == null || Object.class.equals(clazz))
+        {
+            return new Field[0];
+        }
+        Field seq = getDeepField(clazz, "fieldSequence");
         if (seq != null)
         {
             Field[] fields = getFieldSequence(seq, obj);

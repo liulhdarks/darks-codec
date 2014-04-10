@@ -59,7 +59,7 @@ public class StringType extends BaseType
             }
             len = readAutoLength(in, param);
             int ioLen = in.available();
-            len = (len <= 0 || ioLen < len) ? ioLen : len;
+            len = (len < 0 || ioLen < len) ? ioLen : len;
             byte[] bytes = ByteHelper.readBytes(in, len, false);
             return ByteHelper.convertToString(bytes, param.getEncoding());
         }

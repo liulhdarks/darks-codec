@@ -71,6 +71,7 @@ public class OCObject extends OCBase
         Field[] fields = getFields(object, param);
         for (Field field : fields)
         {
+            param.setCurrentfield(field);
             Object val = ReflectHelper.getFieldValue(object, field);
             encoder.encodeObject(out, val, param);
         }
@@ -89,8 +90,8 @@ public class OCObject extends OCBase
         Field[] fields = getFields(object, param);
         for (Field field : fields)
         {
-            Object val = ReflectHelper.getFieldValue(object, field);
             param.setCurrentfield(field);
+            Object val = ReflectHelper.getFieldValue(object, field);
             val = decoder.decodeObject(in, val, param);
             if (val != null)
             {
