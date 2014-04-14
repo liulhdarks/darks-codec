@@ -1,0 +1,16 @@
+darks.codec
+darks.codec.annotations
+darks.codec.basetype
+darks.codec.basetype.impl
+darks.codec.coder
+darks.codec.coder.cache
+darks.codec.exceptions
+darks.codec.helper
+darks.codec.iostream
+darks.codec.logs
+darks.codec.logs.impl
+darks.codec.type
+darks.codec.wrap
+darks.codec.wrap.cipher
+darks.codec.wrap.verify
+darks.codec.wrap.zip

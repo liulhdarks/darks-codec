@@ -19,6 +19,11 @@ package darks.codec.logs.impl;
 
 import darks.codec.logs.Logger;
 
+/**
+ * Log4jLogger.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class Log4jLogger extends Logger
 {
     private org.apache.log4j.Logger log;

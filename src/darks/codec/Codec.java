@@ -21,25 +21,53 @@ import java.io.IOException;
 
 import darks.codec.type.OCObject;
 
+/**
+ * Codec interface. Developers can implement it to customize codec.<br>
+ * 
+ * Codec.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class Codec
 {
-    
+
     protected CodecConfig codecConfig;
-    
+
     public Codec(CodecConfig codecConfig)
     {
         this.codecConfig = codecConfig;
     }
-    
+
+    /**
+     * Be called when first executing.
+     */
     public void activated()
     {
     }
-    
-    public abstract byte[] encode(OCObject msg)
-        throws IOException;
-    
+
+    /**
+     * Encode {@linkplain darks.codec.type.OCObject OCObject} object.
+     * 
+     * @param msg Message object.
+     * @return If successful encoding, return bytes arrays. Otherwise return
+     *         null.
+     * @throws IOException IO exception
+     */
+    public abstract byte[] encode(OCObject msg) throws IOException;
+
+    /**
+     * Decode {@linkplain darks.codec.type.OCObject OCObject} object.
+     * 
+     * @param bytes Bytes array.
+     * @param source Target decoding object.
+     * @return If successful encoding, return
+     *         {@linkplain darks.codec.type.OCObject OCObject} object. Otherwise
+     *         return null.
+     * @throws IOException
+     */
     public abstract OCObject decode(byte[] bytes, OCObject source)
-        throws IOException;
+            throws IOException;
 
     public CodecConfig getCodecConfig()
     {
@@ -50,6 +78,5 @@ public abstract class Codec
     {
         this.codecConfig = codecConfig;
     }
-    
-    
+
 }

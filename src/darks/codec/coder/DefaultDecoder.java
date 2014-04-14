@@ -31,11 +31,22 @@ import darks.codec.logs.Logger;
 import darks.codec.type.OCType;
 import darks.codec.type.OCObject;
 
+/**
+ * Default decoder in {@linkplain darks.codec.coder.DefaultCodec DefaultCodec}.
+ * 
+ * DefaultDecoder.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class DefaultDecoder extends Decoder
 {
 
     private static Logger log = Logger.getLogger(DefaultDecoder.class);
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object decodeObject(BytesInputStream in, Object obj,
             CodecParameter param) throws IOException
@@ -45,7 +56,8 @@ public class DefaultDecoder extends Decoder
         {
             if (log.isDebugEnabled())
             {
-                log.debug(StringHelper.buffer("Decode base type:[", ReflectHelper.getClass(obj, param), "] ", obj));
+                log.debug(StringHelper.buffer("Decode base type:[",
+                        ReflectHelper.getClass(obj, param), "] ", obj));
             }
             return baseType.decode(in, obj, param);
         }
@@ -59,23 +71,33 @@ public class DefaultDecoder extends Decoder
         }
         return null;
     }
-
-    private void decodeDefault(BytesInputStream in, OCType ocs,
+    
+    /**
+     * Decoding default type which inherit {@inheritDoc darks.codec.type.OCType
+     * OCType}.
+     * 
+     * @param in Decoding IO stream.
+     * @param type Default type object.
+     * @param param Codec parameter.
+     */
+    private void decodeDefault(BytesInputStream in, OCType type,
             CodecParameter param) throws IOException
     {
         try
         {
             if (log.isDebugEnabled())
             {
-                log.debug(StringHelper.buffer("Decode default:[", ReflectHelper.getClass(ocs, param), "] ", ocs));
+                log.debug(StringHelper.buffer("Decode default:[",
+                        ReflectHelper.getClass(type, param), "] ", type));
             }
-            if (ocs == null && param.getCurrentfield() != null)
+            if (type == null && param.getCurrentfield() != null)
             {
-                ocs = (OCType)ReflectHelper.newInstance(param.getCurrentfield().getType());
+                type = (OCType) ReflectHelper.newInstance(param
+                        .getCurrentfield().getType());
             }
-            if (ocs != null)
+            if (type != null)
             {
-                ocs.readObject(this, in, param);
+                type.readObject(this, in, param);
             }
         }
         catch (IOException e)
@@ -84,12 +106,21 @@ public class DefaultDecoder extends Decoder
         }
     }
 
+    /**
+     * Decoding java object.
+     * 
+     * @param out Decoding IO stream.
+     * @param object Java object.
+     * @param param Codec parameter
+     * @throws IOException IO exception
+     */
     private void decodeOther(BytesInputStream in, Object object,
             CodecParameter param) throws IOException
     {
         if (log.isDebugEnabled())
         {
-            log.debug(StringHelper.buffer("Decode default:[", ReflectHelper.getClass(object, param), "] ", object));
+            log.debug(StringHelper.buffer("Decode default:[",
+                    ReflectHelper.getClass(object, param), "] ", object));
         }
         new OCObject(object).readObject(this, in, param);
     }

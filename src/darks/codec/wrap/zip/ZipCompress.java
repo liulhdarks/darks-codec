@@ -21,11 +21,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Customize ZIP compress interface.
+ * 
+ * ZipCompress.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class ZipCompress
 {
-    
-    public abstract void compress(InputStream input, OutputStream out) throws IOException;
-    
-    public abstract void uncompress(InputStream input, OutputStream out) throws IOException;
-    
+
+    /**
+     * Compress bytes data.
+     * 
+     * @param input Input stream
+     * @param out Output stream
+     * @throws IOException IO exception.
+     */
+    public abstract void compress(InputStream input, OutputStream out)
+            throws IOException;
+
+    /**
+     * Uncompress byte data.
+     * 
+     * @param input Input stream.
+     * @param out Output stream
+     * @throws IOException IO exception.
+     */
+    public abstract void uncompress(InputStream input, OutputStream out)
+            throws IOException;
+
 }

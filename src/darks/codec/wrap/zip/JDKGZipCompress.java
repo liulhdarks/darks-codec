@@ -25,9 +25,20 @@ import java.util.zip.GZIPOutputStream;
 
 import darks.codec.helper.IoHelper;
 
+/**
+ * Use JDK ZIP compress.
+ * 
+ * JDKGZipCompress.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class JDKGZipCompress extends ZipCompress
 {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void compress(InputStream input, OutputStream out)
             throws IOException
@@ -50,6 +61,9 @@ public class JDKGZipCompress extends ZipCompress
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void uncompress(InputStream input, OutputStream out)
             throws IOException

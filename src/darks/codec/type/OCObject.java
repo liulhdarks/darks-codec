@@ -29,6 +29,13 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Indicate that coding java object
+ * 
+ * OCObject.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCObject extends OCBase
 {
@@ -42,9 +49,13 @@ public class OCObject extends OCBase
         object = this;
     }
     
-    public OCObject(Object externObject)
+    /**
+     * Coding java object.
+     * @param object Java object
+     */
+    public OCObject(Object object)
     {
-        this.object = externObject;
+        this.object = object;
     }
 
     public OCObject(OCInteger lenType)
@@ -53,12 +64,15 @@ public class OCObject extends OCBase
         object = this;
     }
 
-    public OCObject(Object externObject, OCInteger lenType)
+    public OCObject(Object object, OCInteger lenType)
     {
         super(lenType);
-        this.object = externObject;
+        this.object = object;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -79,6 +93,9 @@ public class OCObject extends OCBase
         writeDynamicLength(end - start, encoder, out, param);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException

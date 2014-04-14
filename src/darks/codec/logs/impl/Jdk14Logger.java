@@ -21,6 +21,12 @@ import java.util.logging.Level;
 
 import darks.codec.logs.Logger;
 
+/**
+ * 
+ * Jdk14Logger.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class Jdk14Logger extends Logger
 {
     private java.util.logging.Logger log;

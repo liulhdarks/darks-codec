@@ -28,36 +28,64 @@ import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Integer base type.
+ * 
+ * OCInteger.java
+ * 
+ * @see OCBaseType
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCInteger extends OCBaseType<Integer>
 {
-    
+
     public static final int BIT8_LEN = 1;
-    
+
     public static final int BIT16_LEN = 2;
-    
+
     public static final int BIT32_LEN = 4;
-    
+
     public OCInteger()
     {
-        
+
     }
-    
+
+    /**
+     * Construct integer by initialize value.
+     * 
+     * @param val Integer value.
+     */
     public OCInteger(int val)
     {
         super(val);
     }
-    
+
+    /**
+     * Construct integer by initialize value.
+     * 
+     * @param val Integer value.
+     * @param len bits length..
+     */
     public OCInteger(int val, int len)
     {
         super(val, len);
     }
-    
+
+    /**
+     * Construct integer object by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCInteger(OCInteger lenType)
     {
         super(lenType);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -69,12 +97,16 @@ public class OCInteger extends OCBaseType<Integer>
         }
         super.writeBytes(encoder, out, bytes, param);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-        byte[] bytes = ByteHelper.readBytes(in, getLength(), param.isLittleEndian());
+        byte[] bytes = ByteHelper.readBytes(in, getLength(),
+                param.isLittleEndian());
 
         int len = getLength();
         switch (len)
@@ -90,7 +122,7 @@ public class OCInteger extends OCBaseType<Integer>
             break;
         }
     }
-    
+
     public byte[] getBytes(boolean littleEndian)
     {
         byte[] bytes = null;
@@ -109,5 +141,5 @@ public class OCInteger extends OCBaseType<Integer>
         }
         return bytes;
     }
-    
+
 }

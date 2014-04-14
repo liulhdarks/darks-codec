@@ -31,6 +31,13 @@ import darks.codec.exceptions.ReflectException;
 import darks.codec.logs.Logger;
 import darks.codec.type.OCType;
 
+/**
+ * 
+ * ReflectHelper.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public final class ReflectHelper
 {
 
@@ -126,6 +133,15 @@ public final class ReflectHelper
         }
     }
 
+    /**
+     * Get valid object fields.
+     * 
+     * @param obj Target object.
+     * @param codecParam Codec parameter.
+     * @return If field 'fieldSequence' exists, return the fields specify by
+     *         'fieldSequence'. Otherwise return object fields deeply without
+     *         the class flaged by CodecType.
+     */
     public static Field[] getValidField(Object obj, CodecParameter codecParam)
     {
         Class<?> clazz = obj == null ? null : obj.getClass();

@@ -21,17 +21,29 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 
+ * StrongRefStrategy.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class StrongRefStrategy implements CacheStrategy
 {
 
     private Map<Class<?>, Field[]> fieldsMap = new ConcurrentHashMap<Class<?>, Field[]>();
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Field[] getCacheFields(Class<?> clazz)
     {
         return fieldsMap.get(clazz);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putCacheFields(Class<?> clazz, Field[] fields)
     {

@@ -28,24 +28,34 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 
 import darks.codec.helper.IoHelper;
 
+/**
+ * Common compress. It needs common-compress 1.x support.
+ * 
+ * CommonsCompress.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class CommonsCompress extends ZipCompress
 {
-    
+
     private CompressorStreamFactory factory = new CompressorStreamFactory();
-    
+
     private String type;
-    
+
     public CommonsCompress()
     {
         this.type = CompressorStreamFactory.GZIP;
     }
-    
+
     public CommonsCompress(String type)
     {
         this.type = type;
     }
-    
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void compress(InputStream input, OutputStream out)
             throws IOException
@@ -64,7 +74,9 @@ public class CommonsCompress extends ZipCompress
         }
         catch (CompressorException e)
         {
-            throw new IOException("Fail to compress data by commons compress. Cause " + e.getMessage(), e);
+            throw new IOException(
+                    "Fail to compress data by commons compress. Cause "
+                            + e.getMessage(), e);
         }
         finally
         {
@@ -72,6 +84,9 @@ public class CommonsCompress extends ZipCompress
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void uncompress(InputStream input, OutputStream out)
             throws IOException
@@ -90,7 +105,9 @@ public class CommonsCompress extends ZipCompress
         }
         catch (CompressorException e)
         {
-            throw new IOException("Fail to decompress data by commons compress. Cause " + e.getMessage(), e);
+            throw new IOException(
+                    "Fail to decompress data by commons compress. Cause "
+                            + e.getMessage(), e);
         }
         finally
         {

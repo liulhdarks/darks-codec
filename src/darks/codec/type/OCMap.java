@@ -35,6 +35,16 @@ import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Store Key-value pair values.
+ * 
+ * OCMap.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ * @param <K>
+ * @param <E>
+ */
 @CodecType
 public class OCMap<K, E> extends OCBase implements Map<K, E>
 {
@@ -45,84 +55,123 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     {
         map = new HashMap<K, E>();
     }
-    
+
     public OCMap(Map<K, E> map)
     {
         this.map = map;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size()
     {
         return map.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty()
     {
         return map.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsKey(Object key)
     {
         return map.containsKey(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsValue(Object value)
     {
         return map.containsValue(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E get(Object key)
     {
         return map.get(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E put(K key, E value)
     {
         return map.put(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E remove(Object key)
     {
         return map.remove(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putAll(Map<? extends K, ? extends E> m)
     {
         map.putAll(m);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear()
     {
         map.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<K> keySet()
     {
         return map.keySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<E> values()
     {
         return map.values();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Entry<K, E>> entrySet()
     {
         return map.entrySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -141,6 +190,9 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
         writeDynamicLength(size(), encoder, out, param);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
@@ -182,6 +234,9 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

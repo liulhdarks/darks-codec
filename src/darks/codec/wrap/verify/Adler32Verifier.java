@@ -21,7 +21,17 @@ import java.util.zip.Adler32;
 
 import darks.codec.helper.ByteHelper;
 import darks.codec.logs.Logger;
+import darks.codec.wrap.VerifyWrapper;
 
+/**
+ * Adler32 verify bytes arrays.
+ * 
+ * Adler32Verifier.java
+ * 
+ * @see VerifyWrapper
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class Adler32Verifier extends Verifier
 {
 
@@ -31,6 +41,9 @@ public class Adler32Verifier extends Verifier
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] getVerifyCode(Object code, boolean littleEndian)
     {
@@ -43,6 +56,9 @@ public class Adler32Verifier extends Verifier
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object update(Object initData, byte[] data, int offset, int length)
     {
@@ -54,11 +70,15 @@ public class Adler32Verifier extends Verifier
         adler.update(data, offset, length);
         if (log.isDebugEnabled())
         {
-            log.debug("Adler32 update " + ByteHelper.toHexString(data, offset, length));
+            log.debug("Adler32 update "
+                    + ByteHelper.toHexString(data, offset, length));
         }
         return adler;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int verifyLength()
     {

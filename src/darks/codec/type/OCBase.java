@@ -29,6 +29,14 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * 
+ * OCBase.java
+ * 
+ * @see CodecType
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public abstract class OCBase implements OCType
 {
@@ -41,6 +49,13 @@ public abstract class OCBase implements OCType
     {
     }
 
+    /**
+     * Construct object by length type. Length type object will be set when
+     * encoding. Object will read specify length through length type when
+     * decoding.
+     * 
+     * @param lenType Length type
+     */
     public OCBase(OCInteger lenType)
     {
         this.lenType = lenType;

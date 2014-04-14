@@ -32,9 +32,20 @@ import darks.codec.annotations.CodecType;
 import darks.codec.exceptions.DecodingException;
 import darks.codec.exceptions.OCException;
 import darks.codec.helper.ReflectHelper;
+import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Indicate the list collect object.
+ * 
+ * OCList.java
+ * 
+ * @see OCBase
+ * @version 1.0.0
+ * @author Liu lihua
+ * @param <E>
+ */
 @CodecType
 public class OCList<E> extends OCBase implements List<E>
 {
@@ -46,166 +57,261 @@ public class OCList<E> extends OCBase implements List<E>
         list = new LinkedList<E>();
     }
 
+    /**
+     * Construct list by java list.
+     * 
+     * @param list Java list
+     */
     public OCList(List<E> list)
     {
         this.list = list;
     }
 
+
+    /**
+     * Construct list by java collection.
+     * 
+     * @param c Java collection
+     */
     public OCList(Collection<? extends E> c)
     {
         list = new LinkedList<E>(c);
     }
 
+    /**
+     * Construct list object by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCList(OCInteger lenType)
     {
         super(lenType);
         list = new LinkedList<E>();
     }
 
+
+    /**
+     * Construct list object by list object and length type object.
+     * 
+     * @param list Java list
+     * @param lenType Length type
+     */
     public OCList(List<E> list, OCInteger lenType)
     {
         super(lenType);
         this.list = list;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size()
     {
         return list.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty()
     {
         return list.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean contains(Object o)
     {
         return list.contains(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Iterator<E> iterator()
     {
         return list.iterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object[] toArray()
     {
         return list.toArray();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T[] toArray(T[] a)
     {
         return list.toArray(a);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean add(E e)
     {
         return list.add(e);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean remove(Object o)
     {
         return list.remove(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsAll(Collection<?> c)
     {
         return list.containsAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(Collection<? extends E> c)
     {
         return list.addAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(int index, Collection<? extends E> c)
     {
         return list.addAll(index, c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeAll(Collection<?> c)
     {
         return list.removeAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean retainAll(Collection<?> c)
     {
         return list.retainAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear()
     {
         list.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E get(int index)
     {
         return list.get(index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E set(int index, E element)
     {
         return list.set(index, element);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void add(int index, E element)
     {
         list.add(index, element);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E remove(int index)
     {
         return list.remove(index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int indexOf(Object o)
     {
         return list.indexOf(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int lastIndexOf(Object o)
     {
         return list.lastIndexOf(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ListIterator<E> listIterator()
     {
         return list.listIterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ListIterator<E> listIterator(int index)
     {
         return list.listIterator(index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<E> subList(int fromIndex, int toIndex)
     {
         return list.subList(fromIndex, toIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -223,6 +329,9 @@ public class OCList<E> extends OCBase implements List<E>
         writeDynamicLength(size(), encoder, out, param);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
@@ -262,10 +371,13 @@ public class OCList<E> extends OCBase implements List<E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
-        return "OCList [list=" + list + "]";
+        return StringHelper.buffer("OCList [list=", list, ']');
     }
 
 }

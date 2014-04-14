@@ -29,21 +29,18 @@ import darks.codec.basetype.impl.ShortType;
 import darks.codec.basetype.impl.StringType;
 
 /**
+ * Mapping base type with base type coder.
  * 
- * <一句话功能简述>
- * <功能详细描述>
+ * BaseTypeFactory.java
  * 
- * @author  lWX148392
- * @version  [版本号, 2013-7-29]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ * @version 1.0.0
+ * @author Liu lihua
  */
 public final class BaseTypeFactory
 {
-    
-    private static ConcurrentHashMap<Class<?>, BaseType> codecs =
-        new ConcurrentHashMap<Class<?>, BaseType>();
-    
+
+    private static ConcurrentHashMap<Class<?>, BaseType> codecs = new ConcurrentHashMap<Class<?>, BaseType>();
+
     static
     {
         registerCodec(Integer.class, new IntegerType());
@@ -60,29 +57,41 @@ public final class BaseTypeFactory
         registerCodec(long.class, new LongType());
         registerCodec(String.class, new StringType());
     }
-    
+
     private BaseTypeFactory()
     {
-        
+
     }
-    
+
     /**
-     * <一句话功能简述>
-     * <功能详细描述>
-     * @param clazz
-     * @param codec
-     * @see [类、类#方法、类#成员]
+     * Register base type codec.
+     * 
+     * @param clazz Base type class.
+     * @param codec Base type coder.
      */
     public static void registerCodec(Class<?> clazz, BaseType codec)
     {
         codecs.put(clazz, codec);
     }
-    
+
+    /**
+     * Get base type coder by class.
+     * 
+     * @param clazz Base type class object
+     * @return Base type coder.
+     */
     public static BaseType getCodec(Class<?> clazz)
     {
         return codecs.get(clazz);
     }
-    
+
+    /**
+     * Get base type coder by object and parameters.
+     * 
+     * @param obj Target object
+     * @param param Codec parameter.
+     * @return If exists, return base type coder object.
+     */
     public static BaseType getCodec(Object obj, CodecParameter param)
     {
         Class<?> clazz = null;

@@ -17,7 +17,12 @@
 
 package darks.codec.exceptions;
 
-
+/**
+ * 
+ * DecodingException.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class DecodingException extends OCException
 {
 

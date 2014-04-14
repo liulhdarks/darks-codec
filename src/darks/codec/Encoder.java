@@ -21,10 +21,27 @@ import java.io.IOException;
 
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Encoder is the interface to encode message object in codec. Developer can
+ * customize encoder in custom codec.<br>
+ * 
+ * Encoder.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class Encoder
 {
 
-    public abstract void encodeObject(BytesOutputStream out, Object obj, CodecParameter param)
-            throws IOException;
+    /**
+     * Encode object
+     * 
+     * @param out Encode bytes stream.
+     * @param obj Target object.
+     * @param param Codec parameter. It's available in current encode flow.
+     * @throws IOException IO exception
+     */
+    public abstract void encodeObject(BytesOutputStream out, Object obj,
+            CodecParameter param) throws IOException;
 
 }

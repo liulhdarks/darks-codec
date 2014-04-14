@@ -20,6 +20,11 @@ package darks.codec.wrap.verify;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+/**
+ * VerifyExtern.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class VerifyExtern
 {
     public List<ByteBuffer> headList;

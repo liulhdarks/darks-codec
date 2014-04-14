@@ -22,11 +22,21 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 
+ * SoftRefStrategy.java
+ * @see CacheStrategy
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class SoftRefStrategy implements CacheStrategy
 {
 
     private Map<Class<?>, SoftReference<Field[]>> fieldsMap = new ConcurrentHashMap<Class<?>, SoftReference<Field[]>>();
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Field[] getCacheFields(Class<?> clazz)
     {
@@ -38,6 +48,9 @@ public class SoftRefStrategy implements CacheStrategy
         return ref.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putCacheFields(Class<?> clazz, Field[] fields)
     {

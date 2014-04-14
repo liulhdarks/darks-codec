@@ -23,6 +23,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Indicate that class/object is the codec type class/object. It won't be
+ * encoded or decoded.
+ * 
+ * CodecType.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

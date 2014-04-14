@@ -19,25 +19,44 @@ package darks.codec.type;
 
 import darks.codec.annotations.CodecType;
 
+/**
+ * 16-bits integer just like short type.
+ * 
+ * OCInt16.java
+ * 
+ * @see OCInteger
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCInt16 extends OCInteger
 {
-    
+
     public OCInt16()
     {
         setLength(2);
     }
-    
+
+    /**
+     * Construct 16-bits integer by initialize value.
+     * 
+     * @param val 16-bits integer Value
+     */
     public OCInt16(int val)
     {
         super(val, 2);
     }
-    
+
+    /**
+     * Construct 16-bits integer by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCInt16(OCInteger lenType)
     {
         super(lenType);
         setLength(2);
         lenType.setValue(2);
     }
-    
+
 }

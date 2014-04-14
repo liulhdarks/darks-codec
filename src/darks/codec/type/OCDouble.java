@@ -28,46 +28,72 @@ import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Just like java double type.
+ * 
+ * OCDouble.java
+ * @see OCBaseType
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCDouble extends OCBaseType<Double>
 {
-    
+
     public OCDouble()
     {
         setLength(8);
     }
-    
+
+    /**
+     * Construct object by initialize value.
+     * 
+     * @param val Double Value.
+     */
     public OCDouble(double val)
     {
         super(val, 8);
     }
-    
+
+    /**
+     * Construct double object by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCDouble(OCInteger lenType)
     {
         super(lenType);
         setLength(8);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
         double v = getValue(0.);
-        byte[] bytes = ByteHelper.convertLong(Double.doubleToLongBits(v), param.isLittleEndian());
+        byte[] bytes = ByteHelper.convertLong(Double.doubleToLongBits(v),
+                param.isLittleEndian());
         if (bytes == null)
         {
             throw new EncodingException("Fail to encode " + getClass());
         }
         super.writeBytes(encoder, out, bytes, param);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-        byte[] bytes = ByteHelper.readBytes(in, getLength(), param.isLittleEndian());
+        byte[] bytes = ByteHelper.readBytes(in, getLength(),
+                param.isLittleEndian());
         long v = ByteHelper.convertToLong(bytes);
         setValue(Double.longBitsToDouble(v));
     }
-    
+
 }

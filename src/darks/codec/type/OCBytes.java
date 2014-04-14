@@ -31,6 +31,15 @@ import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
 
+/**
+ * Instead of Java bytes arrays.
+ * 
+ * OCBytes.java
+ * 
+ * @see CodecType
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCBytes extends OCBaseType<byte[]>
 {
@@ -42,27 +51,55 @@ public class OCBytes extends OCBaseType<byte[]>
 
     }
 
+    /**
+     * Construct bytes object by length type object.
+     * 
+     * @param lenType Length type.
+     */
     public OCBytes(OCInteger lenType)
     {
         super(lenType);
     }
 
+    /**
+     * Construct bytes object by bytes arrays.
+     * 
+     * @param bytes Bytes arrays.
+     */
     public OCBytes(byte[] bytes)
     {
         super(bytes);
         setLength(bytes.length);
     }
 
+    /**
+     * Construct bytes object by bytes arrays and length type object.
+     * 
+     * @param bytes Bytes arrays.
+     * @param lenType Length type object.
+     */
     public OCBytes(byte[] bytes, OCInteger lenType)
     {
         super(bytes, lenType);
     }
 
+    /**
+     * Construct bytes object by bytes arrays.
+     * 
+     * @param bytes Bytes arrays.
+     * @param len Bytes arrays length.
+     */
     public OCBytes(byte[] bytes, int len)
     {
         super(bytes, len);
     }
 
+    /**
+     * Construct bytes object by bytes arrays length. Developer can use it in
+     * decoding.
+     * 
+     * @param len Bytes arrays length.
+     */
     public OCBytes(int len)
     {
         super(null, len);
@@ -134,6 +171,9 @@ public class OCBytes extends OCBaseType<byte[]>
         return ByteHelper.convertToInt32(getValue(), littleEndian);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -147,6 +187,9 @@ public class OCBytes extends OCBaseType<byte[]>
         super.writeBytes(encoder, out, bytes, param);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
@@ -200,6 +243,9 @@ public class OCBytes extends OCBaseType<byte[]>
         setValue(buf);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

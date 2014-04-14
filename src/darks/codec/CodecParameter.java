@@ -22,26 +22,67 @@ import java.lang.reflect.Field;
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.coder.FinalEncodeQueue;
 import darks.codec.coder.cache.Cache;
+import darks.codec.helper.StringHelper;
 
+/**
+ * Codec parameter. The parameter will be available in current flow. It's not
+ * global parameters.
+ * 
+ * CodecParameter.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class CodecParameter
 {
 
+    /**
+     * Codec config
+     */
     private CodecConfig codecConfig;
-    
+
+    /**
+     * Whether current endian is little-endian.
+     */
     private boolean littleEndian;
-    
+
+    /**
+     * Whether current configuration set automatic object length.
+     */
     private boolean autoLength = false;
-    
+
+    /**
+     * Whether ignore object type's automatic length, when autoLength is true.
+     */
     private boolean ignoreObjectAutoLength = false;
-    
+
+    /**
+     * String object encoding.
+     */
     private String encoding;
-    
+
+    /**
+     * Current cache
+     */
     private Cache cache;
-    
+
+    /**
+     * Current encoding object's field.
+     */
     private Field currentfield;
-    
+
+    /**
+     * Final encoding queue will be called in final encoding handle.
+     */
     private FinalEncodeQueue finalQueue;
-    
+
+    /**
+     * Construct parameter through global {@linkplain darks.codec.CodecConfig
+     * CodecConfig}.
+     * 
+     * @param codecConfig Global codec configuration.
+     * @param cache Current cache object.
+     */
     public CodecParameter(CodecConfig codecConfig, Cache cache)
     {
         this.codecConfig = codecConfig;
@@ -51,7 +92,7 @@ public class CodecParameter
         ignoreObjectAutoLength = codecConfig.isIgnoreObjectAutoLength();
         encoding = codecConfig.getEncoding();
     }
-    
+
     public boolean isLittleEndian()
     {
         return littleEndian;
@@ -101,5 +142,15 @@ public class CodecParameter
     {
         this.finalQueue = finalQueue;
     }
-    
+
+    @Override
+    public String toString()
+    {
+        return StringHelper.buffer("CodecParameter [codecConfig=", codecConfig,
+                ", littleEndian=", littleEndian, ", autoLength=", autoLength,
+                ", ignoreObjectAutoLength=", ignoreObjectAutoLength,
+                ", encoding=", encoding, ", cache=", cache, ", currentfield=",
+                currentfield, ", finalQueue=", finalQueue, ']');
+    }
+
 }

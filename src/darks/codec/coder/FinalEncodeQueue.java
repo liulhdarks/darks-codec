@@ -25,17 +25,40 @@ import darks.codec.Encoder;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.wrap.Wrapper;
 
+/**
+ * Final encode queue will be called in final encode handle.
+ * 
+ * FinalEncodeQueue.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class FinalEncodeQueue
 {
-    
+
     LinkedList<FinalPair> pairs = new LinkedList<FinalEncodeQueue.FinalPair>();
-    
+
+    /**
+     * Add final called wrapper.
+     * 
+     * @param wrap {@linkplain darks.codec.wrap.Wrapper Wrapper} object.
+     * @param extern Additional data.
+     */
     public void addWrap(Wrapper wrap, Object extern)
     {
         pairs.add(new FinalPair(wrap, extern));
     }
-    
-    public void doFinal(Encoder encoder, BytesOutputStream out, CodecParameter param) throws IOException
+
+    /**
+     * Call final wrapper to encoding final bytes.
+     * 
+     * @param encoder {@linkplain darks.codec.Encoder Encoder} object.
+     * @param out Encoding IO stream
+     * @param param parameters
+     * @throws IOException IO exception.
+     */
+    public void doFinal(Encoder encoder, BytesOutputStream out,
+            CodecParameter param) throws IOException
     {
         FinalPair pair = null;
         while ((pair = pairs.poll()) != null)
@@ -43,11 +66,11 @@ public class FinalEncodeQueue
             pair.wrap.finalEncode(encoder, out, param, pair.extern);
         }
     }
-    
+
     static class FinalPair
     {
         Wrapper wrap;
-        
+
         Object extern;
 
         public FinalPair(Wrapper wrap, Object extern)
@@ -56,6 +79,6 @@ public class FinalEncodeQueue
             this.wrap = wrap;
             this.extern = extern;
         }
-        
+
     }
 }

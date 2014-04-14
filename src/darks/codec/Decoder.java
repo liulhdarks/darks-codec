@@ -21,10 +21,26 @@ import java.io.IOException;
 
 import darks.codec.iostream.BytesInputStream;
 
+/**
+ * Decoder is the interface to decode message object in codec. Developer can
+ * customize decoder in custom codec.<br>
+ * Decoder.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class Decoder
 {
-    
-    public abstract Object decodeObject(BytesInputStream in, Object obj, CodecParameter param)
-        throws IOException;
+
+    /**
+     * Decode object
+     * 
+     * @param in Decode bytes stream.
+     * @param obj Target object.
+     * @param param Codec parameter. It's available in current decode flow.
+     * @throws IOException IO exception
+     */
+    public abstract Object decodeObject(BytesInputStream in, Object obj,
+            CodecParameter param) throws IOException;
 
 }

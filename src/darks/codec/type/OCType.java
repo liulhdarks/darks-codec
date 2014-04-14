@@ -26,13 +26,38 @@ import darks.codec.annotations.CodecType;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Codec type object.
+ * 
+ * OCType.java
+ * 
+ * @see CodecType
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public interface OCType
 {
 
+    /**
+     * Write object to encoding IO stream.
+     * 
+     * @param encoder Encoding object.
+     * @param out Encoding IO stream.
+     * @param param Codec parameter object.
+     * @throws IOException IO exception.
+     */
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException;
 
+    /**
+     * Read object from decoding IO stream.
+     * 
+     * @param decoder Decoding object,
+     * @param in Decoding IO stream.
+     * @param param Codec parameter object.
+     * @throws IOException IO exception.
+     */
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException;
 }

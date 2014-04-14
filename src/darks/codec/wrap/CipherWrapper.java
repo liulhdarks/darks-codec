@@ -29,18 +29,45 @@ import darks.codec.logs.Logger;
 import darks.codec.wrap.cipher.AESCipher;
 import darks.codec.wrap.cipher.OCCipher;
 
+/**
+ * CipherWrapper can encrypt bytes after encoding and decrypt before decoding
+ * bytes. It support AES, RSA cipher algorithm.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ *  ObjectCoder coder = new ObjectCoder();
+ *      ...
+ *  coder.getCodecConfig().addWrap(CipherWrapper.AES("darks"));
+ *      ...
+ * </pre>
+ * 
+ * Or
+ * 
+ * <pre>
+ *  ObjectCoder coder = new ObjectCoder();
+ *      ...
+ *  coder.getCodecConfig().addWrap(new CipherWrapper(new CustomCipher()));
+ *      ...
+ * </pre>
+ * 
+ * CipherWrapper.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class CipherWrapper extends Wrapper
 {
 
     private static Logger log = Logger.getLogger(CipherWrapper.class);
 
     private OCCipher cipher;
-    
+
     public static CipherWrapper AES(String key)
     {
         return new CipherWrapper(new AESCipher(key));
     }
-    
+
     public static CipherWrapper AES(String key, int keysize)
     {
         return new CipherWrapper(new AESCipher(key, keysize));
@@ -51,6 +78,9 @@ public class CipherWrapper extends Wrapper
         this.cipher = cipher;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -89,6 +119,9 @@ public class CipherWrapper extends Wrapper
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void beforeDecode(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
@@ -107,7 +140,8 @@ public class CipherWrapper extends Wrapper
                 log.debug("Cipher wrapper decrypt count:" + count);
             }
         }
-        byte[] data = cipher.decrypt(in.getDirectBytes(), in.position(), in.available(), param);
+        byte[] data = cipher.decrypt(in.getDirectBytes(), in.position(),
+                in.available(), param);
         in.reset(data);
         if (log.isDebugEnabled())
         {

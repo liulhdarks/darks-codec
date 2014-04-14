@@ -18,49 +18,73 @@
 package darks.codec.type;
 
 import darks.codec.annotations.CodecType;
+import darks.codec.helper.StringHelper;
 
+/**
+ * Base type abstract class.
+ * 
+ * OCBaseType.java
+ * 
+ * @see CodecType
+ * @version 1.0.0
+ * @author Liu lihua
+ * @param <T>
+ */
 @CodecType
 public abstract class OCBaseType<T> extends OCBase
 {
-    
+
     private T value;
-    
+
     private int length = -1;
-    
+
     public OCBaseType()
     {
-        super();
     }
-    
+
+    /**
+     * Initialize value
+     * 
+     * @param value Default value
+     */
     public OCBaseType(T value)
     {
-        super();
         this.value = value;
     }
-    
+
     public OCBaseType(T value, int length)
     {
-        super();
         this.value = value;
         this.length = length;
     }
-    
+
+    /**
+     * Construct base type by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCBaseType(OCInteger lenType)
     {
         super(lenType);
     }
-    
+
+    /**
+     * Construct base type by length type object.
+     * 
+     * @param value Value 
+     * @param lenType Length type
+     */
     public OCBaseType(T value, OCInteger lenType)
     {
         super(lenType);
         this.value = value;
     }
-    
+
     public T getValue()
     {
         return value;
     }
-    
+
     public T getValue(T defaultValue)
     {
         if (value == null)
@@ -69,22 +93,22 @@ public abstract class OCBaseType<T> extends OCBase
         }
         return value;
     }
-    
+
     public void setValue(T value)
     {
         this.value = value;
     }
-    
+
     public int getLength()
     {
         return length;
     }
-    
+
     public void setLength(int length)
     {
         this.length = length;
     }
-    
+
     public OCBaseType<T> clone(OCBaseType<T> target)
     {
         if (target == null)
@@ -95,13 +119,20 @@ public abstract class OCBaseType<T> extends OCBase
         target.value = value;
         return target;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
-        return "OCType [value=" + value + ", length=" + length + "]";
+        return StringHelper.buffer("OCBaseType [value=", value, ", length=",
+                length, ']');
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
@@ -110,7 +141,10 @@ public abstract class OCBaseType<T> extends OCBase
         result = prime * result + ((value == null) ? 0 : value.hashCode());
         return result;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -120,7 +154,7 @@ public abstract class OCBaseType<T> extends OCBase
             return false;
         if (getClass() != obj.getClass())
             return false;
-        OCBaseType<?> other = (OCBaseType<?>)obj;
+        OCBaseType<?> other = (OCBaseType<?>) obj;
         if (value == null)
         {
             if (other.value != null)
@@ -130,5 +164,5 @@ public abstract class OCBaseType<T> extends OCBase
             return false;
         return true;
     }
-    
+
 }

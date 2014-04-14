@@ -17,8 +17,22 @@
 
 package darks.codec.helper;
 
+/**
+ * 
+ * StringHelper.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public final class StringHelper
 {
+
+    /**
+     * Buffer string objects.
+     * 
+     * @param objs Objects.
+     * @return string
+     */
     public static String buffer(Object... objs)
     {
         StringBuilder buf = new StringBuilder(64);

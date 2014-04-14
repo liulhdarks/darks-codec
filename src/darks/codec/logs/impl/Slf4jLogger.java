@@ -19,7 +19,12 @@ package darks.codec.logs.impl;
 
 import darks.codec.logs.Logger;
 
-
+/**
+ * 
+ * Slf4jLogger.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class Slf4jLogger extends Logger
 {
     

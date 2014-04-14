@@ -17,7 +17,12 @@
 
 package darks.codec.exceptions;
 
-
+/**
+ * 
+ * CipherException.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class CipherException extends OCException
 {
 

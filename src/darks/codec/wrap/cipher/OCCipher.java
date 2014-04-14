@@ -19,10 +19,38 @@ package darks.codec.wrap.cipher;
 
 import darks.codec.CodecParameter;
 
+/**
+ * Customize cipher interface.
+ * 
+ * OCCipher.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class OCCipher
 {
-    
-    public abstract byte[] encrypt(byte[] data, int offset, int length, CodecParameter param);
 
-    public abstract byte[] decrypt(byte[] data, int offset, int length, CodecParameter param);
+    /**
+     * Encrypt bytes data.
+     * 
+     * @param data Bytes data.
+     * @param offset Bytes offset.
+     * @param length Bytes length.
+     * @param param Codec parameters.
+     * @return Bytes after encrypt.
+     */
+    public abstract byte[] encrypt(byte[] data, int offset, int length,
+            CodecParameter param);
+
+    /**
+     * Decrypt bytes data.
+     * 
+     * @param data Bytes data.
+     * @param offset Bytes offset.
+     * @param length Bytes length.
+     * @param param Codec parameters.
+     * @return Bytes after decrypted.
+     */
+    public abstract byte[] decrypt(byte[] data, int offset, int length,
+            CodecParameter param);
 }

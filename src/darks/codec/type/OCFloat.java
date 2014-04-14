@@ -28,46 +28,73 @@ import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Just like java float type.
+ * 
+ * OCFloat.java
+ * 
+ * @see OCBaseType
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCFloat extends OCBaseType<Float>
 {
-    
+
     public OCFloat()
     {
         setLength(4);
     }
-    
+
+    /**
+     * Construct object by initialize value.
+     * 
+     * @param val Float Value.
+     */
     public OCFloat(float val)
     {
         super(val, 4);
     }
-    
+
+    /**
+     * Construct float object by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCFloat(OCInteger lenType)
     {
         super(lenType);
         setLength(4);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
         float v = getValue(0.f);
-        byte[] bytes = ByteHelper.convertInt32(Float.floatToIntBits(v), param.isLittleEndian());
+        byte[] bytes = ByteHelper.convertInt32(Float.floatToIntBits(v),
+                param.isLittleEndian());
         if (bytes == null)
         {
             throw new EncodingException("Fail to encode " + getClass());
         }
         super.writeBytes(encoder, out, bytes, param);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-        byte[] bytes = ByteHelper.readBytes(in, getLength(), param.isLittleEndian());
+        byte[] bytes = ByteHelper.readBytes(in, getLength(),
+                param.isLittleEndian());
         int v = ByteHelper.convertToInt32(bytes);
         setValue(Float.intBitsToFloat(v));
     }
-    
+
 }

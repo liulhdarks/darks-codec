@@ -27,39 +27,54 @@ import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Just like {@linkplain java.lang.String String}.
+ * 
+ * OCString.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCString extends OCBaseType<String>
 {
-    
+
     public OCString()
     {
         super();
     }
-    
+
     public OCString(String value, int length)
     {
         super(value, length);
     }
-    
+
     public OCString(String value)
     {
         super(value);
     }
-    
+
     public OCString(OCInteger lenType)
     {
         super(lenType);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
         writeAutoLength(encoder, out, param);
-        byte[] bytes = ByteHelper.convertString(getValue(), param.getEncoding());
+        byte[] bytes = ByteHelper
+                .convertString(getValue(), param.getEncoding());
         super.writeBytes(encoder, out, bytes, param);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException

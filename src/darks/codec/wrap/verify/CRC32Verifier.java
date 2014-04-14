@@ -21,7 +21,17 @@ import java.util.zip.CRC32;
 
 import darks.codec.helper.ByteHelper;
 import darks.codec.logs.Logger;
+import darks.codec.wrap.VerifyWrapper;
 
+/**
+ * CRC32 verify bytes arrays.
+ * 
+ * CRC32Verifier.java
+ * 
+ * @see VerifyWrapper
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class CRC32Verifier extends Verifier
 {
 
@@ -31,6 +41,9 @@ public class CRC32Verifier extends Verifier
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] getVerifyCode(Object code, boolean littleEndian)
     {
@@ -43,6 +56,9 @@ public class CRC32Verifier extends Verifier
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object update(Object initData, byte[] data, int offset, int length)
     {
@@ -60,6 +76,9 @@ public class CRC32Verifier extends Verifier
         return crc32;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int verifyLength()
     {

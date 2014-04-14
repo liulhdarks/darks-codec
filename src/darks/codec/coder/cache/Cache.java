@@ -25,15 +25,29 @@ import darks.codec.helper.EnvHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.logs.Logger;
 
+/**
+ * Indicate thar cache object fields and other data.
+ * 
+ * Cache.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class Cache
 {
-    
+
     private static Logger log = Logger.getLogger(Cache.class);
-    
+
     private static Cache globalCache;
-    
+
     private CacheStrategy strategy;
-    
+
+    /**
+     * Create or get cache object by configuration.
+     * 
+     * @param cfg Codec configuration
+     * @return Cache object.
+     */
     public static Cache getCache(CodecConfig cfg)
     {
         if (cfg.getCacheType() == CacheType.GLOBAL)
@@ -49,7 +63,7 @@ public class Cache
             return null;
         }
     }
-    
+
     private static synchronized Cache getGlobalCache()
     {
         if (log.isDebugEnabled())
@@ -62,7 +76,7 @@ public class Cache
         }
         return globalCache;
     }
-    
+
     private static Cache getLocalCache()
     {
         if (log.isDebugEnabled())
@@ -71,7 +85,7 @@ public class Cache
         }
         return new Cache();
     }
-    
+
     private Cache()
     {
         if (EnvHelper.isAndroidEnv())
@@ -83,23 +97,37 @@ public class Cache
             strategy = new SoftRefStrategy();
         }
     }
-    
+
+    /**
+     * Get object's fields from cache.
+     * 
+     * @param clazz Target class.
+     * @return Fields arrays.
+     */
     public Field[] getCacheFields(Class<?> clazz)
     {
         if (log.isDebugEnabled())
         {
-            log.debug(StringHelper.buffer("Get fields from cache:", strategy, " for ", clazz));
+            log.debug(StringHelper.buffer("Get fields from cache:", strategy,
+                    " for ", clazz));
         }
         return strategy.getCacheFields(clazz);
     }
-    
+
+    /**
+     * Put object's fields to cache.
+     * 
+     * @param clazz Target class
+     * @param fields Class's mapping fields.
+     */
     public void putCacheFields(Class<?> clazz, Field[] fields)
     {
         if (log.isDebugEnabled())
         {
-            log.debug(StringHelper.buffer("Put fields to cache:", strategy, " for ", clazz));
+            log.debug(StringHelper.buffer("Put fields to cache:", strategy,
+                    " for ", clazz));
         }
         strategy.putCacheFields(clazz, fields);
     }
-    
+
 }

@@ -27,6 +27,12 @@ import darks.codec.CodecConfig;
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.helper.ByteHelper;
 
+/**
+ * 
+ * BytesOutputStream.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class BytesOutputStream extends OutputStream
 {
     private static final int DEFAULT_OFFSET = 0;

@@ -25,11 +25,20 @@ import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
 
+/**
+ * 
+ * DoubleType.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class DoubleType extends BaseType
 {
     
     private static Logger log = Logger.getLogger(DoubleType.class);
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void encode(BytesOutputStream out, Object obj, CodecParameter param)
     {
@@ -43,7 +52,10 @@ public class DoubleType extends BaseType
             log.error(e.getMessage(), e);
         }
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object decode(BytesInputStream in, Object obj, CodecParameter param)
     {

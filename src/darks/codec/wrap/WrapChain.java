@@ -25,12 +25,24 @@ import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * 
+ * WrapChain.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class WrapChain
 {
     Wrapper head;
-    
+
     Wrapper tail;
-    
+
+    /**
+     * Add wrapper to wrap chain
+     * 
+     * @param wrap {@linkplain darks.codec.wrap.Wrapper Wrapper} object.
+     */
     public void add(Wrapper wrap)
     {
         if (head == null)
@@ -45,7 +57,7 @@ public class WrapChain
             head = wrap;
         }
     }
-    
+
     public void beforeEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {

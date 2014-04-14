@@ -24,25 +24,29 @@ import java.io.UnsupportedEncodingException;
 import darks.codec.exceptions.OCException;
 
 /**
+ * ByteHelper.java
  * 
- * <字节辅助类> <功能详细描述>
- * 
- * @author lWX148392
- * @version [版本号, 2013-4-10]
- * @see [相关类/方法]
- * @since [产品/模块版本]
+ * @version 1.0.0
+ * @author Liu lihua
  */
 public final class ByteHelper
 {
 
     private static final char[] HEX_DIGIT = new char[] { '0', '1', '2', '3',
-            '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+            '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
     private ByteHelper()
     {
 
     }
 
+    /**
+     * Convert 32-bits integer value to bytes arrays.
+     * 
+     * @param v 32-bits integer value
+     * @param isLE Whether endian is LITTLE-ENDIAN.
+     * @return Bytes arrays.
+     */
     public static byte[] convertInt32(int v, boolean isLE)
     {
         byte[] bytes = new byte[4];
@@ -56,7 +60,14 @@ public final class ByteHelper
         }
         return bytes;
     }
-    
+
+    /**
+     * Convert long value to bytes arrays.
+     * 
+     * @param v long value
+     * @param isLE Whether endian is LITTLE-ENDIAN.
+     * @return Bytes arrays.
+     */
     public static byte[] convertLong(long v, boolean isLE)
     {
         byte[] bytes = new byte[8];
@@ -133,6 +144,13 @@ public final class ByteHelper
         return convertInt16((short) v, isLE);
     }
 
+    /**
+     * Convert 16-bits integer value to bytes arrays.
+     * 
+     * @param v 16-bits integer value
+     * @param isLE Whether endian is LITTLE-ENDIAN.
+     * @return Bytes arrays.
+     */
     public static byte[] convertInt16(short v, boolean isLE)
     {
         byte[] bytes = new byte[2];
@@ -170,6 +188,12 @@ public final class ByteHelper
         return 0;
     }
 
+    /**
+     * Convert 8-bits integer value to bytes arrays.
+     * 
+     * @param v 8-bits integer value
+     * @return Bytes arrays.
+     */
     public static byte[] convertInt8(int v)
     {
         byte[] bytes = new byte[1];
@@ -221,7 +245,7 @@ public final class ByteHelper
             throw new OCException("Not support encoding " + encoding, e);
         }
     }
-    
+
     public static byte[] reverseBytes(byte[] bytes)
     {
         int size = bytes.length;
@@ -237,10 +261,12 @@ public final class ByteHelper
     }
 
     /**
+     * Read bytes from input stream.
      * 
-     * @param in
-     * @param len
-     * @return
+     * @param in Input stream.
+     * @param len Bytes length.
+     * @param isLE Whether it's little-endian
+     * @return Bytes arrays.
      * @throws IOException
      */
     public static byte[] readBytes(InputStream in, int len, boolean isLE)
@@ -269,8 +295,7 @@ public final class ByteHelper
         return toHexString(coded, 0, coded.length);
     }
 
-    public static String toHexString(byte[] coded, int offset,
-            int length)
+    public static String toHexString(byte[] coded, int offset, int length)
     {
         if (coded == null)
         {

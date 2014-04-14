@@ -26,6 +26,13 @@ import darks.codec.CodecConfig.EndianType;
 import darks.codec.helper.ByteHelper;
 import darks.codec.helper.StringHelper;
 
+/**
+ * 
+ * BytesInputStream.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class BytesInputStream extends InputStream
 {
 
@@ -38,9 +45,9 @@ public class BytesInputStream extends InputStream
     private int pos;
 
     private int count;
-    
+
     private int offsetStart;
-    
+
     private int offsetEnd;
 
     public BytesInputStream(byte[] buf, CodecConfig codecConfig)
@@ -66,31 +73,6 @@ public class BytesInputStream extends InputStream
         return (pos - offsetStart < count) ? (buffer[pos++] & 0xff) : -1;
     }
 
-    /**
-     * Reads up to <code>len</code> bytes of data into an array of bytes from
-     * this input stream. If <code>pos</code> equals <code>count</code>, then
-     * <code>-1</code> is returned to indicate end of file. Otherwise, the
-     * number <code>k</code> of bytes read is equal to the smaller of
-     * <code>len</code> and <code>count-pos</code>. If <code>k</code> is
-     * positive, then bytes <code>buf[pos]</code> through
-     * <code>buf[pos+k-1]</code> are copied into <code>b[off]</code> through
-     * <code>b[off+k-1]</code> in the manner performed by
-     * <code>System.arraycopy</code>. The value <code>k</code> is added into
-     * <code>pos</code> and <code>k</code> is returned.
-     * <p>
-     * This <code>read</code> method cannot block.
-     * 
-     * @param b the buffer into which the data is read.
-     * @param off the start offset in the destination array <code>b</code>
-     * @param len the maximum number of bytes read.
-     * @return the total number of bytes read into the buffer, or
-     *         <code>-1</code> if there is no more data because the end of the
-     *         stream has been reached.
-     * @exception NullPointerException If <code>b</code> is <code>null</code>.
-     * @exception IndexOutOfBoundsException If <code>off</code> is negative,
-     *                <code>len</code> is negative, or <code>len</code> is
-     *                greater than <code>b.length - off</code>
-     */
     public int read(byte b[], int off, int len)
     {
         if (b == null)
@@ -122,8 +104,9 @@ public class BytesInputStream extends InputStream
      * Returns the number of remaining bytes that can be read (or skipped over)
      * from this input stream.
      * <p>
-     * The value returned is <code>count&nbsp;- pos</code>, which is the number
-     * of bytes remaining to be read from the input buffer.
+     * The value returned is
+     * <code>count&nbsp;-&nbsp;pos&nbsp;+&nbsp;offsetStart</code>, which is the
+     * number of bytes remaining to be read from the input buffer.
      * 
      * @return the number of remaining bytes that can be read (or skipped over)
      *         from this input stream without blocking.
@@ -325,7 +308,7 @@ public class BytesInputStream extends InputStream
     {
         return Double.longBitsToDouble(readLong());
     }
-    
+
     public void reset(byte[] bytes)
     {
         this.buffer = bytes;
@@ -334,7 +317,7 @@ public class BytesInputStream extends InputStream
         offsetStart = 0;
         offsetEnd = 0;
     }
-    
+
     public int getOffsetStart()
     {
         return offsetStart;
@@ -354,7 +337,7 @@ public class BytesInputStream extends InputStream
     {
         this.offsetEnd = offsetEnd;
     }
-    
+
     public void offset(int offstart, int offend)
     {
         offsetStart += offstart;
@@ -362,17 +345,20 @@ public class BytesInputStream extends InputStream
         count -= offend;
         count -= offstart;
     }
-    
+
     public void moveHead()
     {
         pos = offsetStart;
     }
-    
+
     public int position()
     {
         return pos;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

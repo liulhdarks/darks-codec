@@ -17,6 +17,12 @@
 
 package darks.codec.logs;
 
+/**
+ * 
+ * Logger.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class Logger
 {
     

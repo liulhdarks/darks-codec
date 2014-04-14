@@ -17,6 +17,12 @@
 
 package darks.codec.exceptions;
 
+/**
+ * 
+ * OCException.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class OCException extends RuntimeException
 {
     

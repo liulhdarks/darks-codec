@@ -17,18 +17,54 @@
 
 package darks.codec.wrap.verify;
 
-
+/**
+ * Verify bytes arrays before decoding.
+ * 
+ * Verifier.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public abstract class Verifier
 {
-    
-    public Object update(Object initData, byte[] data)
+
+    /**
+     * Update verify calculate bytes.
+     * 
+     * @param lastData Last verify data.
+     * @param data Bytes arrays.
+     * @return Current verify data.
+     */
+    public Object update(Object lastData, byte[] data)
     {
-        return update(initData, data, 0, data.length);
+        return update(lastData, data, 0, data.length);
     }
-    
-    public abstract Object update(Object initData, byte[] data, int offset, int length);
-    
+
+    /**
+     * Update verify calculate bytes.
+     * 
+     * @param lastData Last verify data.
+     * @param data Bytes arrays.
+     * @param offset Bytes offset.
+     * @param length Bytes length.
+     * @return Current verify data.
+     */
+    public abstract Object update(Object lastData, byte[] data, int offset,
+            int length);
+
+    /**
+     * Get verify code through verify data and little-endian.
+     * 
+     * @param code Verify data.
+     * @param littleEndian Whether configure little-endian.
+     * @return Code bytes arrays
+     */
     public abstract byte[] getVerifyCode(Object code, boolean littleEndian);
-    
+
+    /**
+     * Verify code byte length.
+     * 
+     * @return Byte length
+     */
     public abstract int verifyLength();
 }

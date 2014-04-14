@@ -19,6 +19,12 @@ package darks.codec.logs.impl;
 
 import darks.codec.logs.Logger;
 
+/**
+ * 
+ * NoOpLogger.java
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class NoOpLogger extends Logger
 {
     

@@ -19,9 +19,31 @@ package darks.codec.coder.cache;
 
 import java.lang.reflect.Field;
 
+/**
+ * Cache strategy.
+ * 
+ * CacheStrategy.java
+ * @see Cache
+ * @see SoftRefStrategy
+ * @see StrongRefStrategy
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public interface CacheStrategy
 {
+    /**
+     * Get object's fields from cache.
+     * 
+     * @param clazz Target class.
+     * @return Fields arrays.
+     */
     public Field[] getCacheFields(Class<?> clazz);
-    
+
+    /**
+     * Put object's fields to cache.
+     * 
+     * @param clazz Target class
+     * @param fields Class's mapping fields.
+     */
     public void putCacheFields(Class<?> clazz, Field[] fields);
 }

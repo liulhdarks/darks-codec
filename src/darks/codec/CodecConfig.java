@@ -21,6 +21,7 @@ import darks.codec.wrap.WrapChain;
 import darks.codec.wrap.Wrapper;
 
 /**
+ * Codec configuration object.
  * 
  * CodecConfig.java
  * 
@@ -30,37 +31,110 @@ import darks.codec.wrap.Wrapper;
 public class CodecConfig
 {
 
+    /**
+     * Endian type
+     * 
+     * @version 1.0.0
+     * @author Liu lihua
+     */
     public enum EndianType
     {
         LITTLE, BIG
     }
 
+    /**
+     * Cache type
+     * 
+     * @version 1.0.0
+     * @author Liu lihua
+     */
     public enum CacheType
     {
-        NONE, GLOBAL, LOCAL
+        /**
+         * Don't use cache object.
+         */
+        NONE,
+        /**
+         * Global cache object is available in all coders.
+         */
+        GLOBAL,
+        /**
+         * Local cache object is only available in current coder.
+         */
+        LOCAL
     }
 
+    /**
+     * Total length type
+     * 
+     * @version 1.0.0
+     * @author Liu lihua
+     */
     public enum TotalLengthType
     {
-        AUTO, BODY, HEAD_BODY
+        /**
+         * Automatic object total length. It calculate object length without
+         * head or tail wrapper's length only when autoLength is true.
+         */
+        AUTO,
+        /**
+         * Body total length will calculate object length and tail wrapper's
+         * length without head wrapper's length.
+         */
+        BODY,
+        /**
+         * Head and body total length will calculate head wrapper, tail wrapper
+         * and object length.
+         */
+        HEAD_BODY
     }
-    
+
+    /**
+     * Total length type. Default AUTO
+     */
     private TotalLengthType totalLengthType = TotalLengthType.AUTO;
 
+    /**
+     * Endian type. Default little-endian.
+     */
     private EndianType endianType = EndianType.LITTLE;
 
+    /**
+     * Whether add type length automatically. Default false.
+     */
     private boolean autoLength = false;
 
+    /**
+     * Whether ignore object type's automatic length, when autoLength is true.
+     * Default false.
+     */
     private boolean ignoreObjectAutoLength = false;
 
+    /**
+     * Whether ignore object's static fields when get object's fields. Default
+     * false.
+     */
     private boolean ignoreStaticField = false;
 
+    /**
+     * Whether ignore object's constant fields when get object's fields. Default
+     * true.
+     */
     private boolean ignoreConstField = true;
 
+    /**
+     * Cache type. Default LOCAL.
+     */
     private CacheType cacheType = CacheType.LOCAL;
 
+    /**
+     * String object encoding. Default null.
+     */
     private String encoding;
 
+    /**
+     * Wrapper chain. It will be called before and after encoding or decoding.
+     */
     private WrapChain wrapChain = new WrapChain();
 
     public CodecConfig()
@@ -68,6 +142,11 @@ public class CodecConfig
 
     }
 
+    /**
+     * Check current setting whether total length exists.
+     * 
+     * @return If exists, return true. Otherwise return false.
+     */
     public boolean isHasTotalLength()
     {
         if (totalLengthType == TotalLengthType.AUTO)
@@ -83,7 +162,7 @@ public class CodecConfig
             return true;
         }
     }
-    
+
     public TotalLengthType getTotalLengthType()
     {
         return totalLengthType;

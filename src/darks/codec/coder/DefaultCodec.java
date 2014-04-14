@@ -34,6 +34,15 @@ import darks.codec.type.OCObject;
 import darks.codec.wrap.TotalLengthWrapper;
 import darks.codec.wrap.WrapChain;
 
+/**
+ * Default codec to encode or decode object.
+ * 
+ * DefaultCodec.java
+ * 
+ * @see Codec
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class DefaultCodec extends Codec
 {
 
@@ -48,7 +57,7 @@ public class DefaultCodec extends Codec
     private Cache cache;
 
     private WrapChain wrapChain;
-    
+
     private TotalLengthWrapper totalLenWrap = new TotalLengthWrapper();
 
     public DefaultCodec(CodecConfig codecConfig)
@@ -59,12 +68,18 @@ public class DefaultCodec extends Codec
         wrapChain = codecConfig.getWrapChain();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void activated()
     {
         cache = Cache.getCache(codecConfig);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] encode(OCObject msg) throws IOException
     {
@@ -86,6 +101,9 @@ public class DefaultCodec extends Codec
         return bytes;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OCObject decode(byte[] bytes, OCObject msg) throws IOException
     {
@@ -109,7 +127,7 @@ public class DefaultCodec extends Codec
             param.getFinalQueue().addWrap(totalLenWrap, null);
         }
     }
-    
+
     private void decodeTotalLength(OCObject msg, BytesInputStream in,
             CodecParameter param) throws IOException
     {

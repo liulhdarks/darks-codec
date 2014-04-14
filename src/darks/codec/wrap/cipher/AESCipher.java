@@ -17,29 +17,61 @@
 
 package darks.codec.wrap.cipher;
 
+import darks.codec.wrap.CipherWrapper;
 
+/**
+ * AES cipher.
+ * 
+ * AESCipher.java
+ * 
+ * @see CipherWrapper
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class AESCipher extends AbstractCipher
 {
-    
+
     private static final int DEFAULT_KEY_SIZE = 128;
-    
+
     private static final String ALGORITHM = "AES";
-    
+
+    /**
+     * Construct AES cipher. Default key size 128.
+     * 
+     * @param key AES key.
+     */
     public AESCipher(String key)
     {
         this(key.getBytes());
     }
-    
+
+    /**
+     * Construct AES cipher
+     * 
+     * @param key AES key.
+     * @param keySize AES key size.
+     */
     public AESCipher(String key, int keySize)
     {
         this(key.getBytes(), keySize);
     }
-    
+
+    /**
+     * Construct AES cipher. Default key size 128.
+     * 
+     * @param key AES key bytes.
+     */
     public AESCipher(byte[] key)
     {
         this(key, DEFAULT_KEY_SIZE);
     }
-    
+
+    /**
+     * Construct AES cipher
+     * 
+     * @param key AES key bytes.
+     * @param keySize AES key size.
+     */
     public AESCipher(byte[] key, int keySize)
     {
         super(ALGORITHM, key, keySize);

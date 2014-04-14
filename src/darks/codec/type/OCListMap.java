@@ -37,6 +37,17 @@ import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * ListMap can store value like HashMap. It also can store multiply values in
+ * same key.
+ * 
+ * OCListMap.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ * @param <K>
+ * @param <E>
+ */
 @CodecType
 public class OCListMap<K, E> extends OCBase implements Map<K, E>
 {
@@ -50,43 +61,61 @@ public class OCListMap<K, E> extends OCBase implements Map<K, E>
         map = new HashMap<K, E>();
         mapList = new HashMap<K, List<E>>();
     }
-    
+
     public OCListMap(Map<K, E> map)
     {
         this.map = map;
         mapList = new HashMap<K, List<E>>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size()
     {
         return map.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty()
     {
         return map.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsKey(Object key)
     {
         return map.containsKey(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsValue(Object value)
     {
         return map.containsValue(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E get(Object key)
     {
         return map.get(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E put(K key, E value)
     {
@@ -100,6 +129,9 @@ public class OCListMap<K, E> extends OCBase implements Map<K, E>
         return map.put(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E remove(Object key)
     {
@@ -107,36 +139,57 @@ public class OCListMap<K, E> extends OCBase implements Map<K, E>
         return map.remove(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putAll(Map<? extends K, ? extends E> m)
     {
         map.putAll(m);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear()
     {
         map.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<K> keySet()
     {
         return map.keySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<E> values()
     {
         return map.values();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Entry<K, E>> entrySet()
     {
         return map.entrySet();
     }
 
+    /**
+     * Get value list in same key.
+     * 
+     * @param key Key object
+     * @return Value list
+     */
     public List<E> getKeyList(K key)
     {
         List<E> list = mapList.get(key);
@@ -158,6 +211,9 @@ public class OCListMap<K, E> extends OCBase implements Map<K, E>
         return mapList.values();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -176,6 +232,9 @@ public class OCListMap<K, E> extends OCBase implements Map<K, E>
         writeDynamicLength(size(), encoder, out, param);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
@@ -217,6 +276,9 @@ public class OCListMap<K, E> extends OCBase implements Map<K, E>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

@@ -28,26 +28,37 @@ import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
+/**
+ * Kust like long type.
+ * 
+ * OCLong.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCLong extends OCBaseType<Long>
 {
-    
+
     public OCLong()
     {
         setLength(8);
     }
-    
+
     public OCLong(long val)
     {
         super(val, 8);
     }
-    
+
     public OCLong(OCInteger lenType)
     {
         super(lenType);
         setLength(8);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
@@ -60,14 +71,18 @@ public class OCLong extends OCBaseType<Long>
         }
         super.writeBytes(encoder, out, bytes, param);
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
     {
-        byte[] bytes = ByteHelper.readBytes(in, getLength(), param.isLittleEndian());
+        byte[] bytes = ByteHelper.readBytes(in, getLength(),
+                param.isLittleEndian());
         long v = ByteHelper.convertToLong(bytes);
         setValue(v);
     }
-    
+
 }

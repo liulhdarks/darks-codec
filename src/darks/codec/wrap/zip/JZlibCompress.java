@@ -26,9 +26,20 @@ import com.jcraft.jzlib.GZIPOutputStream;
 
 import darks.codec.helper.IoHelper;
 
+/**
+ * JZlib compress,It needs jzlib-1.1-up support.
+ * 
+ * JZlibCompress.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class JZlibCompress extends ZipCompress
 {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void compress(InputStream input, OutputStream out)
             throws IOException
@@ -51,6 +62,9 @@ public class JZlibCompress extends ZipCompress
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void uncompress(InputStream input, OutputStream out)
             throws IOException

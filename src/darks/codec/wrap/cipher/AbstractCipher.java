@@ -28,6 +28,13 @@ import javax.crypto.spec.SecretKeySpec;
 import darks.codec.CodecParameter;
 import darks.codec.exceptions.CipherException;
 
+/**
+ * 
+ * AbstractCipher.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class AbstractCipher extends OCCipher
 {
 
@@ -39,16 +46,35 @@ public class AbstractCipher extends OCCipher
 
     private String algorithm;
 
+    /**
+     * Construct cipher
+     * 
+     * @param algorithm Cipher algorithm.
+     * @param key Cipher key.
+     */
     public AbstractCipher(String algorithm, String key)
     {
         this(algorithm, key.getBytes());
     }
 
+    /**
+     * Construct cipher
+     * 
+     * @param algorithm Cipher algorithm.
+     * @param key Cipher key.
+     * @param keySize Cipher key size.
+     */
     public AbstractCipher(String algorithm, String key, int keySize)
     {
         this(algorithm, key.getBytes(), keySize);
     }
 
+    /**
+     * Construct cipher
+     * 
+     * @param algorithm Cipher algorithm.
+     * @param key Cipher key bytes.
+     */
     public AbstractCipher(String algorithm, byte[] key)
     {
         this.algorithm = algorithm;
@@ -56,6 +82,13 @@ public class AbstractCipher extends OCCipher
         initSecretKey();
     }
 
+    /**
+     * Construct cipher
+     * 
+     * @param algorithm Cipher algorithm.
+     * @param key Cipher key bytes.
+     * @param keySize Cipher key size.
+     */
     public AbstractCipher(String algorithm, byte[] key, int keySize)
     {
         this.algorithm = algorithm;
@@ -82,11 +115,14 @@ public class AbstractCipher extends OCCipher
         }
         catch (NoSuchAlgorithmException e)
         {
-            throw new CipherException(
-                    "Invalid cipher algorithm, which is " + algorithm, e);
+            throw new CipherException("Invalid cipher algorithm, which is "
+                    + algorithm, e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] encrypt(byte[] data, int offset, int length,
             CodecParameter param)
@@ -109,6 +145,9 @@ public class AbstractCipher extends OCCipher
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] decrypt(byte[] data, int offset, int length,
             CodecParameter param)

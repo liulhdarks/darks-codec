@@ -31,11 +31,23 @@ import darks.codec.logs.Logger;
 import darks.codec.type.OCType;
 import darks.codec.type.OCObject;
 
+/**
+ * Default encoder in {@linkplain darks.codec.coder.DefaultCodec DefaultCodec}.
+ * 
+ * DefaultEncoder.java
+ * 
+ * @see Encoder
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class DefaultEncoder extends Encoder
 {
-    
+
     private static Logger log = Logger.getLogger(DefaultEncoder.class);
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void encodeObject(BytesOutputStream out, Object obj,
             CodecParameter param) throws IOException
@@ -45,7 +57,8 @@ public class DefaultEncoder extends Encoder
         {
             if (log.isDebugEnabled())
             {
-                log.debug(StringHelper.buffer("Encode base type:[", ReflectHelper.getClass(obj, param), "] ", obj));
+                log.debug(StringHelper.buffer("Encode base type:[",
+                        ReflectHelper.getClass(obj, param), "] ", obj));
             }
             baseType.encode(out, obj, param);
         }
@@ -59,22 +72,32 @@ public class DefaultEncoder extends Encoder
         }
     }
 
-    private void encodeDefault(BytesOutputStream out, OCType ocs,
+    /**
+     * Encoding default type which inherit {@inheritDoc darks.codec.type.OCType
+     * OCType}.
+     * 
+     * @param out Encoding IO stream.
+     * @param type Default type object.
+     * @param param Codec parameter.
+     */
+    private void encodeDefault(BytesOutputStream out, OCType type,
             CodecParameter param)
     {
         try
         {
             if (log.isDebugEnabled())
             {
-                log.debug(StringHelper.buffer("Encode default object:[", ReflectHelper.getClass(ocs, param), "] ", ocs));
+                log.debug(StringHelper.buffer("Encode default object:[",
+                        ReflectHelper.getClass(type, param), "] ", type));
             }
-            if (ocs == null && param.getCurrentfield() != null)
+            if (type == null && param.getCurrentfield() != null)
             {
-                ocs = (OCType)ReflectHelper.newInstance(param.getCurrentfield().getType());
+                type = (OCType) ReflectHelper.newInstance(param
+                        .getCurrentfield().getType());
             }
-            if (ocs != null)
+            if (type != null)
             {
-                ocs.writeObject(this, out, param);
+                type.writeObject(this, out, param);
             }
         }
         catch (IOException e)
@@ -83,12 +106,21 @@ public class DefaultEncoder extends Encoder
         }
     }
 
+    /**
+     * Encoding java object.
+     * 
+     * @param out Encoding IO stream.
+     * @param object Java object.
+     * @param param Codec parameter
+     * @throws IOException IO exception
+     */
     private void encodeOther(BytesOutputStream out, Object object,
             CodecParameter param) throws IOException
     {
         if (log.isDebugEnabled())
         {
-            log.debug(StringHelper.buffer("Encode other object:[", ReflectHelper.getClass(object, param), "] ", object));
+            log.debug(StringHelper.buffer("Encode other object:[",
+                    ReflectHelper.getClass(object, param), "] ", object));
         }
         new OCObject(object).writeObject(this, out, param);
     }

@@ -33,11 +33,40 @@ import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
+import darks.codec.wrap.verify.Adler32Verifier;
 import darks.codec.wrap.verify.CRC16Verifier;
 import darks.codec.wrap.verify.CRC32Verifier;
 import darks.codec.wrap.verify.Verifier;
 import darks.codec.wrap.verify.VerifyExtern;
 
+/**
+ * Add verify code to bytes arrays. It support CRC16, CRC32 and adler32. It will
+ * generate verify code for current head, body and tail bytes, which were called
+ * before verify wrapper.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ *  ObjectCoder coder = new ObjectCoder();
+ *      ...
+ *  coder.getCodecConfig().addWrap(VerifyWrapper.CRC16());
+ *      ...
+ * </pre>
+ * 
+ * Or
+ * 
+ * <pre>
+ *  ObjectCoder coder = new ObjectCoder();
+ *      ...
+ *  coder.getCodecConfig().addWrap(new VerifyWrapper(new CustomVerifyWrapper));
+ *      ...
+ * </pre>
+ * 
+ * VerifyWrapper.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class VerifyWrapper extends Wrapper
 {
 
@@ -50,23 +79,47 @@ public class VerifyWrapper extends Wrapper
         this.verifier = verifier;
     }
 
+    /**
+     * Create CRC16 verify wrapper
+     * 
+     * @return VerifyWrapper object
+     */
     public static VerifyWrapper CRC16()
     {
         return new VerifyWrapper(new CRC16Verifier());
     }
 
+    /**
+     * Create CRC32 verify wrapper
+     * 
+     * @return VerifyWrapper object
+     */
     public static VerifyWrapper CRC32()
     {
         return new VerifyWrapper(new CRC32Verifier());
     }
 
+    /**
+     * Create ADLER32 verify wrapper
+     * 
+     * @return VerifyWrapper object
+     */
+    public static VerifyWrapper ADLER32()
+    {
+        return new VerifyWrapper(new Adler32Verifier());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void afterEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param) throws IOException
     {
         if (log.isDebugEnabled())
         {
-            log.debug("Pre-encode verify " + verifier + " length:" + verifier.verifyLength());
+            log.debug("Pre-encode verify " + verifier + " length:"
+                    + verifier.verifyLength());
         }
         List<ByteBuffer> headList = null;
         List<ByteBuffer> tailList = null;
@@ -92,10 +145,15 @@ public class VerifyWrapper extends Wrapper
             }
         }
         int len = verifier.verifyLength();
-        ByteBuffer verifyBuf = (ByteBuffer)out.newBufferTailEnd(len).position(len);
-        param.getFinalQueue().addWrap(this, new VerifyExtern(headList, tailList, verifyBuf));
+        ByteBuffer verifyBuf = (ByteBuffer) out.newBufferTailEnd(len).position(
+                len);
+        param.getFinalQueue().addWrap(this,
+                new VerifyExtern(headList, tailList, verifyBuf));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void finalEncode(Encoder encoder, BytesOutputStream out,
             CodecParameter param, Object extern) throws IOException
@@ -104,7 +162,7 @@ public class VerifyWrapper extends Wrapper
         {
             log.debug("Final encode verify " + verifier);
         }
-        VerifyExtern vExtern = (VerifyExtern)extern;
+        VerifyExtern vExtern = (VerifyExtern) extern;
         Object code = null;
         if (vExtern.headList != null)
         {
@@ -130,6 +188,9 @@ public class VerifyWrapper extends Wrapper
         vExtern.verifyBuf.put(codes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void beforeDecode(Decoder decoder, BytesInputStream in,
             CodecParameter param) throws IOException
@@ -166,5 +227,4 @@ public class VerifyWrapper extends Wrapper
         }
     }
 
-    
 }

@@ -19,6 +19,15 @@ package darks.codec.type;
 
 import darks.codec.annotations.CodecType;
 
+/**
+ * 32-bits integer just like short type.
+ * 
+ * OCInt32.java
+ * 
+ * @see OCInteger
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 @CodecType
 public class OCInt32 extends OCInteger
 {
@@ -27,12 +36,22 @@ public class OCInt32 extends OCInteger
     {
         super(0, 4);
     }
-    
+
+    /**
+     * Construct 32-bits integer by initialize value.
+     * 
+     * @param val 32-bits integer Value
+     */
     public OCInt32(int val)
     {
         super(val, 4);
     }
-    
+
+    /**
+     * Construct 32-bits integer by length type object.
+     * 
+     * @param lenType Length type
+     */
     public OCInt32(OCInteger lenType)
     {
         super(lenType);
