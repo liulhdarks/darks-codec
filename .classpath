@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="examples"/>
 	<classpathentry kind="lib" path="libs/log4j-1.2.11.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-log4j12-1.6.4.jar"/>

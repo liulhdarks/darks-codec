@@ -6,6 +6,7 @@ import darks.codec.CodecConfig.CacheType;
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.ObjectCoder;
+import darks.codec.type.OCBytes;
 import darks.codec.type.OCInt16;
 import darks.codec.type.OCInt32;
 import darks.codec.type.OCInt8;
@@ -26,7 +27,7 @@ public class TestMain
         ObjectCoder oc = new ObjectCoder();
         oc.getCodecConfig().setEndianType(EndianType.LITTLE);
         oc.getCodecConfig().setTotalLengthType(TotalLengthType.HEAD_BODY);
-        oc.getCodecConfig().setAutoLength(true);
+        oc.getCodecConfig().setAutoLength(false);
         oc.getCodecConfig().setCacheType(CacheType.NONE);
         oc.getCodecConfig().addWrap(new IdentifyWrapper(new OCInt16(0xfafb), new OCInt8(0xFF)));
         oc.getCodecConfig().addWrap(VerifyWrapper.CRC16());
@@ -36,7 +37,7 @@ public class TestMain
         //oc.getCodecConfig().getWrapChain().add(ZipWrapper.COMMON_COMPRESS(CompressorStreamFactory.SNAPPY_FRAMED));
         //oc.getCodecConfig().setIgnoreObjectAutoLength(true);
         long st = System.currentTimeMillis();
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < 1; i++)
         {
             MainMsg msg = new MainMsg();
             msg.id = 10;
@@ -55,6 +56,17 @@ public class TestMain
         }
         long dt = System.currentTimeMillis() - st;
         System.out.println("cost time:" + dt);
+        
+        Test1 test = new Test1();
+        test.id = 4;
+       // test.msg = "123";
+        test.msg2 = "456";
+        test.bytes = OCBytes.int32(128, true);
+        byte[] bytes = oc.encode(test);
+        
+        Test1 test2 = new Test1();
+        oc.decode(bytes, test2);
+        System.out.println(test2);
     }
 
 }
@@ -63,14 +75,19 @@ class Test1
 {
     public int id;
     
-    public String msg;
+    //public String msg;
+    
+    //public String msg2;
+    
+    public OCBytes bytes = new OCBytes(4);
     
     public String msg2;
 
     @Override
     public String toString()
     {
-        return "Test1 [id=" + id + ", msg=" + msg + ", msg2=" + msg2 + "]";
+        return "Test1 [id=" + id
+                + ", bytes=" + bytes+ ", msg2=" + msg2 + "]";
     }
     
 }

@@ -58,7 +58,7 @@ import darks.codec.wrap.verify.VerifyExtern;
  * <pre>
  *  ObjectCoder coder = new ObjectCoder();
  *      ...
- *  coder.getCodecConfig().addWrap(new VerifyWrapper(new CustomVerifyWrapper));
+ *  coder.getCodecConfig().addWrap(new VerifyWrapper(new CustomVerifier()));
  *      ...
  * </pre>
  * 
