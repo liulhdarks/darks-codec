@@ -185,7 +185,7 @@ Complex Message
 --------------
 We can try to build a multiple nested object. The message protocol just like:
 <pre>
-  FA FB [TOTAL LEN 32bits] [ID 32bits] [VERSION 8bits] [EXTERN LEN 16bits] [EXTERN BYTES] [SUB LEN 32 bits] [<SUB MSG>[CODE LEN 8bits] [CODE] [MODULAR 8bits] [SUB MODULAR 8bits] [<CMDS>[CMD CODE 8bits] [CODE length 16bits] [CODE] ... [CMD CODE 8bits] [CODE length 16bits] [CODE]]]
+  FA FB [TOTAL LEN 32bits] [ID 32bits] [VERSION 8bits] [EXTERN LEN 16bits] [EXTERN BYTES] [SUB LEN 32 bits] [#SUB MSG#[CODE LEN 8bits] [CODE] [MODULAR 8bits] [SUB MODULAR 8bits] [#CMDS#[CMD CODE 8bits] [CODE length 16bits] [CODE] ... [CMD CODE 8bits] [CODE length 16bits] [CODE]]]
 </pre>
 We can build JAVA bean like:
 <pre>
@@ -261,7 +261,7 @@ msg.subMsg.commands.put((byte)0x03, new OrderMsg(OCBytes.valueOf("parameter")));
 </pre>
 Code will output console information:
 <pre>
-  FB FA   33 00 00 00   20 00 00 00   01   00 00   22 00 00 00  <SUB MSG>04   32 30 31 34   08   01  <CMDS>03   09 00   70 61 72 61 6D 65 74 65 72   01   05 00   72 65 61 64 79   02   04 00   80 00 00 00
+  FB FA   33 00 00 00   20 00 00 00   01   00 00   22 00 00 00  #SUB MSG#04   32 30 31 34   08   01  #CMDS#03   09 00   70 61 72 61 6D 65 74 65 72   01   05 00   72 65 61 64 79   02   04 00   80 00 00 00
 </pre>
 <p>
 We can also decode the bytes.
