@@ -61,7 +61,7 @@ public class TestMain
         test.id = 4;
        // test.msg = "123";
         test.msg2 = "456";
-        test.bytes = OCBytes.int32(128, true);
+        test.bytes.int32(128, true);
         byte[] bytes = oc.encode(test);
         
         Test1 test2 = new Test1();

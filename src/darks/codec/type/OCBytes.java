@@ -105,27 +105,27 @@ public class OCBytes extends OCBaseType<byte[]>
         super(null, len);
     }
 
-    public static OCBytes int8(int v)
+    public static OCBytes valueOf(byte v)
     {
         return new OCBytes(ByteHelper.convertInt8(v));
     }
 
-    public static OCBytes int16(int v, boolean littleEndian)
+    public static OCBytes valueOf(short v, boolean littleEndian)
     {
         return new OCBytes(ByteHelper.convertInt16(v, littleEndian));
     }
 
-    public static OCBytes int32(int v, boolean littleEndian)
+    public static OCBytes valueOf(int v, boolean littleEndian)
     {
         return new OCBytes(ByteHelper.convertInt32(v, littleEndian));
     }
 
-    public static OCBytes string(String s)
+    public static OCBytes valueOf(String s)
     {
         return new OCBytes(s.getBytes());
     }
 
-    public static OCBytes string(String s, String encoding)
+    public static OCBytes valueOf(String s, String encoding)
     {
         try
         {
@@ -135,6 +135,49 @@ public class OCBytes extends OCBaseType<byte[]>
         {
             log.error(e.getMessage(), e);
             return null;
+        }
+    }
+
+    public static OCBytes valueOf(byte[] bytes)
+    {
+        return new OCBytes(bytes);
+    }
+
+    public void bytes(byte[] bytes)
+    {
+        setValue(bytes);
+        setLength(bytes.length);
+    }
+
+    public void int8(int v)
+    {
+        bytes(ByteHelper.convertInt8(v));
+    }
+
+    public void int16(int v, boolean littleEndian)
+    {
+        bytes(ByteHelper.convertInt16(v, littleEndian));
+    }
+
+    public void int32(int v, boolean littleEndian)
+    {
+        bytes(ByteHelper.convertInt32(v, littleEndian));
+    }
+
+    public void string(String s)
+    {
+        bytes(s.getBytes());
+    }
+
+    public void string(String s, String encoding)
+    {
+        try
+        {
+            bytes(s.getBytes(encoding));
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            log.error(e.getMessage(), e);
         }
     }
 

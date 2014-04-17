@@ -75,9 +75,9 @@ public class TestMap
     {
         MapIntBytesMsg msg1 = new MapIntBytesMsg();
         msg1.code = "1234567890";
-        msg1.map.put(0x0001, OCBytes.string("str123"));
-        msg1.map.put(0x0002, OCBytes.int32(456, true));
-        msg1.map.put(0x0003, OCBytes.int8(64));
+        msg1.map.put(0x0001, OCBytes.valueOf("str123"));
+        msg1.map.put(0x0002, OCBytes.valueOf(456, true));
+        msg1.map.put(0x0003, OCBytes.valueOf((byte)64));
         byte[] bytes = oc.encode(msg1);
         MapIntBytesMsg ret = new MapIntBytesMsg();
         oc.decode(bytes, ret);

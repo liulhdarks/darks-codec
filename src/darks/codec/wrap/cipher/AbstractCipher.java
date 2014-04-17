@@ -17,13 +17,9 @@
 
 package darks.codec.wrap.cipher;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.Key;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import darks.codec.CodecParameter;
 import darks.codec.exceptions.CipherException;
@@ -35,14 +31,10 @@ import darks.codec.exceptions.CipherException;
  * @version 1.0.0
  * @author Liu lihua
  */
-public class AbstractCipher extends OCCipher
+public abstract class AbstractCipher extends OCCipher
 {
 
-    private byte[] aesKey;
-
-    private SecretKeySpec keySpec;
-
-    private int keySize = 0;
+    private Key cipherKey;
 
     private String algorithm;
 
@@ -54,19 +46,7 @@ public class AbstractCipher extends OCCipher
      */
     public AbstractCipher(String algorithm, String key)
     {
-        this(algorithm, key.getBytes());
-    }
-
-    /**
-     * Construct cipher
-     * 
-     * @param algorithm Cipher algorithm.
-     * @param key Cipher key.
-     * @param keySize Cipher key size.
-     */
-    public AbstractCipher(String algorithm, String key, int keySize)
-    {
-        this(algorithm, key.getBytes(), keySize);
+        this(algorithm, key.getBytes(), 0);
     }
 
     /**
@@ -74,51 +54,22 @@ public class AbstractCipher extends OCCipher
      * 
      * @param algorithm Cipher algorithm.
      * @param key Cipher key bytes.
-     */
-    public AbstractCipher(String algorithm, byte[] key)
-    {
-        this.algorithm = algorithm;
-        aesKey = key;
-        initSecretKey();
-    }
-
-    /**
-     * Construct cipher
-     * 
-     * @param algorithm Cipher algorithm.
-     * @param key Cipher key bytes.
-     * @param keySize Cipher key size.
      */
     public AbstractCipher(String algorithm, byte[] key, int keySize)
     {
         this.algorithm = algorithm;
-        this.keySize = keySize;
-        aesKey = key;
-        initSecretKey();
+        cipherKey = initSecretKey(key, keySize);
     }
 
-    private void initSecretKey()
-    {
-        try
-        {
-            KeyGenerator gen = KeyGenerator.getInstance(algorithm);
-            if (keySize > 0)
-            {
-                gen.init(keySize, new SecureRandom(aesKey));
-            }
-            else
-            {
-                gen.init(new SecureRandom(aesKey));
-            }
-            SecretKey secretKey = gen.generateKey();
-            keySpec = new SecretKeySpec(secretKey.getEncoded(), algorithm);
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            throw new CipherException("Invalid cipher algorithm, which is "
-                    + algorithm, e);
-        }
-    }
+    /**
+     * Initialize cipher secret key.
+     * 
+     * @param key Key bytes
+     * @param keySize Key size
+     * @return If initializing successfully, return secret key object. Otherwise
+     *         return null or CipherException will be throw out.
+     */
+    protected abstract Key initSecretKey(byte[] key, int keySize);
 
     /**
      * {@inheritDoc}
@@ -127,7 +78,7 @@ public class AbstractCipher extends OCCipher
     public byte[] encrypt(byte[] data, int offset, int length,
             CodecParameter param)
     {
-        if (keySpec == null)
+        if (cipherKey == null)
         {
             throw new CipherException("Fail to encrypt " + algorithm
                     + ". Cause fail to initialize secret key.");
@@ -135,7 +86,7 @@ public class AbstractCipher extends OCCipher
         try
         {
             Cipher cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+            cipher.init(Cipher.ENCRYPT_MODE, cipherKey);
             return cipher.doFinal(data, offset, length);
         }
         catch (Exception e)
@@ -152,7 +103,7 @@ public class AbstractCipher extends OCCipher
     public byte[] decrypt(byte[] data, int offset, int length,
             CodecParameter param)
     {
-        if (keySpec == null)
+        if (cipherKey == null)
         {
             throw new CipherException("Fail to decrypt " + algorithm
                     + ". Cause fail to initialize secret key.");
@@ -160,7 +111,7 @@ public class AbstractCipher extends OCCipher
         try
         {
             Cipher cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.DECRYPT_MODE, keySpec);
+            cipher.init(Cipher.DECRYPT_MODE, cipherKey);
             return cipher.doFinal(data, offset, length);
         }
         catch (Exception e)

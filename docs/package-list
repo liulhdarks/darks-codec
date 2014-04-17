@@ -9,6 +9,7 @@ darks.codec.helper
 darks.codec.iostream
 darks.codec.logs
 darks.codec.logs.impl
+darks.codec.serial
 darks.codec.type
 darks.codec.wrap
 darks.codec.wrap.cipher

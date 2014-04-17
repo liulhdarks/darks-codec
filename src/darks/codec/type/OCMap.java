@@ -105,7 +105,7 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     {
         return map.get(key);
     }
-
+    
     /**
      * {@inheritDoc}
      */

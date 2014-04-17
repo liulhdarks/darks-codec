@@ -3,7 +3,8 @@ Darks Codec
 
 Darks codec is a lightweight message protocol encoding and decoding framework. 
 It supports encoding and decoding message object of most message protocol based on bytes. 
-It helps developers build any message protocol easily and quickly.
+It helps developers build any message protocol easily and quickly. 
+And help to solve network communication protocol TCP's stick package and broken package problem.
 It makes developers design attention more than the implementation of message protocol, which can help software design better.
 
 Simple Example
@@ -180,6 +181,112 @@ And It will decode command1 by cmdLen1's value when decoding. Therefore we shoul
 </pre>
 You can see detail example codes in /examples/darks/codec/examples/codectype.
 
+Complex Message
+--------------
+We can try to build a multiple nested object. The message protocol just like:
+<pre>
+  FA FB [TOTAL LEN 32bits] [ID 32bits] [VERSION 8bits] [EXTERN LEN 16bits] [EXTERN BYTES] [SUB LEN 32 bits] [<SUB MSG>[CODE LEN 8bits] [CODE] [MODULAR 8bits] [SUB MODULAR 8bits] [<CMDS>[CMD CODE 8bits] [CODE length 16bits] [CODE] ... [CMD CODE 8bits] [CODE length 16bits] [CODE]]]
+</pre>
+We can build JAVA bean like:
+<pre>
+public class ComplexMsg
+{
+    int id;
+    
+    byte version;
+    
+    OCInt16 externLength = new OCInt16();
+    
+    OCBytes extern = new OCBytes(externLength);
+    
+    OCInt32 subMsgLength = new OCInt32();
+    
+    ComplexSubMsg subMsg = new ComplexSubMsg(subMsgLength);
+}
+
+class ComplexSubMsg extends OCObject
+{
+
+    OCInt8 codeLen = new OCInt8();
+    
+    OCString equipCode = new OCString(codeLen);
+    
+    byte modular;
+    
+    byte subModular;
+    
+    OCMap<Byte, OrderMsg> commands = new OCMap<Byte, OrderMsg>();
+    
+    public ComplexSubMsg(OCInteger lenType)
+    {
+        super(lenType);
+    }
+    
+}
+
+class OrderMsg
+{
+    OCInt16 orderLength = new OCInt16();
+    
+    OCBytes order = new OCBytes(orderLength);
+
+    public OrderMsg()
+    {
+    }
+    
+    public OrderMsg(OCBytes order)
+    {
+        this.order = order;
+        order.setLenType(orderLength);
+    }
+    
+}
+</pre>
+Then we encode the message.
+<pre>
+ObjectCoder coder = new ObjectCoder();
+coder.getCodecConfig().setEndianType(EndianType.LITTLE);
+coder.getCodecConfig().setTotalLengthType(TotalLengthType.HEAD_BODY);
+coder.getCodecConfig().addWrap(new IdentifyWrapper(new OCInt16(0xfafb)));
+
+ComplexMsg msg = new ComplexMsg();
+msg.id = 32;
+msg.version = 1;
+msg.subMsg.equipCode.setValue("2014");
+msg.subMsg.modular = 0x08;
+msg.subMsg.subModular = 0x01;
+msg.subMsg.commands.put((byte)0x01, new OrderMsg(OCBytes.valueOf("ready")));
+msg.subMsg.commands.put((byte)0x02, new OrderMsg(OCBytes.valueOf(128, true)));
+msg.subMsg.commands.put((byte)0x03, new OrderMsg(OCBytes.valueOf("parameter")));
+</pre>
+Code will output console information:
+<pre>
+  FB FA   33 00 00 00   20 00 00 00   01   00 00   22 00 00 00  <SUB MSG>04   32 30 31 34   08   01  <CMDS>03   09 00   70 61 72 61 6D 65 74 65 72   01   05 00   72 65 61 64 79   02   04 00   80 00 00 00
+</pre>
+<p>
+We can also decode the bytes.
+<pre>
+ComplexMsg result = new ComplexMsg();
+coder.decode(bytes, result);
+
+OCMap<Byte, OrderMsg> cmds = result.subMsg.commands;
+System.out.println("ID:" + result.id + " VERSION:" + result.version);
+System.out.println("Equip Code:" + result.subMsg.equipCode.getValue());
+System.out.println("Modular:" + result.subMsg.modular + " Sub Modular:" + result.subMsg.subModular);
+System.out.println("Command 01:" + cmds.get((byte)0x01).order.getString());
+System.out.println("Command 02:" + cmds.get((byte)0x02).order.getInt32(true));
+System.out.println("Command 03:" + cmds.get((byte)0x03).order.getString());
+</pre>
+Code will output console information:
+<pre>
+ID:32 VERSION:1
+Equip Code:2014
+Modular:8 Sub Modular:1
+Command 01:ready
+Command 02:128
+Command 03:parameter
+</pre>
+
 Fields Cache
 -----------------
 To encode or decode object, darks-codec will get object's valid fields. We can use field cache to improve the speed
@@ -313,5 +420,4 @@ Developers can encrypt message bytes to ensure information secure.
   coder.getCodecConfig().addWrap(new CipherWrapper(new CustomCipher()));
 </pre>
 
-Continue to update...
--------------------
+I wish you a pleasant to use darks-codec. If you have some good advice or bug report, please share with us. Thank you!

@@ -17,6 +17,15 @@
 
 package darks.codec.wrap.cipher;
 
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import darks.codec.exceptions.CipherException;
 import darks.codec.wrap.CipherWrapper;
 
 /**
@@ -34,7 +43,7 @@ public class AESCipher extends AbstractCipher
     private static final int DEFAULT_KEY_SIZE = 128;
 
     private static final String ALGORITHM = "AES";
-
+    
     /**
      * Construct AES cipher. Default key size 128.
      * 
@@ -42,7 +51,7 @@ public class AESCipher extends AbstractCipher
      */
     public AESCipher(String key)
     {
-        this(key.getBytes());
+        this(key.getBytes(), DEFAULT_KEY_SIZE);
     }
 
     /**
@@ -57,16 +66,6 @@ public class AESCipher extends AbstractCipher
     }
 
     /**
-     * Construct AES cipher. Default key size 128.
-     * 
-     * @param key AES key bytes.
-     */
-    public AESCipher(byte[] key)
-    {
-        this(key, DEFAULT_KEY_SIZE);
-    }
-
-    /**
      * Construct AES cipher
      * 
      * @param key AES key bytes.
@@ -74,6 +73,29 @@ public class AESCipher extends AbstractCipher
      */
     public AESCipher(byte[] key, int keySize)
     {
-        super(ALGORITHM, key, keySize);
+       super(ALGORITHM, key, keySize);
+       if (keySize <= 0)
+       {
+           keySize = DEFAULT_KEY_SIZE;
+       }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Key initSecretKey(byte[] key, int keySize)
+    {
+        try
+        {
+            KeyGenerator gen = KeyGenerator.getInstance(ALGORITHM);
+            gen.init(keySize, new SecureRandom(key));
+            SecretKey secretKey = gen.generateKey();
+            return new SecretKeySpec(secretKey.getEncoded(), ALGORITHM);
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            throw new CipherException("Fail to initialize AES secret key.", e);
+        }
     }
 }
