@@ -96,6 +96,12 @@ public final class ByteHelper
         return bytes;
     }
 
+    /**
+     * Convert bytes to 32-bits integer by BIG-ENDIAN
+     * 
+     * @param bytes Bytes array
+     * @return 32-bits integer
+     */
     public static int convertToInt32(byte[] bytes)
     {
         if (bytes.length >= 4)
@@ -106,6 +112,12 @@ public final class ByteHelper
         return 0;
     }
 
+    /**
+     * Convert bytes to long
+     * 
+     * @param bytes Bytes array
+     * @return long value
+     */
     public static long convertToLong(byte[] longBuffer)
     {
         if (longBuffer.length >= 8)
@@ -121,6 +133,13 @@ public final class ByteHelper
         return 0;
     }
 
+    /**
+     * Convert bytes to 32-bits integer
+     * 
+     * @param bytes Bytes array
+     * @param isLE Whether bytes are LITTLE-ENDIAN
+     * @return 32-bits integer
+     */
     public static int convertToInt32(byte[] bytes, boolean isLE)
     {
         if (bytes.length >= 4)
@@ -139,6 +158,13 @@ public final class ByteHelper
         return 0;
     }
 
+    /**
+     * Convert 16-bits integer to bytes array
+     * 
+     * @param 16-bits integer
+     * @param isLE Whether bytes are LITTLE-ENDIAN
+     * @return bytes Bytes array
+     */
     public static byte[] convertInt16(int v, boolean isLE)
     {
         return convertInt16((short) v, isLE);
@@ -163,6 +189,12 @@ public final class ByteHelper
         return bytes;
     }
 
+    /**
+     * Convert bytes to 16-bits integer by BIG-ENDIAN
+     * 
+     * @param bytes Bytes array
+     * @return 16-bits integer
+     */
     public static int convertToInt16(byte[] bytes)
     {
         if (bytes.length >= 2)
@@ -172,6 +204,13 @@ public final class ByteHelper
         return 0;
     }
 
+    /**
+     * Convert bytes to 16-bits integer
+     * 
+     * @param bytes Bytes array
+     * @param isLE Whether bytes are LITTLE-ENDIAN
+     * @return 16-bits integer
+     */
     public static int convertToInt16(byte[] bytes, boolean isLE)
     {
         if (bytes.length >= 2)
