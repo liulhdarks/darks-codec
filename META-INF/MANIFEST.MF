@@ -6,5 +6,5 @@ Build-Jdk: 1.6.0
 Name: darks.codec
 Implementation-Title: darks-codec
 Implementation-Vendor: "Darks Codec Project"
-Implementation-Version: 1.0.0
+Implementation-Version: 1.0.1
 
