@@ -17,8 +17,6 @@
 
 package darks.codec;
 
-import java.io.IOException;
-
 import darks.codec.coder.DefaultCodec;
 import darks.codec.type.OCObject;
 
@@ -120,9 +118,9 @@ public class ObjectCoder
      *         null. If runtime exception occurred when encoding, it will throw
      *         EncodingException, ReflectException and other wrapper's
      *         OCException.
-     * @throws IOException IO exception
+     * @throws Exception exception
      */
-    public byte[] encode(Object msg) throws IOException
+    public byte[] encode(Object msg) throws Exception
     {
         if (codec == null)
         {
@@ -140,9 +138,9 @@ public class ObjectCoder
      *         null. If runtime exception occurred when encoding, it will throw
      *         EncodingException, ReflectException and other wrapper's
      *         OCException.
-     * @throws IOException IO exception
+     * @throws Exception exception
      */
-    public byte[] encode(OCObject msg) throws IOException
+    public byte[] encode(OCObject msg) throws Exception
     {
         if (codec == null)
         {
@@ -163,9 +161,9 @@ public class ObjectCoder
      *         null. If runtime exception occurred when encoding, it will throw
      *         DecodingException, ReflectException and other wrapper's
      *         OCException.
-     * @throws IOException
+     * @throws Exception
      */
-    public OCObject decode(byte[] bytes, Object source) throws IOException
+    public OCObject decode(byte[] bytes, Object source) throws Exception
     {
         if (codec == null)
         {
@@ -186,9 +184,9 @@ public class ObjectCoder
      *         null. If runtime exception occurred when encoding, it will throw
      *         DecodingException, ReflectException and other wrapper's
      *         OCException.
-     * @throws IOException
+     * @throws Exception exception
      */
-    public OCObject decode(byte[] bytes, OCObject source) throws IOException
+    public OCObject decode(byte[] bytes, OCObject source) throws Exception
     {
         if (codec == null)
         {

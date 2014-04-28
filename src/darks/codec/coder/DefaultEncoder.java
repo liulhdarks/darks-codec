@@ -17,8 +17,6 @@
 
 package darks.codec.coder;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Encoder;
 import darks.codec.basetype.BaseType;
@@ -28,8 +26,8 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
-import darks.codec.type.OCType;
 import darks.codec.type.OCObject;
+import darks.codec.type.OCType;
 
 /**
  * Default encoder in {@linkplain darks.codec.coder.DefaultCodec DefaultCodec}.
@@ -50,7 +48,7 @@ public class DefaultEncoder extends Encoder
      */
     @Override
     public void encodeObject(BytesOutputStream out, Object obj,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         BaseType baseType = BaseTypeFactory.getCodec(obj, param);
         if (baseType != null)
@@ -81,7 +79,7 @@ public class DefaultEncoder extends Encoder
      * @param param Codec parameter.
      */
     private void encodeDefault(BytesOutputStream out, OCType type,
-            CodecParameter param)
+            CodecParameter param) throws Exception
     {
         try
         {
@@ -100,9 +98,9 @@ public class DefaultEncoder extends Encoder
                 type.writeObject(this, out, param);
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            throw new OCException("Fail to encode default object.", e);
+            throw new OCException("Fail to encode default object. Cause " + e.getMessage(), e);
         }
     }
 
@@ -112,10 +110,10 @@ public class DefaultEncoder extends Encoder
      * @param out Encoding IO stream.
      * @param object Java object.
      * @param param Codec parameter
-     * @throws IOException IO exception
+     * @throws Exception exception
      */
     private void encodeOther(BytesOutputStream out, Object object,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (log.isDebugEnabled())
         {

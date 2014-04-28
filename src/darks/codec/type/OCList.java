@@ -17,7 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
@@ -314,7 +313,7 @@ public class OCList<E> extends OCBase implements List<E>
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (list == null)
         {
@@ -335,7 +334,7 @@ public class OCList<E> extends OCBase implements List<E>
     @SuppressWarnings("unchecked")
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         Type[] types = ReflectHelper.getGenericTypes(param.getCurrentfield());
         if (types == null)
@@ -362,7 +361,7 @@ public class OCList<E> extends OCBase implements List<E>
     }
 
     private void parse(Decoder decoder, BytesInputStream in,
-            Class<E> genericType, CodecParameter param) throws IOException
+            Class<E> genericType, CodecParameter param) throws Exception
     {
         E obj = getGenerticValue(decoder, in, genericType, param);
         if (obj != null)

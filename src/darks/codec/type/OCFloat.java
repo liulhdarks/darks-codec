@@ -17,8 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -72,7 +70,7 @@ public class OCFloat extends OCBaseType<Float>
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         float v = getValue(0.f);
         byte[] bytes = ByteHelper.convertInt32(Float.floatToIntBits(v),
@@ -89,7 +87,7 @@ public class OCFloat extends OCBaseType<Float>
      */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         byte[] bytes = ByteHelper.readBytes(in, getLength(),
                 param.isLittleEndian());

@@ -24,6 +24,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import darks.codec.CodecParameter;
 import darks.codec.annotations.CodecType;
@@ -42,6 +44,8 @@ public final class ReflectHelper
 {
 
     private static final Logger log = Logger.getLogger(ReflectHelper.class);
+    
+    private static Map<Class<?>, Constructor<?>> constructorMap = new ConcurrentHashMap<Class<?>, Constructor<?>>();
 
     private ReflectHelper()
     {
@@ -52,13 +56,26 @@ public final class ReflectHelper
     {
         try
         {
-            Constructor<E> ctr = clazz.getConstructor();
-            ctr.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            Constructor<E> ctr = (Constructor<E>)constructorMap.get(clazz);
+            if (ctr == null)
+            {
+                ctr = clazz.getDeclaredConstructor();
+                constructorMap.put(clazz, ctr);
+                ctr.setAccessible(true);
+            }
             return ctr.newInstance();
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            try
+            {
+                return clazz.newInstance();
+            }
+            catch (Exception ex)
+            {
+                log.error("Fail to instance JAVA bean object.", ex);
+            }
         }
         return null;
     }

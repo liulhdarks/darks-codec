@@ -17,8 +17,6 @@
 
 package darks.codec.wrap;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
@@ -38,14 +36,14 @@ import darks.codec.iostream.BytesOutputStream;
  *      
  *      &#064;Override
  *      public void afterEncode(Encoder encoder, BytesOutputStream out,
- *              CodecParameter param) throws IOException
+ *              CodecParameter param) throws Exception
  *      {
  *          ...
  *      }
  *      
  *      &#064;Override
  *      public void beforeDecode(Decoder decoder, BytesInputStream in,
- *              CodecParameter param) throws IOException
+ *              CodecParameter param) throws Exception
  *      {
  *          ...
  *      }
@@ -79,10 +77,10 @@ public abstract class Wrapper
      * @param encoder Encoding object.
      * @param out Encoding IO stream.
      * @param param Codec parameters.
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public void beforeEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
     }
 
@@ -92,10 +90,10 @@ public abstract class Wrapper
      * @param encoder Encoding object.
      * @param out Encoding IO stream.
      * @param param Codec parameters.
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public void afterEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
     }
 
@@ -105,10 +103,10 @@ public abstract class Wrapper
      * @param encoder Encoding object.
      * @param out Encoding IO stream.
      * @param param Codec parameters.
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public void finalEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param, Object extern) throws IOException
+            CodecParameter param, Object extern) throws Exception
     {
     }
 
@@ -118,10 +116,10 @@ public abstract class Wrapper
      * @param decoder Decoding object.
      * @param in Decoding IO stream.
      * @param param Codec parameters.
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public void beforeDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
     }
 
@@ -131,10 +129,10 @@ public abstract class Wrapper
      * @param decoder Decoding object.
      * @param in Decoding IO stream.
      * @param param Codec parameters.
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public void afterDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
     }
 
@@ -144,10 +142,10 @@ public abstract class Wrapper
      * @param encoder Encoding object.
      * @param offset length offset
      * @param codecConfig Codec configuration.
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     protected void computeTotalLength(BytesOutputStream out, int offset,
-            CodecConfig codecConfig) throws IOException
+            CodecConfig codecConfig) throws Exception
     {
         if (offset == 0)
         {

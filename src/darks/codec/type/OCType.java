@@ -17,8 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -45,10 +43,10 @@ public interface OCType
      * @param encoder Encoding object.
      * @param out Encoding IO stream.
      * @param param Codec parameter object.
-     * @throws IOException IO exception.
+     * @throws Exception exception.
      */
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException;
+            CodecParameter param) throws Exception;
 
     /**
      * Read object from decoding IO stream.
@@ -56,8 +54,8 @@ public interface OCType
      * @param decoder Decoding object,
      * @param in Decoding IO stream.
      * @param param Codec parameter object.
-     * @throws IOException IO exception.
+     * @throws Exception exception.
      */
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException;
+            CodecParameter param) throws Exception;
 }

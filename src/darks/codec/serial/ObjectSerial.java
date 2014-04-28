@@ -17,9 +17,39 @@
 
 package darks.codec.serial;
 
+import darks.codec.ObjectCoder;
+
 public class ObjectSerial
 {
-    /**
-     * Developing...
-     */
+    
+    private static SerialHandler serialhandler;
+    
+    static
+    {
+        serialhandler = new SimpleSerialHandler();
+    }
+    
+    public static byte[] encode(ObjectCoder coder, Object obj) throws Exception
+    {
+        if (serialhandler != null && coder != null)
+        {
+            return serialhandler.encode(coder, obj);
+        }
+        return null;
+    }
+    
+    public static Object decode(ObjectCoder coder, byte[] bytes) throws Exception
+    {
+        if (serialhandler != null && coder != null)
+        {
+            return serialhandler.decode(coder, bytes);
+        }
+        return null;
+    }
+
+    public static void setSerialhandler(SerialHandler serialhandler)
+    {
+        ObjectSerial.serialhandler = serialhandler;
+    }
+    
 }

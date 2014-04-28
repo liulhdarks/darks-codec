@@ -17,16 +17,15 @@
 
 package darks.codec.wrap;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 
 import darks.codec.CodecConfig;
+import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
-import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.exceptions.VerifyException;
 import darks.codec.helper.ByteHelper;
 import darks.codec.helper.StringHelper;
@@ -114,7 +113,7 @@ public class VerifyWrapper extends Wrapper
      */
     @Override
     public void afterEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (log.isDebugEnabled())
         {
@@ -156,7 +155,7 @@ public class VerifyWrapper extends Wrapper
      */
     @Override
     public void finalEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param, Object extern) throws IOException
+            CodecParameter param, Object extern) throws Exception
     {
         if (log.isDebugEnabled())
         {
@@ -193,7 +192,7 @@ public class VerifyWrapper extends Wrapper
      */
     @Override
     public void beforeDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         int codeLen = verifier.verifyLength();
         byte[] srcCode = new byte[codeLen];

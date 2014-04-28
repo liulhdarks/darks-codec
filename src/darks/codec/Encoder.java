@@ -17,8 +17,6 @@
 
 package darks.codec;
 
-import java.io.IOException;
-
 import darks.codec.iostream.BytesOutputStream;
 
 /**
@@ -39,9 +37,9 @@ public abstract class Encoder
      * @param out Encode bytes stream.
      * @param obj Target object.
      * @param param Codec parameter. It's available in current encode flow.
-     * @throws IOException IO exception
+     * @throws Exception exception
      */
     public abstract void encodeObject(BytesOutputStream out, Object obj,
-            CodecParameter param) throws IOException;
+            CodecParameter param) throws Exception;
 
 }

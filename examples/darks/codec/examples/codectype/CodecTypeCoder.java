@@ -1,7 +1,5 @@
 package darks.codec.examples.codectype;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.ObjectCoder;
@@ -12,12 +10,12 @@ import darks.codec.wrap.IdentifyWrapper;
 public class CodecTypeCoder
 {
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         encodeMultiCmd();
     }
     
-    private static void encodeMultiCmd() throws IOException
+    private static void encodeMultiCmd() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);

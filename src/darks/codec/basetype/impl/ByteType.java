@@ -17,40 +17,30 @@
 
 package darks.codec.basetype.impl;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.basetype.BaseType;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
-import darks.codec.logs.Logger;
 
 /**
  * 
  * ByteType.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public class ByteType extends BaseType
 {
-    
-    private static Logger log = Logger.getLogger(ByteType.class);
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void encode(BytesOutputStream out, Object obj, CodecParameter param)
+            throws Exception
     {
-        Byte s = (Byte)obj;
-        try
-        {
-            out.writeByte(s);
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
+        Byte s = (Byte) obj;
+        out.writeByte(s);
     }
 
     /**
@@ -58,16 +48,9 @@ public class ByteType extends BaseType
      */
     @Override
     public Object decode(BytesInputStream in, Object obj, CodecParameter param)
+            throws Exception
     {
-        try
-        {
-            return in.readByte();
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
-        return 0;
+        return in.readByte();
     }
-    
+
 }

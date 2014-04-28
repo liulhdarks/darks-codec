@@ -17,8 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -61,7 +59,7 @@ public class OCLong extends OCBaseType<Long>
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         long v = getValue(0l);
         byte[] bytes = ByteHelper.convertLong(v, param.isLittleEndian());
@@ -77,7 +75,7 @@ public class OCLong extends OCBaseType<Long>
      */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         byte[] bytes = ByteHelper.readBytes(in, getLength(),
                 param.isLittleEndian());

@@ -17,7 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
@@ -174,7 +173,7 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (map == null)
         {
@@ -196,7 +195,7 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     @SuppressWarnings("unchecked")
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         Type[] types = ReflectHelper.getGenericTypes(param.getCurrentfield());
         if (types == null)
@@ -224,7 +223,7 @@ public class OCMap<K, E> extends OCBase implements Map<K, E>
     }
 
     private void parse(Decoder decoder, BytesInputStream in, Class<K> keyType,
-            Class<E> valueType, CodecParameter param) throws IOException
+            Class<E> valueType, CodecParameter param) throws Exception
     {
         K key = getGenerticValue(decoder, in, keyType, param);
         E val = getGenerticValue(decoder, in, valueType, param);

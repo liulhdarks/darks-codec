@@ -17,8 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -62,7 +60,7 @@ public abstract class OCBase implements OCType
     }
 
     protected void writeBytes(Encoder encoder, BytesOutputStream out,
-            byte[] bytes, CodecParameter param) throws IOException
+            byte[] bytes, CodecParameter param) throws Exception
     {
         if (bytes == null)
         {
@@ -74,7 +72,7 @@ public abstract class OCBase implements OCType
     }
 
     protected void writeDynamicLength(int length, Encoder encoder,
-            BytesOutputStream out, CodecParameter param) throws IOException
+            BytesOutputStream out, CodecParameter param) throws Exception
     {
         if (lenType != null)
         {
@@ -88,7 +86,7 @@ public abstract class OCBase implements OCType
 
     @SuppressWarnings("unchecked")
     protected <E> E getGenerticValue(Decoder decoder, BytesInputStream in,
-            Class<E> genericType, CodecParameter param) throws IOException
+            Class<E> genericType, CodecParameter param) throws Exception
     {
         E obj = null;
         BaseType baseType = BaseTypeFactory.getCodec(genericType);
@@ -105,7 +103,7 @@ public abstract class OCBase implements OCType
     }
 
     protected void writeAutoLength(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (param.isAutoLength() && lenType == null)
         {
@@ -115,7 +113,7 @@ public abstract class OCBase implements OCType
     }
 
     protected void readAutoLength(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (param.isAutoLength() && lenType == null)
         {

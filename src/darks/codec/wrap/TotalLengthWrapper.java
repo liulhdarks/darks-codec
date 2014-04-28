@@ -17,7 +17,6 @@
 
 package darks.codec.wrap;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import darks.codec.CodecConfig;
@@ -44,7 +43,7 @@ public class TotalLengthWrapper extends Wrapper
      */
     @Override
     public void finalEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param, Object extern) throws IOException
+            CodecParameter param, Object extern) throws Exception
     {
         CodecConfig cfg = param.getCodecConfig();
         int totalSize = 0;

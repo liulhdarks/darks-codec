@@ -22,7 +22,7 @@ public class TestMain
      * @param args
      * @throws IOException 
      */
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         ObjectCoder oc = new ObjectCoder();
         oc.getCodecConfig().setEndianType(EndianType.LITTLE);

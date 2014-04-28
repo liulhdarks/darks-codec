@@ -17,7 +17,6 @@
 
 package darks.codec.wrap.zip;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
@@ -41,7 +40,7 @@ public class JDKGZipCompress extends ZipCompress
      */
     @Override
     public void compress(InputStream input, OutputStream out)
-            throws IOException
+            throws Exception
     {
         GZIPOutputStream gzipOut = null;
         try
@@ -66,7 +65,7 @@ public class JDKGZipCompress extends ZipCompress
      */
     @Override
     public void uncompress(InputStream input, OutputStream out)
-            throws IOException
+            throws Exception
     {
         GZIPInputStream gzipIn = null;
         try

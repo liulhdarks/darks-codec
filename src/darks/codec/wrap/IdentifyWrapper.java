@@ -17,8 +17,6 @@
 
 package darks.codec.wrap;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -94,7 +92,7 @@ public class IdentifyWrapper extends Wrapper
      */
     @Override
     public void afterEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (headIdentify != null)
         {
@@ -113,7 +111,7 @@ public class IdentifyWrapper extends Wrapper
      */
     @Override
     public void beforeDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (headIdentify != null)
         {

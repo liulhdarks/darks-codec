@@ -17,7 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 import darks.codec.CodecParameter;
@@ -25,6 +24,7 @@ import darks.codec.Decoder;
 import darks.codec.Encoder;
 import darks.codec.annotations.CodecType;
 import darks.codec.coder.cache.Cache;
+import darks.codec.exceptions.DecodingException;
 import darks.codec.helper.ReflectHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
@@ -33,7 +33,7 @@ import darks.codec.iostream.BytesOutputStream;
  * Indicate that coding java object
  * 
  * OCObject.java
- * @version 1.0.0
+ * @version 1.0.1
  * @author Liu lihua
  */
 @CodecType
@@ -43,6 +43,8 @@ public class OCObject extends OCBase
     private String[] fieldSequence;
     
     private Object object;
+    
+    private OCClass objClass;
 
     public OCObject()
     {
@@ -69,13 +71,24 @@ public class OCObject extends OCBase
         super(lenType);
         this.object = object;
     }
+    
+    public OCObject(OCClass objClass)
+    {
+        this.objClass = objClass;
+    }
+    
+    public OCObject(OCClass objClass, OCInteger lenType)
+    {
+        super(lenType);
+        this.objClass = objClass;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (!param.isIgnoreObjectAutoLength())
         {
@@ -98,8 +111,9 @@ public class OCObject extends OCBase
      */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
+        checkObject();
         if (!param.isIgnoreObjectAutoLength())
         {
             readAutoLength(decoder, in, param);
@@ -137,6 +151,22 @@ public class OCObject extends OCBase
         return result;
     }
 
+    private void checkObject()
+    {
+        if (objClass != null && object == null)
+        {
+            Class<?> clazz = objClass.getValue();
+            if (clazz != null)
+            {
+                object = ReflectHelper.newInstance(clazz);
+            }
+            if (object == null)
+            {
+                throw new DecodingException("Fail to decode null object.");
+            }
+        }
+    }
+    
     public String[] getFieldSequence()
     {
         return fieldSequence;
@@ -147,4 +177,15 @@ public class OCObject extends OCBase
         this.fieldSequence = fieldSequence;
     }
 
+    public Object getObject()
+    {
+        return object;
+    }
+
+    public void setObject(Object object)
+    {
+        this.object = object;
+    }
+
+    
 }

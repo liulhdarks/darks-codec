@@ -287,6 +287,55 @@ Command 02:128
 Command 03:parameter
 </pre>
 
+Simple Serialization
+--------------------
+To replace the large bytes and coding slowly of JAVA serialization, we can use darks-codec's simple serialization instead.
+It only contains the full name of main class and object's data. Even it can use ObjectCoder's setting such as wrappers, total length and so on.
+Object doesn't needs to implement interface java.io.Serializable. It can be serialized directly.
+<br/>
+If we have a JAVA bean just like:
+<pre>
+class SerialMainBean
+{
+    int id;
+    int version;
+    SerialSub subSerial;
+}
+
+class SerialSubBean
+{
+    String equip;
+    int code;
+    String content;
+}
+</pre>
+Then we configure object coder and build a SerialMainBean object.
+<pre>
+ObjectCoder coder = new ObjectCoder();
+coder.getCodecConfig().setEndianType(EndianType.LITTLE);
+coder.getCodecConfig().setTotalLengthType(TotalLengthType.HEAD_BODY);
+coder.getCodecConfig().setAutoLength(true);
+coder.getCodecConfig().setCacheType(CacheType.LOCAL);
+coder.getCodecConfig().addWrap(new IdentifyWrapper((short)0xfafb));
+coder.getCodecConfig().addWrap(VerifyWrapper.CRC16());
+
+SerialMainBean bean = new SerialMainBean();
+bean.id = 128;
+bean.version = 1;
+bean.subSerial = new SerialSubBean();
+bean.subSerial.code = 10;
+bean.subSerial.content = "running";
+bean.subSerial.equip = "2014";
+</pre>
+Then we can serial object to bytes.
+<pre>
+byte[] bytes = ObjectSerial.encode(coder, bean);
+</pre>
+And we can convert bytes to object.
+<pre>
+Object result = ObjectSerial.decode(coder, bytes);
+</pre>
+
 Fields Cache
 -----------------
 To encode or decode object, darks-codec will get object's valid fields. We can use field cache to improve the speed

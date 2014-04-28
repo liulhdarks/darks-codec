@@ -17,40 +17,30 @@
 
 package darks.codec.basetype.impl;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.basetype.BaseType;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
-import darks.codec.logs.Logger;
 
 /**
  * 
  * LongType.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public class LongType extends BaseType
 {
-    
-    private static Logger log = Logger.getLogger(LongType.class);
 
-    /**
+   /**
      * {@inheritDoc}
      */
     @Override
     public void encode(BytesOutputStream out, Object obj, CodecParameter param)
+            throws Exception
     {
-        Long v = (Long)obj;
-        try
-        {
-            out.writeLong(v);
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
+        Long v = (Long) obj;
+        out.writeLong(v);
     }
 
     /**
@@ -58,16 +48,9 @@ public class LongType extends BaseType
      */
     @Override
     public Object decode(BytesInputStream in, Object obj, CodecParameter param)
+            throws Exception
     {
-        try
-        {
-            return in.readLong();
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
-        return 0;
+        return in.readLong();
     }
-    
+
 }

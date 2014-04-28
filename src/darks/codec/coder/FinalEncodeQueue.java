@@ -17,7 +17,6 @@
 
 package darks.codec.coder;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 import darks.codec.CodecParameter;
@@ -55,10 +54,10 @@ public class FinalEncodeQueue
      * @param encoder {@linkplain darks.codec.Encoder Encoder} object.
      * @param out Encoding IO stream
      * @param param parameters
-     * @throws IOException IO exception.
+     * @throws Exception exception.
      */
     public void doFinal(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         FinalPair pair = null;
         while ((pair = pairs.poll()) != null)

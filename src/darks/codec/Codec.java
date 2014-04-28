@@ -17,8 +17,6 @@
 
 package darks.codec;
 
-import java.io.IOException;
-
 import darks.codec.type.OCObject;
 
 /**
@@ -52,9 +50,9 @@ public abstract class Codec
      * @param msg Message object.
      * @return If successful encoding, return bytes arrays. Otherwise return
      *         null.
-     * @throws IOException IO exception
+     * @throws Exception exception
      */
-    public abstract byte[] encode(OCObject msg) throws IOException;
+    public abstract byte[] encode(OCObject msg) throws Exception;
 
     /**
      * Decode {@linkplain darks.codec.type.OCObject OCObject} object.
@@ -64,10 +62,10 @@ public abstract class Codec
      * @return If successful encoding, return
      *         {@linkplain darks.codec.type.OCObject OCObject} object. Otherwise
      *         return null.
-     * @throws IOException
+     * @throws Exception
      */
     public abstract OCObject decode(byte[] bytes, OCObject source)
-            throws IOException;
+            throws Exception;
 
     public CodecConfig getCodecConfig()
     {

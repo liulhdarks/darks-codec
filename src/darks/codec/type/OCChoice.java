@@ -17,8 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -39,7 +37,7 @@ public class OCChoice<T> extends OCBase
     
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (selected != null)
         {
@@ -51,7 +49,7 @@ public class OCChoice<T> extends OCBase
     
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         
     }

@@ -17,8 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -64,7 +62,7 @@ public class OCString extends OCBaseType<String>
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         writeAutoLength(encoder, out, param);
         byte[] bytes = ByteHelper
@@ -77,7 +75,7 @@ public class OCString extends OCBaseType<String>
      */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         readAutoLength(decoder, in, param);
         byte[] bytes = null;

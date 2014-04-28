@@ -17,8 +17,6 @@
 
 package darks.codec.coder;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.basetype.BaseType;
@@ -28,8 +26,10 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.logs.Logger;
-import darks.codec.type.OCType;
+import darks.codec.type.OCInt32;
+import darks.codec.type.OCInteger;
 import darks.codec.type.OCObject;
+import darks.codec.type.OCType;
 
 /**
  * Default decoder in {@linkplain darks.codec.coder.DefaultCodec DefaultCodec}.
@@ -49,7 +49,7 @@ public class DefaultDecoder extends Decoder
      */
     @Override
     public Object decodeObject(BytesInputStream in, Object obj,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         BaseType baseType = BaseTypeFactory.getCodec(obj, param);
         if (baseType != null)
@@ -67,11 +67,11 @@ public class DefaultDecoder extends Decoder
         }
         else
         {
-            decodeOther(in, obj, param);
+            return decodeOther(in, obj, param);
         }
         return null;
     }
-    
+
     /**
      * Decoding default type which inherit {@inheritDoc darks.codec.type.OCType
      * OCType}.
@@ -81,7 +81,7 @@ public class DefaultDecoder extends Decoder
      * @param param Codec parameter.
      */
     private void decodeDefault(BytesInputStream in, OCType type,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         try
         {
@@ -100,9 +100,9 @@ public class DefaultDecoder extends Decoder
                 type.readObject(this, in, param);
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
-            throw new OCException("Fail to decode default object.", e);
+            throw new OCException("Fail to decode default object. Cause " + e.getMessage(), e);
         }
     }
 
@@ -112,16 +112,36 @@ public class DefaultDecoder extends Decoder
      * @param out Decoding IO stream.
      * @param object Java object.
      * @param param Codec parameter
-     * @throws IOException IO exception
+     * @throws Exception exception
+     * @return If object is null, return new Object;
      */
-    private void decodeOther(BytesInputStream in, Object object,
-            CodecParameter param) throws IOException
+    private Object decodeOther(BytesInputStream in, Object object,
+            CodecParameter param) throws Exception
     {
         if (log.isDebugEnabled())
         {
             log.debug(StringHelper.buffer("Decode default:[",
                     ReflectHelper.getClass(object, param), "] ", object));
         }
-        new OCObject(object).readObject(this, in, param);
+        OCInteger lenType = null;
+        if (object == null && param.isAutoLength()
+                && !param.isIgnoreObjectAutoLength())
+        {
+            lenType = new OCInt32();
+            lenType.readObject(this, in, param);
+            int lenVal = lenType.getValue(0);
+            if (lenVal != 0)
+            {
+                object = ReflectHelper.newInstance(param.getCurrentfield()
+                        .getType());
+                new OCObject(object, lenType).readObject(this, in, param);
+                return object;
+            }
+        }
+        else
+        {
+            new OCObject(object).readObject(this, in, param);
+        }
+        return null;
     }
 }

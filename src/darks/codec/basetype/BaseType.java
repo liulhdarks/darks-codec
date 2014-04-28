@@ -43,7 +43,7 @@ public abstract class BaseType
      * @param param Codec parameter.
      */
     public abstract void encode(BytesOutputStream out, Object obj,
-            CodecParameter param);
+            CodecParameter param) throws Exception;
 
     /**
      * Decoding base type.
@@ -53,7 +53,7 @@ public abstract class BaseType
      * @param param Codec parameter.
      */
     public abstract Object decode(BytesInputStream in, Object obj,
-            CodecParameter param);
+            CodecParameter param) throws Exception;
 
     /**
      * Write base type's automatic length.

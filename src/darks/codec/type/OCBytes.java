@@ -17,7 +17,6 @@
 
 package darks.codec.type;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import darks.codec.CodecParameter;
@@ -219,7 +218,7 @@ public class OCBytes extends OCBaseType<byte[]>
      */
     @Override
     public void writeObject(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (getValue() == null)
         {
@@ -235,7 +234,7 @@ public class OCBytes extends OCBaseType<byte[]>
      */
     @Override
     public void readObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         readAutoLength(decoder, in, param);
         if (isDynamicLength())
@@ -253,7 +252,7 @@ public class OCBytes extends OCBaseType<byte[]>
     }
 
     private void readDynamicLengthObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         int length = getLenType().getValue();
         setLength(length);
@@ -261,7 +260,7 @@ public class OCBytes extends OCBaseType<byte[]>
     }
 
     private void readAvailableLengthObject(Decoder decoder,
-            BytesInputStream in, CodecParameter param) throws IOException
+            BytesInputStream in, CodecParameter param) throws Exception
     {
         int len = in.available();
         setLength(len);
@@ -269,7 +268,7 @@ public class OCBytes extends OCBaseType<byte[]>
     }
 
     private void readSpecifyLengthObject(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         int length = getLength();
         byte[] buf = getValue();

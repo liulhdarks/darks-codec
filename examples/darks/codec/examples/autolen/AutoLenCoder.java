@@ -1,7 +1,5 @@
 package darks.codec.examples.autolen;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.ObjectCoder;
@@ -12,12 +10,12 @@ import darks.codec.wrap.IdentifyWrapper;
 public class AutoLenCoder
 {
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         encodeAutoLength();
     }
     
-    private static void encodeAutoLength() throws IOException
+    private static void encodeAutoLength() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);

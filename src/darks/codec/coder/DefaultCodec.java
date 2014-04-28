@@ -17,8 +17,6 @@
 
 package darks.codec.coder;
 
-import java.io.IOException;
-
 import darks.codec.Codec;
 import darks.codec.CodecConfig;
 import darks.codec.CodecConfig.TotalLengthType;
@@ -81,7 +79,7 @@ public class DefaultCodec extends Codec
      * {@inheritDoc}
      */
     @Override
-    public byte[] encode(OCObject msg) throws IOException
+    public byte[] encode(OCObject msg) throws Exception
     {
         CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesOutputStream out = new BytesOutputStream(INIT_BYTES_SIZE,
@@ -105,7 +103,7 @@ public class DefaultCodec extends Codec
      * {@inheritDoc}
      */
     @Override
-    public OCObject decode(byte[] bytes, OCObject msg) throws IOException
+    public OCObject decode(byte[] bytes, OCObject msg) throws Exception
     {
         CodecParameter param = new CodecParameter(codecConfig, cache);
         BytesInputStream in = new BytesInputStream(bytes, codecConfig);
@@ -117,7 +115,7 @@ public class DefaultCodec extends Codec
     }
 
     private void encodeTotalLength(OCObject msg, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (codecConfig.getTotalLengthType() != TotalLengthType.AUTO)
         {
@@ -129,7 +127,7 @@ public class DefaultCodec extends Codec
     }
 
     private void decodeTotalLength(OCObject msg, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         if (codecConfig.getTotalLengthType() != TotalLengthType.AUTO)
         {

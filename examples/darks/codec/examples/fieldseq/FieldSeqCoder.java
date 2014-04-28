@@ -1,7 +1,5 @@
 package darks.codec.examples.fieldseq;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.ObjectCoder;
 import darks.codec.helper.ByteHelper;
@@ -12,13 +10,13 @@ import darks.codec.wrap.IdentifyWrapper;
 public class FieldSeqCoder
 {
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         codeFieldMsg();
         codeFieldCodecMsg();
     }
     
-    private static void codeFieldMsg() throws IOException
+    private static void codeFieldMsg() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);
@@ -37,7 +35,7 @@ public class FieldSeqCoder
         System.out.println("COMMAND:" + result.command);
     } 
     
-    private static void codeFieldCodecMsg() throws IOException
+    private static void codeFieldCodecMsg() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);

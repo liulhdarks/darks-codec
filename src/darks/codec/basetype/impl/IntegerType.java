@@ -17,40 +17,31 @@
 
 package darks.codec.basetype.impl;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.basetype.BaseType;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
-import darks.codec.logs.Logger;
 
 /**
  * 
  * IntegerType.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public class IntegerType extends BaseType
 {
-    
-    private static Logger log = Logger.getLogger(IntegerType.class);
+
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void encode(BytesOutputStream out, Object obj, CodecParameter param)
+            throws Exception
     {
-        Integer v = (Integer)obj;
-        try
-        {
-            out.writeInt(v);
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
+        Integer v = (Integer) obj;
+        out.writeInt(v);
     }
 
     /**
@@ -58,16 +49,9 @@ public class IntegerType extends BaseType
      */
     @Override
     public Object decode(BytesInputStream in, Object obj, CodecParameter param)
+            throws Exception
     {
-        try
-        {
-            return in.readInt();
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
-        return 0;
+        return in.readInt();
     }
-    
+
 }

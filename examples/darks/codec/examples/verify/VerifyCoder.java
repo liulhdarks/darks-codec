@@ -1,7 +1,5 @@
 package darks.codec.examples.verify;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.ObjectCoder;
@@ -15,9 +13,9 @@ public class VerifyCoder
 
     /**
      * @param args
-     * @throws IOException 
+     * @throws Exception 
      */
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);

@@ -1,7 +1,5 @@
 package darks.codec.examples.simple;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
 import darks.codec.ObjectCoder;
@@ -15,16 +13,16 @@ public class SimpleCoder
     
     /**
      * @param args
-     * @throws IOException 
+     * @throws Exception 
      */
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         simpleCode();
         simpleCodeTotalHeadBody();
         simpleCodeAutoLengtth();
     }
     
-    private static void simpleCode() throws IOException
+    private static void simpleCode() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);
@@ -43,7 +41,7 @@ public class SimpleCoder
         System.out.println("COMMAND:" + result.command);
     }
     
-    private static void simpleCodeTotalHeadBody() throws IOException
+    private static void simpleCodeTotalHeadBody() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);
@@ -57,7 +55,7 @@ public class SimpleCoder
         System.out.println(ByteHelper.toHexString(bytes));
     }
 
-    private static void simpleCodeAutoLengtth() throws IOException
+    private static void simpleCodeAutoLengtth() throws Exception
     {
         ObjectCoder coder = new ObjectCoder();
         coder.getCodecConfig().setEndianType(EndianType.LITTLE);

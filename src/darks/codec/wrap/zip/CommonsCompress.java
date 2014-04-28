@@ -17,7 +17,6 @@
 
 package darks.codec.wrap.zip;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -58,7 +57,7 @@ public class CommonsCompress extends ZipCompress
      */
     @Override
     public void compress(InputStream input, OutputStream out)
-            throws IOException
+            throws Exception
     {
         CompressorOutputStream cos = null;
         try
@@ -74,7 +73,7 @@ public class CommonsCompress extends ZipCompress
         }
         catch (CompressorException e)
         {
-            throw new IOException(
+            throw new Exception(
                     "Fail to compress data by commons compress. Cause "
                             + e.getMessage(), e);
         }
@@ -89,7 +88,7 @@ public class CommonsCompress extends ZipCompress
      */
     @Override
     public void uncompress(InputStream input, OutputStream out)
-            throws IOException
+            throws Exception
     {
         CompressorInputStream cin = null;
         try
@@ -105,7 +104,7 @@ public class CommonsCompress extends ZipCompress
         }
         catch (CompressorException e)
         {
-            throw new IOException(
+            throw new Exception(
                     "Fail to decompress data by commons compress. Cause "
                             + e.getMessage(), e);
         }

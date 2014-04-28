@@ -1,7 +1,5 @@
 package darks.codec.test.map;
 
-import java.io.IOException;
-
 import darks.codec.CodecConfig.CacheType;
 import darks.codec.CodecConfig.EndianType;
 import darks.codec.CodecConfig.TotalLengthType;
@@ -14,7 +12,7 @@ import darks.codec.wrap.VerifyWrapper;
 public class TestMap
 {
     
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
         ObjectCoder oc = new ObjectCoder();
         oc.getCodecConfig().setEndianType(EndianType.LITTLE);
@@ -32,7 +30,7 @@ public class TestMap
         testIntObjectMap(oc);
     }
     
-    private static void testIntMap(ObjectCoder oc) throws IOException
+    private static void testIntMap(ObjectCoder oc) throws Exception
     {
         MapIntIntMsg msg1 = new MapIntIntMsg();
         msg1.code = "1234567890";
@@ -45,7 +43,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testStringIntMap(ObjectCoder oc) throws IOException
+    private static void testStringIntMap(ObjectCoder oc) throws Exception
     {
         MapStringIntMsg msg1 = new MapStringIntMsg();
         msg1.code = "1234567890";
@@ -58,7 +56,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testIntStringMap(ObjectCoder oc) throws IOException
+    private static void testIntStringMap(ObjectCoder oc) throws Exception
     {
         MapIntStringMsg msg1 = new MapIntStringMsg();
         msg1.code = "1234567890";
@@ -71,7 +69,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testIntBytesMap(ObjectCoder oc) throws IOException
+    private static void testIntBytesMap(ObjectCoder oc) throws Exception
     {
         MapIntBytesMsg msg1 = new MapIntBytesMsg();
         msg1.code = "1234567890";
@@ -84,7 +82,7 @@ public class TestMap
         System.out.println(ret);
     }
     
-    private static void testIntObjectMap(ObjectCoder oc) throws IOException
+    private static void testIntObjectMap(ObjectCoder oc) throws Exception
     {
         MapIntObjectMsg msg1 = new MapIntObjectMsg();
         msg1.code = "1234567890";

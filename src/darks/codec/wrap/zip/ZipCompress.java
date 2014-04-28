@@ -17,7 +17,6 @@
 
 package darks.codec.wrap.zip;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -37,19 +36,19 @@ public abstract class ZipCompress
      * 
      * @param input Input stream
      * @param out Output stream
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public abstract void compress(InputStream input, OutputStream out)
-            throws IOException;
+            throws Exception;
 
     /**
      * Uncompress byte data.
      * 
      * @param input Input stream.
      * @param out Output stream
-     * @throws IOException IO exception.
+     * @throws Exception IO exception.
      */
     public abstract void uncompress(InputStream input, OutputStream out)
-            throws IOException;
+            throws Exception;
 
 }

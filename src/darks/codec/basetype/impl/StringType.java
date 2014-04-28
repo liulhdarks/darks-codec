@@ -17,43 +17,33 @@
 
 package darks.codec.basetype.impl;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.basetype.BaseType;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
-import darks.codec.logs.Logger;
 
 /**
  * 
  * StringType.java
+ * 
  * @version 1.0.0
  * @author Liu lihua
  */
 public class StringType extends BaseType
 {
-    
-    private static Logger log = Logger.getLogger(StringType.class);
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void encode(BytesOutputStream out, Object obj, CodecParameter param)
+            throws Exception
     {
-        String s = (String)obj;
-        try
-        {
-            byte[] bytes = ByteHelper.convertString(s, param.getEncoding());
-            writeAutoLength(out, bytes.length, param);
-            out.write(bytes);
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
-        }
+        String s = (String) obj;
+        byte[] bytes = ByteHelper.convertString(s, param.getEncoding());
+        writeAutoLength(out, bytes.length, param);
+        out.write(bytes);
     }
 
     /**
@@ -61,25 +51,22 @@ public class StringType extends BaseType
      */
     @Override
     public Object decode(BytesInputStream in, Object obj, CodecParameter param)
+            throws Exception
     {
-        try
+        int len = in.available();
+        if (len <= 0)
         {
-            int len = in.available();
-            if (len <= 0)
-            {
-                return null;
-            }
-            len = readAutoLength(in, param);
-            int ioLen = in.available();
-            len = (len < 0 || ioLen < len) ? ioLen : len;
-            byte[] bytes = ByteHelper.readBytes(in, len, false);
-            return ByteHelper.convertToString(bytes, param.getEncoding());
-        }
-        catch (IOException e)
-        {
-            log.error(e.getMessage(), e);
             return null;
         }
+        len = readAutoLength(in, param);
+        int ioLen = in.available();
+        len = (len < 0 || ioLen < len) ? ioLen : len;
+        byte[] bytes = ByteHelper.readBytes(in, len, false);
+        if (bytes == null)
+        {
+            return null;
+        }
+        return ByteHelper.convertToString(bytes, param.getEncoding());
     }
-    
+
 }

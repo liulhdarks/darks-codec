@@ -17,8 +17,13 @@
 
 package darks.codec.helper;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 import darks.codec.exceptions.OCException;
@@ -311,6 +316,10 @@ public final class ByteHelper
     public static byte[] readBytes(InputStream in, int len, boolean isLE)
             throws IOException
     {
+        if (len == 0)
+        {
+            return new byte[0];
+        }
         byte[] bytes = new byte[len];
         int rlen = in.read(bytes);
         if (rlen != len)
@@ -323,6 +332,37 @@ public final class ByteHelper
             bytes = reverseBytes(bytes);
         }
         return bytes;
+    }
+    
+    public static byte[] objectToBytes(Serializable s) throws IOException
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        try
+        {
+            oos.writeObject(s);
+            oos.flush();
+            return baos.toByteArray();
+        }
+        finally
+        {
+            oos.close();
+        }
+        
+    }
+    
+    public static Object bytesToObject(byte[] bytes) throws IOException, ClassNotFoundException
+    {
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        try
+        {
+            return ois.readObject();
+        }
+        finally
+        {
+            ois.close();
+        }
     }
 
     public static String toHexString(byte[] coded)

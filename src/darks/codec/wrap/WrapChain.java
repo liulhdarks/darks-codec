@@ -17,8 +17,6 @@
 
 package darks.codec.wrap;
 
-import java.io.IOException;
-
 import darks.codec.CodecParameter;
 import darks.codec.Decoder;
 import darks.codec.Encoder;
@@ -59,7 +57,7 @@ public class WrapChain
     }
 
     public void beforeEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         Wrapper wrap = head;
         while (wrap != null)
@@ -70,7 +68,7 @@ public class WrapChain
     }
 
     public void afterEncode(Encoder encoder, BytesOutputStream out,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         Wrapper wrap = head;
         while (wrap != null)
@@ -81,7 +79,7 @@ public class WrapChain
     }
 
     public void beforeDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         Wrapper wrap = tail;
         while (wrap != null)
@@ -92,7 +90,7 @@ public class WrapChain
     }
 
     public void afterDecode(Decoder decoder, BytesInputStream in,
-            CodecParameter param) throws IOException
+            CodecParameter param) throws Exception
     {
         Wrapper wrap = tail;
         while (wrap != null)

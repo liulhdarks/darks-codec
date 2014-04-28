@@ -17,8 +17,6 @@
 
 package darks.codec;
 
-import java.io.IOException;
-
 import darks.codec.iostream.BytesInputStream;
 
 /**
@@ -38,9 +36,10 @@ public abstract class Decoder
      * @param in Decode bytes stream.
      * @param obj Target object.
      * @param param Codec parameter. It's available in current decode flow.
-     * @throws IOException IO exception
+     * @return If return not null, parent object will set the value to current field.
+     * @throws Exception exception
      */
     public abstract Object decodeObject(BytesInputStream in, Object obj,
-            CodecParameter param) throws IOException;
+            CodecParameter param) throws Exception;
 
 }
