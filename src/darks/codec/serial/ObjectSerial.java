@@ -19,16 +19,32 @@ package darks.codec.serial;
 
 import darks.codec.ObjectCoder;
 
+/**
+ * Serial JAVA object through simple protocol.
+ * 
+ * ObjectSerial.java
+ * 
+ * @version 1.0.0
+ * @author Liu lihua
+ */
 public class ObjectSerial
 {
-    
+
     private static SerialHandler serialhandler;
-    
+
     static
     {
         serialhandler = new SimpleSerialHandler();
     }
-    
+
+    /**
+     * Encode object to serial java object to bytes
+     * 
+     * @param coder ObjectCoder
+     * @param obj Target object
+     * @return Object serial bytes
+     * @throws Exception Exception
+     */
     public static byte[] encode(ObjectCoder coder, Object obj) throws Exception
     {
         if (serialhandler != null && coder != null)
@@ -37,8 +53,16 @@ public class ObjectSerial
         }
         return null;
     }
-    
-    public static Object decode(ObjectCoder coder, byte[] bytes) throws Exception
+
+    /**
+     * Decode bytes to get JAVA object
+     * @param coder ObjectCoder
+     * @param bytes Serial bytes
+     * @return JAVA object
+     * @throws Exception
+     */
+    public static Object decode(ObjectCoder coder, byte[] bytes)
+            throws Exception
     {
         if (serialhandler != null && coder != null)
         {
@@ -51,5 +75,5 @@ public class ObjectSerial
     {
         ObjectSerial.serialhandler = serialhandler;
     }
-    
+
 }

@@ -20,6 +20,8 @@ package darks.codec.basetype;
 import java.io.IOException;
 
 import darks.codec.CodecParameter;
+import darks.codec.Decoder;
+import darks.codec.Encoder;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
 
@@ -34,26 +36,31 @@ import darks.codec.iostream.BytesOutputStream;
  */
 public abstract class BaseType
 {
+	
+	public enum BaseTypeBox
+	{
+		NONE, BOX
+	}
 
     /**
      * Encoding base type.
-     * 
+     * @param encoder Encoder object
      * @param out Encoding IO stream.
      * @param obj Target field object.
      * @param param Codec parameter.
      */
-    public abstract void encode(BytesOutputStream out, Object obj,
-            CodecParameter param) throws Exception;
+	public abstract void encode(Encoder encoder, BytesOutputStream out,
+            Object obj, CodecParameter param) throws Exception;
 
     /**
      * Decoding base type.
-     * 
+     * @param decoder Decoder object
      * @param in Decoding IO stream.
      * @param obj Target field object.
      * @param param Codec parameter.
      */
-    public abstract Object decode(BytesInputStream in, Object obj,
-            CodecParameter param) throws Exception;
+    public abstract Object decode(Decoder decoder, BytesInputStream in,
+            Object obj, CodecParameter param) throws Exception;
 
     /**
      * Write base type's automatic length.

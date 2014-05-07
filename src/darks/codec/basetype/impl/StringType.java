@@ -18,6 +18,8 @@
 package darks.codec.basetype.impl;
 
 import darks.codec.CodecParameter;
+import darks.codec.Decoder;
+import darks.codec.Encoder;
 import darks.codec.basetype.BaseType;
 import darks.codec.helper.ByteHelper;
 import darks.codec.iostream.BytesInputStream;
@@ -37,7 +39,7 @@ public class StringType extends BaseType
      * {@inheritDoc}
      */
     @Override
-    public void encode(BytesOutputStream out, Object obj, CodecParameter param)
+    public void encode(Encoder encoder, BytesOutputStream out, Object obj, CodecParameter param)
             throws Exception
     {
         String s = (String) obj;
@@ -50,7 +52,7 @@ public class StringType extends BaseType
      * {@inheritDoc}
      */
     @Override
-    public Object decode(BytesInputStream in, Object obj, CodecParameter param)
+    public Object decode(Decoder decoder, BytesInputStream in, Object obj, CodecParameter param)
             throws Exception
     {
         int len = in.available();

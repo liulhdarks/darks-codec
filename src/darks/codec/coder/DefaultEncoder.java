@@ -26,6 +26,8 @@ import darks.codec.helper.ReflectHelper;
 import darks.codec.helper.StringHelper;
 import darks.codec.iostream.BytesOutputStream;
 import darks.codec.logs.Logger;
+import darks.codec.type.OCInt32;
+import darks.codec.type.OCInteger;
 import darks.codec.type.OCObject;
 import darks.codec.type.OCType;
 
@@ -58,7 +60,7 @@ public class DefaultEncoder extends Encoder
                 log.debug(StringHelper.buffer("Encode base type:[",
                         ReflectHelper.getClass(obj, param), "] ", obj));
             }
-            baseType.encode(out, obj, param);
+            baseType.encode(this, out, obj, param);
         }
         else if (ReflectHelper.isDefaultType(obj))
         {
@@ -120,7 +122,16 @@ public class DefaultEncoder extends Encoder
             log.debug(StringHelper.buffer("Encode other object:[",
                     ReflectHelper.getClass(object, param), "] ", object));
         }
-        new OCObject(object).writeObject(this, out, param);
+        if (object == null && param.isAutoLength()
+                && !param.isIgnoreObjectAutoLength())
+        {
+            OCInteger lenType = new OCInt32(0);
+            lenType.writeObject(this, out, param);
+        }
+        else
+        {
+            new OCObject(object).writeObject(this, out, param);
+        }
     }
 
 }

@@ -20,6 +20,7 @@ package darks.codec.basetype;
 import java.util.concurrent.ConcurrentHashMap;
 
 import darks.codec.CodecParameter;
+import darks.codec.basetype.BaseType.BaseTypeBox;
 import darks.codec.basetype.impl.ByteType;
 import darks.codec.basetype.impl.DoubleType;
 import darks.codec.basetype.impl.FloatType;
@@ -27,6 +28,14 @@ import darks.codec.basetype.impl.IntegerType;
 import darks.codec.basetype.impl.LongType;
 import darks.codec.basetype.impl.ShortType;
 import darks.codec.basetype.impl.StringType;
+import darks.codec.basetype.impl.array.ByteArrayType;
+import darks.codec.basetype.impl.array.DoubleArrayType;
+import darks.codec.basetype.impl.array.FloatArrayType;
+import darks.codec.basetype.impl.array.IntegerArrayType;
+import darks.codec.basetype.impl.array.LongArrayType;
+import darks.codec.basetype.impl.array.ObjectArrayType;
+import darks.codec.basetype.impl.array.ShortArrayType;
+import darks.codec.basetype.impl.array.StringArrayType;
 
 /**
  * Mapping base type with base type coder.
@@ -39,7 +48,7 @@ import darks.codec.basetype.impl.StringType;
 public final class BaseTypeFactory
 {
 
-    private static ConcurrentHashMap<Class<?>, BaseType> codecs = new ConcurrentHashMap<Class<?>, BaseType>();
+    private static ConcurrentHashMap<Class<?>, BaseType> codecs = new ConcurrentHashMap<Class<?>, BaseType>(60);
 
     static
     {
@@ -56,6 +65,21 @@ public final class BaseTypeFactory
         registerCodec(Long.class, new LongType());
         registerCodec(long.class, new LongType());
         registerCodec(String.class, new StringType());
+        
+        registerCodec(int[].class, new IntegerArrayType(BaseTypeBox.NONE));
+        registerCodec(Integer[].class, new IntegerArrayType(BaseTypeBox.BOX));
+        registerCodec(short[].class, new ShortArrayType(BaseTypeBox.NONE));
+        registerCodec(Short[].class, new ShortArrayType(BaseTypeBox.BOX));
+        registerCodec(byte[].class, new ByteArrayType(BaseTypeBox.NONE));
+        registerCodec(Byte[].class, new ByteArrayType(BaseTypeBox.BOX));
+        registerCodec(float[].class, new FloatArrayType(BaseTypeBox.NONE));
+        registerCodec(Float[].class, new FloatArrayType(BaseTypeBox.BOX));
+        registerCodec(long[].class, new LongArrayType(BaseTypeBox.NONE));
+        registerCodec(Long[].class, new LongArrayType(BaseTypeBox.BOX));
+        registerCodec(double[].class, new DoubleArrayType(BaseTypeBox.NONE));
+        registerCodec(Double[].class, new DoubleArrayType(BaseTypeBox.BOX));
+        registerCodec(String[].class, new StringArrayType());
+        registerCodec(Object[].class, new ObjectArrayType());
     }
 
     private BaseTypeFactory()
@@ -107,6 +131,11 @@ public final class BaseTypeFactory
         {
             return null;
         }
-        return codecs.get(clazz);
+        BaseType baseType = codecs.get(clazz);
+        if (baseType == null && clazz.isArray())
+        {
+        	baseType = codecs.get(Object[].class); 
+        }
+        return baseType;
     }
 }

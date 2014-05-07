@@ -118,6 +118,10 @@ public class OCObject extends OCBase
         {
             readAutoLength(decoder, in, param);
         }
+        if (getLenType() != null && getLenType().getValue() <= 0)
+        {
+            return;
+        }
         Field[] fields = getFields(object, param);
         for (Field field : fields)
         {

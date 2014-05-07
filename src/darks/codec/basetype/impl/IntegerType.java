@@ -18,6 +18,8 @@
 package darks.codec.basetype.impl;
 
 import darks.codec.CodecParameter;
+import darks.codec.Decoder;
+import darks.codec.Encoder;
 import darks.codec.basetype.BaseType;
 import darks.codec.iostream.BytesInputStream;
 import darks.codec.iostream.BytesOutputStream;
@@ -37,7 +39,7 @@ public class IntegerType extends BaseType
      * {@inheritDoc}
      */
     @Override
-    public void encode(BytesOutputStream out, Object obj, CodecParameter param)
+    public void encode(Encoder encoder, BytesOutputStream out, Object obj, CodecParameter param)
             throws Exception
     {
         Integer v = (Integer) obj;
@@ -48,7 +50,7 @@ public class IntegerType extends BaseType
      * {@inheritDoc}
      */
     @Override
-    public Object decode(BytesInputStream in, Object obj, CodecParameter param)
+    public Object decode(Decoder decoder, BytesInputStream in, Object obj, CodecParameter param)
             throws Exception
     {
         return in.readInt();

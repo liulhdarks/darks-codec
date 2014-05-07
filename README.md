@@ -309,7 +309,8 @@ class SerialSubBean
     String content;
 }
 </pre>
-Then we configure object coder and build a SerialMainBean object.
+Then we configure object coder and build a SerialMainBean object. 
+If you build JAVA bean without codec type, you should set automatic length true.
 <pre>
 ObjectCoder coder = new ObjectCoder();
 coder.getCodecConfig().setEndianType(EndianType.LITTLE);

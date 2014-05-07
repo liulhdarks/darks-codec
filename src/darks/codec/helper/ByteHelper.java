@@ -55,13 +55,19 @@ public final class ByteHelper
     public static byte[] convertInt32(int v, boolean isLE)
     {
         byte[] bytes = new byte[4];
-        bytes[0] = (byte) ((v >>> 24) & 0xFF);
-        bytes[1] = (byte) ((v >>> 16) & 0xFF);
-        bytes[2] = (byte) ((v >>> 8) & 0xFF);
-        bytes[3] = (byte) ((v >>> 0) & 0xFF);
         if (isLE)
         {
-            bytes = reverseBytes(bytes);
+            bytes[3] = (byte) ((v >>> 24) & 0xFF);
+            bytes[2] = (byte) ((v >>> 16) & 0xFF);
+            bytes[1] = (byte) ((v >>> 8) & 0xFF);
+            bytes[0] = (byte) ((v >>> 0) & 0xFF);
+        }
+        else
+        {
+            bytes[0] = (byte) ((v >>> 24) & 0xFF);
+            bytes[1] = (byte) ((v >>> 16) & 0xFF);
+            bytes[2] = (byte) ((v >>> 8) & 0xFF);
+            bytes[3] = (byte) ((v >>> 0) & 0xFF);
         }
         return bytes;
     }
@@ -185,11 +191,15 @@ public final class ByteHelper
     public static byte[] convertInt16(short v, boolean isLE)
     {
         byte[] bytes = new byte[2];
-        bytes[0] = (byte) ((v >>> 8) & 0xFF);
-        bytes[1] = (byte) ((v >>> 0) & 0xFF);
         if (isLE)
         {
-            bytes = reverseBytes(bytes);
+            bytes[1] = (byte) ((v >>> 8) & 0xFF);
+            bytes[0] = (byte) ((v >>> 0) & 0xFF);
+        }
+        else
+        {
+            bytes[0] = (byte) ((v >>> 8) & 0xFF);
+            bytes[1] = (byte) ((v >>> 0) & 0xFF);
         }
         return bytes;
     }
@@ -333,7 +343,14 @@ public final class ByteHelper
         }
         return bytes;
     }
-    
+
+    /**
+     * Serial JAVA object to bytes through JDK
+     * 
+     * @param s Serializable object
+     * @return serial bytes;
+     * @throws IOException
+     */
     public static byte[] objectToBytes(Serializable s) throws IOException
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -348,10 +365,19 @@ public final class ByteHelper
         {
             oos.close();
         }
-        
+
     }
-    
-    public static Object bytesToObject(byte[] bytes) throws IOException, ClassNotFoundException
+
+    /**
+     * Unserial bytes to JAVA object
+     * 
+     * @param bytes Serial bytes
+     * @return Java object
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static Object bytesToObject(byte[] bytes) throws IOException,
+            ClassNotFoundException
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         ObjectInputStream ois = new ObjectInputStream(bais);

@@ -2,6 +2,7 @@ darks.codec
 darks.codec.annotations
 darks.codec.basetype
 darks.codec.basetype.impl
+darks.codec.basetype.impl.array
 darks.codec.coder
 darks.codec.coder.cache
 darks.codec.exceptions

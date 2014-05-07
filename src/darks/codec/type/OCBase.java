@@ -92,7 +92,7 @@ public abstract class OCBase implements OCType
         BaseType baseType = BaseTypeFactory.getCodec(genericType);
         if (baseType != null)
         {
-            obj = (E) baseType.decode(in, null, param);
+            obj = (E) baseType.decode(decoder, in, null, param);
         }
         else
         {

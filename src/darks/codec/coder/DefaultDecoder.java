@@ -59,7 +59,7 @@ public class DefaultDecoder extends Decoder
                 log.debug(StringHelper.buffer("Decode base type:[",
                         ReflectHelper.getClass(obj, param), "] ", obj));
             }
-            return baseType.decode(in, obj, param);
+            return baseType.decode(this, in, obj, param);
         }
         else if (ReflectHelper.isDefaultType(obj))
         {
