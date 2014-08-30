@@ -25,7 +25,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 
-import darks.log.kernel.Kernel;
+import darks.codec.logs.Logger;
 
 /**
  * 
@@ -35,6 +35,8 @@ import darks.log.kernel.Kernel;
  */
 public final class IoHelper
 {
+
+    private static final Logger log = Logger.getLogger(IoHelper.class);
 
 	private IoHelper()
 	{
@@ -51,7 +53,7 @@ public final class IoHelper
 		}
 		catch (Exception e)
 		{
-			Kernel.logError("Closing IO error. Cause " + e.getMessage(), e);
+			log.error("Closing IO error. Cause " + e.getMessage(), e);
 		}
 	}
 
@@ -66,7 +68,7 @@ public final class IoHelper
 		}
 		catch (Exception e)
 		{
-			Kernel.logError("Closing IO error. Cause " + e.getMessage(), e);
+			log.error("Closing IO error. Cause " + e.getMessage(), e);
 		}
 	}
 
@@ -81,7 +83,7 @@ public final class IoHelper
 		}
 		catch (Exception e)
 		{
-			Kernel.logError("Closing IO error. Cause " + e.getMessage(), e);
+			log.error("Closing IO error. Cause " + e.getMessage(), e);
 		}
 	}
 
@@ -96,7 +98,7 @@ public final class IoHelper
 		}
 		catch (Exception e)
 		{
-			Kernel.logError("Closing IO error. Cause " + e.getMessage(), e);
+			log.error("Closing IO error. Cause " + e.getMessage(), e);
 		}
 	}
 	
